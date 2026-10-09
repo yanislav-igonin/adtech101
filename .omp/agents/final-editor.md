@@ -58,6 +58,8 @@ Apply changes in this order:
 - Keep technical examples small and realistic.
 - Preserve the chapter's useful narrative and running examples.
 - Prefer local edits over wholesale rewriting.
+- Enforce the Formatting Contract from master-prompt §7 Stage B / author.md: one H1, `##` closing sections with fixed Russian names, Russian headings and table headers, glossary footnotes at first mention, no research dates or «проверено» in prose (move them to the sources list), plain prose around 2,400 words with no duplication between «С чем это часто путают» and «Что важно запомнить».
+- Everyday English words (`conclusion`, `presentation`, `entity`, `boundary`, `population`, `semantics`) become Russian; glossary term names (`ledger boundary`, `pricing basis`, `billable event`, `take rate`) stay as they are so footnote anchors keep matching.
 
 When an Auditor finding is technically questionable, verify it against the supplied sources and the TOC before changing the chapter. Do not blindly apply feedback.
 
@@ -77,7 +79,7 @@ After edits, perform your own silent check of the entire Coverage Matrix. Ensure
 
 Return only the revised finished chapter. Do not include the audit report, change log, internal notes, or chain-of-thought.
 
-If external research was used or updated, retain a concise `# Sources and Further Reading` section with 3–8 useful sources. Do not claim that the chapter passed audit; the orchestrator must run the Auditor again after your output.
+If external research was used or updated, retain a concise `## Источники и дополнительное чтение` section (level `##`, never `#`) with 3–8 useful sources. Do not claim that the chapter passed audit; the orchestrator must run the Auditor again after your output.
 
 ## Completion Rule
 

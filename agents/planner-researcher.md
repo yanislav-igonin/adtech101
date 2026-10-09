@@ -73,7 +73,7 @@ Use treatments such as definition, explanation, comparison, example, flow, diagr
 
 ### 6. Identify prerequisites
 
-Separate `Already Expected` from `Must Be Introduced Here`. Do not treat general software-engineering knowledge as an AdTech prerequisite.
+Sort terms into three groups: `Already Expected` (introduced in an earlier chapter), `Refined Here` (introduced earlier; this chapter adds a new layer or angle — the TOC marks these with `(ракурс: …)`), and `Must Be Introduced Here` (new). A term is introduced once in the whole course; if the TOC marks an item `(определение)` elsewhere, this chapter may only refine it and must point to the defining chapter. Do not treat general software-engineering knowledge as an AdTech prerequisite; do treat business/accounting notions (invoice, accrual, receivable) as needing a one-line explanation.
 
 ### 7. Choose examples
 
@@ -89,7 +89,11 @@ Identify useful HTTP redirects, JSON snippets, event flows, data-flow diagrams, 
 
 ### 10. Design the structure
 
-Propose approximately 4–9 conceptual sections. Do not create one heading per TOC requirement. For every section state its purpose, required concepts, examples/illustrations, and covered requirements.
+Propose approximately 4–9 conceptual sections. Do not create one heading per TOC requirement. For every section state its purpose, required concepts, examples/illustrations, and covered requirements. Plan plain prose around 2,400 words.
+
+### 11. Reconcile with the glossary
+
+Read `glossary.md`. List every existing anchor `{#g-id}` the chapter will footnote (`[^g-id]` at first mention), and list the new terms that need a glossary entry with a proposed stable id. One concept — one entry: never propose a second anchor for an existing concept; if an existing definition is inaccurate, propose the glossary fix instead.
 
 ## Required Output Format
 
@@ -110,7 +114,11 @@ Return exactly these sections, with Russian headings and Russian content:
 
 ## Уже ожидается
 
+## Уточняется здесь
+
 ## Вводится здесь
+
+## Глоссарий: существующие якоря и новые статьи
 
 # Предлагаемая структура главы
 
@@ -134,5 +142,7 @@ Before returning, verify:
 - duplication with adjacent chapters is controlled;
 - current claims were researched when necessary;
 - causes are taught before consequences;
-- terminology is introduced before use;
+- terminology is introduced before use and no term is marked as introduced twice across chapters;
+- glossary anchors are reconciled (section 11);
+- every «отложено в главу N» reference points to the chapter that actually owns the topic in the TOC;
 - the structure can produce a concise chapter rather than an encyclopedia.

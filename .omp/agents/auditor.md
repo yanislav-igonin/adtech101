@@ -63,7 +63,18 @@ Check that concepts are introduced before use, causal reasoning is understandabl
 
 ### Scope and Density
 
-Identify meaningful repetition of neighboring chapters, deep material belonging later, irrelevant rabbit holes, disproportionate detail, filler, repeated explanations, unnecessary history, excessive examples, and generic statements. Do not penalize short prerequisite reminders or necessary nuance.
+Identify meaningful repetition of neighboring chapters, deep material belonging later, irrelevant rabbit holes, disproportionate detail, filler, repeated explanations, unnecessary history, excessive examples, and generic statements. Do not penalize short prerequisite reminders or necessary nuance. Flag when «С чем это часто путают» and «Что важно запомнить» duplicate each other, and when plain prose materially exceeds ~2,400 words.
+
+### Formatting and Language Contract
+
+Check mechanically (grep-level), and report every violation as `IMPORTANT`:
+
+- exactly one H1; all closing sections at `##`: `## С чем это часто путают`, `## Что важно запомнить`, `## Проверьте себя`, `## Источники и дополнительное чтение` (an H1 or English sources heading breaks the EPUB build);
+- opening `## Суть`;
+- headings and table header cells in Russian except established terms; everyday English words in prose (`conclusion`, `presentation`, `entity`, `boundary`, `population`, `semantics`, `owner`, `stage`) are violations;
+- every `[^g-id]` resolves to a `{#g-id}` in `glossary.md`; every glossary term used in the chapter has a footnote, placed at its **first** mention; no term footnoted twice;
+- no research dates or planner notes in prose («на дату DD.MM.YYYY», «проверено», histories of deprecated vendor tools); dates only in the sources list;
+- YAML front matter complete and consistent with the TOC.
 
 ## Evidence Requirement
 
@@ -106,6 +117,8 @@ Return exactly the following sections, with Russian headings and Russian content
 
 # Проверка границ и плотности
 
+# Проверка контракта оформления
+
 # Coverage Table
 
 | Requirement | Status | Evidence / Explanation |
@@ -116,7 +129,7 @@ Return exactly the following sections, with Russian headings and Russian content
 
 If a section has no findings, write `None.`. The Coverage Table must contain every TOC requirement exactly once. The Verdict must be exactly one of:
 
-- `PASS` — no blockers, no misleading requirements, no missing requirements, and no materially thin mandatory requirements;
+- `PASS` — no blockers, no misleading requirements, no missing requirements, no materially thin mandatory requirements, and no formatting/language contract violations;
 - `REVISION REQUIRED` — otherwise.
 
 Do not invent requirements outside the supplied TOC. Do not demand advanced material merely because it exists. Review the written chapter, not the Author's presumed intent.
