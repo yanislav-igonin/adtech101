@@ -6,14 +6,14 @@ chapter: 1
 slug: what-is-adtech
 title: "What AdTech Is and Why It Exists"
 language: en
-status: draft
+status: reviewed
 toc_requirements: ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10"]
 prerequisites: []
 ---
 
 # What AdTech Is and Why It Exists
 
-## The Essence
+## The Core Idea
 
 **Digital advertising**[^g-digital-advertising] is paid communication by which an organization tries to influence the knowledge, attitude, or behavior of an audience in a digital environment. A company with a subscription app wants to find potential customers; the owner of another app wants to earn money from its audience; the user wants to receive content or a service and, at the same time, encounters advertising.
 
@@ -43,7 +43,7 @@ Using two mobile apps as an example:
 | Participant | What it contributes | What it wants to get | Main constraint |
 |---|---|---|---|
 | An app with a paid subscription — advertiser | Budget, goal, `creative` | Attract users who will take out a subscription | Not spending budget on unsuitable opportunities |
-| A content or gaming app — publisher | Media environment and advertising opportunities | Earn revenue without ruining the user experience | Balancing monetization, quality, and ad load |
+| A content or gaming app — publisher | Media environment and advertising opportunities | Earn revenue[^g-revenue] without ruining the user experience | Balancing monetization, quality, and ad load |
 | A person — user | Attention, context of use, and a possible reaction | Content or app functionality on acceptable terms | Relevance, privacy, safety, and not being overloaded with ads |
 
 The value exchange is not symmetric. The advertiser pays for media access; the publisher receives advertising revenue; the user gets the product and the advertising experience, but at the same time bears a cost in the form of time, attention, and possible use of their data. That is why effectiveness for the advertiser, revenue for the publisher, and quality of experience for the user can conflict. A significant part of AdTech exists precisely to manage these conflicting goals at scale.
@@ -56,7 +56,7 @@ The value exchange is not symmetric. The advertiser pays for media access; the p
 
 These words denote sides of the market, not specific technologies. A DSP (Demand-Side Platform)[^g-dsp] belongs to the demand side not because it "creates demand," but because it acts in the buyer's interest. An SSP (Supply-Side Platform)[^g-ssp] belongs to the supply side because it helps publishers manage the sale of opportunities.
 
-The subject of the deal is **advertising inventory**: the set of available or projected opportunities to show an ad. Inventory is bounded by the environment, the placement, the format, the timing, the publisher's rules, and the acceptable audience context. It is not a list of users, and it does not mean that future impressions already exist in a warehouse.
+The subject of the deal is **advertising inventory**: the set of available or projected opportunities to show an ad. Inventory is bounded by the environment, the placement, the format, the timing, the publisher's rules, and the acceptable audience context. It is not a list of users, and it does not mean that future impressions already exist in a warehouse. Supply and inventory are not synonyms: supply is a side of the market (who sells, and why), inventory is the subject of the deal (what exactly is sold); inventory without a seller is not yet supply.
 
 It is useful to distinguish three levels:
 
@@ -69,10 +69,10 @@ placement exists in the app's design
     ↓ user completed a level
 an ad opportunity arises
     ↓ the system selected a creative
-the ad is delivered and displayed; an impression is registered
+the ad is delivered; an impression is registered according to the system's rule
 ```
 
-Even that last statement requires care. `Served`, `rendered`, and `viewable impression` are different states: sending an ad does not prove that it rendered and actually entered the person's field of view. Precise definitions and metrics will appear in chapter 3.
+Even that last statement requires care. `Served`[^g-served-impression], `rendered`[^g-rendered-impression], and `viewable impression`[^g-viewable-impression] are different states: sending an ad does not prove that it rendered and actually entered the person's field of view. Precise definitions and metrics will appear in chapter 3.
 
 ## From a Market Problem to Technology
 
@@ -87,12 +87,10 @@ AdTech appears where the market requires repeatable technical execution:
 | There is often little time left to make a decision | Automated execution | Buying/selling platforms, exchange[^g-ad-exchange] |
 | The creative must reach the right environment and format | `Ad serving` and interoperability | Ad server, SDK, platform integrations |
 | Parties see events from different vantage points | Measurement and reporting | Ad server, measurement providers; in mobile — MMP (Mobile Measurement Partner)[^g-mmp] |
-| A delivery may be unsuitable or low-quality | Verification[^g-verification] and risk controls | Verification provider, fraud/quality systems |
+| A delivery may be unsuitable or low-quality | Verification[^g-verification] and risk controls: verification is an independent assessment of display conditions, fraud detection is a separate function that identifies invalid traffic (chapters 36–37) | Verification provider, fraud detection and quality-control systems |
 | Participants need to reconcile volumes and payments | Reconciliation and settlements | Reporting, billing, and finance systems |
 
-An MMP is a specialized category of providers for mobile measurement and attribution, not a synonym for any measurement system.
-
-Standards and shared protocols reduce the number of pairwise integrations: it becomes easier for the parties to describe inventory consistently, pass decisions along, and understand the chain of sellers. One example is RTB (real-time bidding)[^g-rtb], where an individual opportunity can be auctioned in real time. But `RTB` is only one mechanism inside `programmatic`[^g-programmatic], i.e. automated buying and selling; and `programmatic` is only part of AdTech. Direct deals, reserved buying, and closed platform ecosystems also use AdTech.
+Standards and shared protocols reduce the number of pairwise integrations: it becomes easier for the parties to describe inventory consistently, pass decisions along, and understand the chain of sellers; for example, ads.txt shows a buyer who is authorized to sell a given publisher's inventory, and sellers.json shows who actually stands behind each seller and intermediary in the chain (chapter 38). One example is RTB (real-time bidding)[^g-rtb], where an individual opportunity can be auctioned in real time. But `RTB` is only one mechanism inside `programmatic`[^g-programmatic], i.e. automated buying and selling; and `programmatic` is only part of AdTech. Direct deals, reserved buying, and closed platform ecosystems also use AdTech.
 
 ### Why Intermediaries Exist
 
@@ -104,9 +102,11 @@ Standards and shared protocols reduce the number of pairwise integrations: it be
 - a connective layer passes opportunities and decisions between the parties;
 - an ad server manages the selection and delivery of creative;
 - measurement and verification providers provide an independent point of observation;
-- data/identity providers[^g-data-provider] help systems interpret permitted signals and connect data.
+- data providers[^g-data-provider] supply permitted signals, while identity providers[^g-identity-provider] link identifiers across systems.
 
-An intermediary is justified when the value from reach, aggregation, interoperability, speed, measurement, or risk control exceeds its cost and complexity. But not every intermediary is needed in every deal. A publisher can sell part of its inventory directly to an agreed advertiser and make another part available to many buyers through platforms. The short path is not always better functionally, and the long one is not always more effective. What needs to be evaluated is the function performed, its cost, its transparency, and its conflicts of interest.
+An intermediary is justified when the value from reach[^g-reach], aggregation, interoperability, speed, measurement, or risk control exceeds its cost and complexity. But not every intermediary is needed in every deal. The short path is not always better functionally, and the long one is not always more effective. What needs to be evaluated is the function performed, its cost, its transparency, and its conflicts of interest.
+
+One publisher, two ways to sell. A gaming app sells its full-screen block after a level directly to an agreed advertiser: the path is short, with no intermediary fees, but with its own integration, its own reporting, and reach limited to the buyers the publisher has managed to strike deals with. It opens the remaining opportunities in the same block to many buyers through an SSP: the path is longer and the platform keeps a fee, but the publisher gains demand aggregation, automated execution, and the filling of opportunities that would otherwise go unsold. Both paths work at the same time, and for every hop the question is the same: what function did it perform, and did that function justify its cost?
 
 ## A Map of the Advertising Ecosystem
 
@@ -124,7 +124,7 @@ Advertiser
                                                                     └→ Publisher → User (path without a publisher ad server)
 
 Cross-cutting functions connected to several participants:
-[Measurement providers, including the mobile MMP category]
+[Measurement providers]
 [Verification]   [Data / identity providers]
 ```
 
@@ -146,9 +146,9 @@ For now, the categories on the map are only needed as navigation:
 | **Ad exchange** | Connective layer | Connects buyers and sellers for an automated deal |
 | **SSP** | Publisher side (`sell side`) | Helps the publisher manage buyer access to inventory |
 | **Ad server** | Advertiser or publisher side | Selects, delivers, and registers advertising according to defined rules |
-| **Measurement provider**; a specialized mobile category — **MMP** | Across the chain | Measures advertising events and outcomes; an MMP specializes in mobile acquisition and attribution |
-| **Verification provider** | Across the chain | Independently evaluates the quality and conditions of delivery |
-| **Data / identity provider** | Across the chain | Supplies or connects permitted data signals for activation and measurement |
+| **Measurement provider**; a specialized mobile category — **MMP** | Across the chain | Measures advertising events and outcomes; an MMP specializes in mobile acquisition and attribution[^g-attribution] |
+| **Verification provider** | Across the chain | Independently evaluates the quality and conditions of display |
+| **Data / identity provider** | Across the chain | Supplies or connects permitted data signals for activation[^g-activation] and measurement |
 
 Full definitions, varieties, and combinations of these roles are the topic of chapter 2.
 
@@ -164,12 +164,10 @@ user opens a screen in the publisher app
     → available systems select an ad
     → the selected creative, or an instruction to load it, is returned to the app
     → the app loads and renders the creative
-    → when specific conditions are met, the delivery may be counted as viewable;
-      the render itself does not prove that
     → the user may notice the ad and interact with it
 ```
 
-The flow starts on the publisher's side, because that is where the opportunity arises. The decision may come from a direct campaign, an ad network, a DSP/SSP path, or a closed platform. The creative, meanwhile, may be delivered not by the same service that made the commercial decision: an ad server or a CDN often participates in delivery separately.
+In a typical flow, the process starts on the publisher's side, because that is where the opportunity arises. The decision may come from a direct campaign[^g-campaign], an ad network, a DSP/SSP path, or a closed platform. The creative, meanwhile, may be delivered not by the same service that made the commercial decision: an ad server or a CDN often participates in delivery separately.
 
 ### 2. The Data Flow
 
@@ -182,9 +180,9 @@ publisher context → selection systems → selected ad + delivery metadata
 impression / click / outcome events → measurement + reporting → optimization
 ```
 
-**Campaign**[^g-campaign] is an organized set of advertising activity with a goal, a budget, and creatives. Before delivery, the advertiser side tells the systems the conditions of that activity. When an opportunity arises, the publisher side may pass a description of the app or site, the placement, the format, the time, and — as permitted by platform rules — signals about context, device, or audience. The selection systems match supply with demand and return a result.
+**Campaign** is an organized set of advertising activity with a goal, a budget, and creatives. Before delivery, the advertiser side tells the systems the conditions of that activity. When an opportunity arises, the publisher side may pass a description of the app or site, the placement, the format, the time, and — as permitted by platform rules — signals about context, device, or audience. The selection systems match supply with demand and return a result.
 
-The systems link objects and events with identifiers such as `request_id`, `campaign_id`, and `creative_id`; the specific fields and rules depend on the integration. After delivery, different participants may separately register an `impression` and a `click`. If the user installs the advertised app and takes out a subscription, the outcome event may reach measurement systems — provided the right integrations exist and within platform/privacy restrictions.
+The systems link objects and events with identifiers such as `request_id`, `campaign_id`, and `creative_id`; the specific fields and rules depend on the integration. After delivery, different participants may separately register an `impression` and a `click`[^g-click]. If the user installs the advertised app and takes out a subscription, the outcome event may reach measurement systems — provided the right integrations exist and within platform/privacy restrictions.
 
 This reverse flow is usually asynchronous and does not have to travel the same network path as the ad request. The advertiser, the publisher, and intermediaries may have different points of observation, timestamps, and counting rules, so their reports do not have to match perfectly.
 
@@ -199,13 +197,13 @@ Separately, depending on contracts:
 advertiser or publisher → service / SaaS fee → technology provider
 ```
 
-**Media spend**[^g-media-spend] is the money an advertiser allocates to buying advertising. A portion passes to media sellers and ultimately forms **publisher revenue**[^g-publisher-revenue]; along the way, **fees** may be deducted. But not every provider takes a share of every advertising payment. An agency, an ad server, an MMP, a verification or data provider may receive a separate service fee, SaaS fee, or other contractual payment. Some participants only pass along or measure events and never touch media money at all.
+**Media spend**[^g-media-spend] is the money an advertiser allocates to buying advertising. A portion passes to media sellers and ultimately forms **publisher revenue**[^g-publisher-revenue]; along the way, **fees** may be deducted. But not every provider takes a share of every advertising payment. An agency often receives a percentage of media spend, sometimes a fixed fee[^g-fixed-fee]; an ad server, an MMP, a verification or data provider may receive a separate service fee, SaaS fee, or other contractual payment. Some participants only pass along or measure events and never touch media money at all.
 
 Therefore, the three sums must not be treated as synonyms:
 
 - advertiser spend — the buyer's cost;
 - intermediary fee — payment for a specific intermediary or technology function;
-- publisher revenue — the seller of inventory's revenue.
+- publisher revenue — the revenue of the inventory seller.
 
 Exact pricing models, margins, and the path of a hypothetical `$100` are covered in chapter 4. What matters here is the direction: advertising and data move in both directions, while money mostly flows from the advertiser to the owners of supply and to service providers.
 
@@ -227,11 +225,11 @@ business goal
 
 Let's walk through the cycle for a subscription app.
 
-1. **Business goal.** The advertiser decides to acquire users who take out a subscription with acceptable unit economics.
+1. **Business goal.** The advertiser decides to acquire users who take out a subscription with acceptable economics.
 2. **Planning and setup.** It defines the audience, the available channels, the budget, and the method of measurement. This is where demand is formed.
 3. **Preparation.** A campaign and several creatives are created. The systems receive delivery rules and the necessary integrations.
-4. **Access to media and ad selection.** The publisher provides opportunities directly or through sell-side systems. Buying systems find suitable opportunities and select a creative. The specifics of bidding, targeting, and pacing will appear in later chapters.
-5. **Delivery and render.** The creative is delivered to the publisher app. Events corresponding to the participants' points of observation are registered; a render by itself does not mean viewability or the user's actual attention.
+4. **Access to media and ad selection.** The publisher provides opportunities directly or through sell-side systems. Buying systems find suitable opportunities and select a creative. The specifics of bidding, targeting[^g-targeting], and pacing[^g-pacing] will appear in later chapters.
+5. **Delivery and render.** The creative is delivered to the publisher app and rendered; events corresponding to the participants' points of observation are registered.
 6. **Reaction and result.** The user may ignore the ad, click it, install the app, and later buy a subscription. The presence of an event does not prove the ad's causal impact.
 7. **Measurement and reporting.** The systems aggregate the observed impressions, clicks, and outcomes. Attribution and mobile measurement require separate mechanisms and will be covered later.
 8. **Optimization and settlements.** The advertiser redistributes future demand based on the available signals; the publisher adjusts its monetization strategy; the participants reconcile reports and carry out settlements.
@@ -247,21 +245,21 @@ The feedback loop is the reason AdTech is not just delivery infrastructure. Valu
 | Primary object | Paid media and advertising opportunities | Customer relationships and marketing operations |
 | Main coordination | Between the buying side and the selling side | Inside the advertiser and its owned channels |
 | Typical channels | Publisher sites and apps, ad platforms, media marketplaces | Email, CRM, push, the brand's own site or app, customer journeys |
-| Typical systems | DSP, SSP, ad network, exchange, ad server | CRM, marketing automation, CDP, email/push platforms |
+| Typical systems | DSP, SSP, ad network, exchange, ad server | CRM, marketing automation, CDP[^g-cdp], email/push platforms |
 | Primary result | Buy, sell, select, deliver, and measure advertising | Manage customer data and communications across the lifecycle |
 
 The overlap is large. Measurement, attribution, identity, CDP, and activation can serve paid media and owned channels at the same time. For example, a subscription-purchase event lives in product/backend systems, may enter a MarTech retention process, and at the same time become an outcome signal for AdTech measurement. That is why `AdTech vs MarTech` is a working rule of thumb, not an impermeable boundary.
 
-## What This Is Often Confused With
+## Common Confusions
 
 - **"The user is the inventory."** No. Inventory is advertising opportunities in a media environment. The user creates context and attention but remains a separate participant with their own interests and rights.
 - **"An impression means the person saw the ad."** Not necessarily. `Served`, `rendered`, and `viewable` describe different points of the process, and viewability by itself does not prove human attention.
 - **"Every intermediary resells media and keeps a share of the spend."** No. Some receive a separate service/SaaS fee, and some take no part in the media money flow at all.
 - **"The more intermediaries, the worse."** Additional hops add fees, latency, and the risk of opacity, but they can also provide reach, aggregation, interoperability, measurement, and quality controls. The question is what function each hop performs and what it costs.
 - **"AdTech = programmatic = RTB."** No. RTB is one mechanism of programmatic; programmatic is part of AdTech; AdTech also supports direct and closed-platform advertising.
-- **"AdTech and MarTech are strictly separated."** No. Their primary jobs differ, but data, identity, measurement, and activation often overlap.
+- **"AdTech and MarTech are strictly separated."** No. AdTech primarily coordinates paid media, while MarTech handles the customer lifecycle and owned channels, but data, identity, measurement, and activation often overlap.
 
-## Key Takeaways
+## What to Remember
 
 1. Digital advertising is a market of coordination between advertiser, publisher, and user, not just the delivery of a banner.
 2. The advertiser creates demand, the publisher creates supply; the sides of the market must not be confused with platform names.
@@ -271,7 +269,6 @@ The overlap is large. Measurement, attribution, identity, CDP, and activation ca
 6. Intermediaries perform functions; no category is required to be present in every deal.
 7. The display flow, the data flow, and the money flow differ in direction, participants, and timing.
 8. The advertising lifecycle forms a feedback loop: measurement of past events influences future decisions and spending.
-9. AdTech primarily coordinates paid media, while MarTech handles the customer lifecycle and owned channels, but there is overlap between them.
 
 ## Check Yourself
 
