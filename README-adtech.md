@@ -87,8 +87,9 @@ The Planner, Author, Auditor, and Editor are independent roles:
 The central sequence is:
 
 ```text
-market → campaign → programmatic → tracking → attribution → MMP
-→ analytics → fraud/privacy → engineering → products/business
+market → campaign → platforms (walled gardens) → publisher side → programmatic
+→ tracking → attribution → MMP → analytics → fraud/privacy → engineering
+→ ecosystems (video, CTV, retail, affiliate) → products/business
 ```
 
 The recurring case is a subscription mobile app: a user sees an ad on a publisher property, clicks, installs the app, and later buys a subscription. Reuse it when it clarifies the topic, but do not force it where another example is better.

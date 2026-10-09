@@ -69,7 +69,9 @@
 - editorial outputs;
 - glossary, formula sheets, case studies и metadata titles/descriptions.
 
-Не переключайся на английский автоматически. Английский разрешён только для established AdTech terminology, кода, JSON keys, protocol fields, URLs, названий компаний и цитат. Перевод в English выполняется отдельным явным этапом после утверждения русской версии.
+Не переключайся на английский автоматически. Английский разрешён только для established AdTech terminology, кода, JSON keys, protocol fields, URLs, названий компаний и цитат. Бытовые слова (`conclusion`, `presentation`, `entity`, `boundary`, `population`, `semantics`, `owner`, `stage`) пишутся по-русски; заголовки секций и шапки таблиц — по-русски, английский в них допустим только как термин.
+
+Даты проверки источников и пометки вроде «на дату DD.MM.YYYY», «проверено» — только в разделе источников. В учебном тексте vendor-примеры приводятся без даты («в Google Ads …»); если актуальность критична — «на момент написания». Перевод в English выполняется отдельным явным этапом после утверждения русской версии.
 
 ## 4. Сквозной mental model
 
@@ -141,7 +143,7 @@ Planner должен:
 3. Исследовать тему, если нужны свежие сведения.
 4. Выстроить causal mental model: problem → why mechanism exists → participants → data/money/decision flow → example → edge cases.
 5. Создать Coverage Matrix для каждого numbered TOC requirement с planned location и treatment.
-6. Выделить `Already expected` и `Must be introduced here`.
+6. Разделить термины на три группы: `Уже ожидается` (введены ранее), `Уточняется здесь` (введены ранее, глава добавляет новый слой или ракурс — см. пометки `(ракурс: …)` в TOC) и `Вводится здесь` (новые). Термин не может быть «введён» дважды.
 7. Выбрать 1–3 concrete examples.
 8. Выделить relevant misconceptions.
 9. Спланировать 4–9 смысловых секций, не создавая заголовок для каждого TOC item.
@@ -165,6 +167,18 @@ Author получает original course instructions, relevant TOC, Planner Brie
 
 Показывай money flow и data flow отдельно, когда они расходятся. Используй компактные схемы, таблицы, формулы, JSON и HTTP snippets.
 
+#### Контракт оформления главы
+
+Обязателен для Author и Final Editor, проверяется Auditor:
+
+- ровно один H1 — заголовок главы; все секции — `##`, подсекции — `###`;
+- хвост главы — фиксированные секции уровня `##` с фиксированными названиями и в этом порядке: `## С чем это часто путают`, `## Что важно запомнить`, `## Проверьте себя`, `## Источники и дополнительное чтение`. Источники — всегда `##`, иначе EPUB (`--split-level=1`) делает из них отдельную главу;
+- вводная секция называется `## Суть` (допустим подзаголовок через двоеточие);
+- заголовки секций и шапки таблиц — по-русски; английский в них только как established term (`## Bid strategy` допустимо, `## Contract arithmetic` — нет);
+- глоссарная сноска `[^g-id]` ставится при **первом** упоминании термина в главе, а не при «определяющем»; каждый термин, имеющий статью в `glossary.md`, получает сноску; в одной главе один термин — одна сноска;
+- без дат проверки и research-пометок в prose (см. §3);
+- чистая проза главы (без таблиц, схем и front matter) — ориентир до 2 400 слов; «С чем это часто путают» и «Что важно запомнить» не дублируют друг друга (суммарно не более 12–14 пунктов).
+
 ### Stage C — Coverage & Accuracy Auditor
 
 Создай независимого Auditor, который получает TOC requirements, Planner Coverage Matrix, Planner Boundaries, готовый draft, current date и sources. Auditor не редактирует текст.
@@ -178,7 +192,7 @@ Author получает original course instructions, relevant TOC, Planner Brie
 
 Одно упоминание термина не считается coverage.
 
-Auditor проверяет также correctness, data flow, money flow, current-vs-legacy claims, pedagogy, scope и information density. Каждый finding должен ссылаться на конкретную секцию или цитируемую формулировку.
+Auditor проверяет также correctness, data flow, money flow, current-vs-legacy claims, pedagogy, scope, information density и **контракт оформления** (Stage B): структура заголовков, названия служебных секций, язык заголовков и шапок таблиц, сноски при первом упоминании, отсутствие дат в prose. Нарушение контракта оформления — `IMPORTANT` и блокирует `PASS`, потому что ломает сборку EPUB и структурный паритет перевода. Каждый finding должен ссылаться на конкретную секцию или цитируемую формулировку.
 
 ### Stage D — Final Editor
 
@@ -287,63 +301,67 @@ Translation pipeline запускается только для главы, пр
 
 Каждый подпункт ниже — обязательный coverage requirement соответствующей главы. Порядок внутри главы можно менять ради ясности, но requirement нельзя терять.
 
+Пометка `(определение)` означает, что термин вводится именно здесь; пометка `(ракурс: …)` означает послойное возвращение к уже определённому термину — глава раскрывает только указанный ракурс и ссылается на главу определения, а не переопределяет термин. Planner обязан учитывать эти пометки в разделах «Уже ожидается» и «Уточняется здесь».
+
+Структура принята 2026-10-09 (см. `audits/ru/review-2026-10-09/toc-proposal.md`): 54 главы, 13 частей.
+
 ### Часть I. Фундамент рекламного рынка
 
 #### 1. Что такое AdTech и зачем он существует
 
-1.1 Реклама как рынок; 1.2 advertiser, publisher и user; 1.3 supply и demand; 1.4 advertising inventory; 1.5 где появляется technology; 1.6 три потока — деньги, данные, показы; 1.7 MarTech vs AdTech; 1.8 lifecycle рекламы; 1.9 зачем столько посредников; 1.10 карта экосистемы.
+1.1 Реклама как рынок; 1.2 advertiser, publisher и user; 1.3 supply и demand; 1.4 advertising inventory; 1.5 где появляется technology; 1.6 три потока — деньги, данные, показы (ракурс: направление потоков); 1.7 MarTech vs AdTech; 1.8 lifecycle рекламы; 1.9 зачем столько посредников; 1.10 карта экосистемы.
 
 #### 2. Участники рекламной экосистемы
 
-2.1 advertiser; 2.2 brand и performance advertiser; 2.3 publisher; 2.4 agency; 2.5 media buyer; 2.6 ad network; 2.7 DSP; 2.8 SSP; 2.9 ad exchange; 2.10 ad server; 2.11 MMP и attribution provider; 2.12 verification provider; 2.13 data provider; 2.14 DMP и CDP; 2.15 identity provider; 2.16 кто кому платит; 2.17 совмещение ролей внутри одной компании.
+2.1 advertiser; 2.2 brand и performance advertiser; 2.3 publisher; 2.4 agency; 2.5 media buyer (функция внутри advertiser/agency; affiliate media buyer — глава 51); 2.6 ad network; 2.7 DSP; 2.8 SSP; 2.9 ad exchange; 2.10 ad server; 2.11 MMP и attribution provider; 2.12 verification provider; 2.13 data provider; 2.14 DMP и CDP; 2.15 identity provider; 2.16 кто кому платит (ракурс: contractual path и тип оплаты по ролям); 2.17 совмещение ролей внутри одной компании.
 
 #### 3. Основные рекламные метрики
 
-3.1 request и opportunity; 3.2 impression; 3.3 served/rendered/viewable impression; 3.4 reach; 3.5 frequency; 3.6 click; 3.7 CTR; 3.8 conversion; 3.9 CVR; 3.10 CPM; 3.11 eCPM; 3.12 CPC; 3.13 CPA; 3.14 CPI; 3.15 CPL; 3.16 CAC; 3.17 revenue; 3.18 spend и cost; 3.19 ROAS; 3.20 ROI; 3.21 ARPU и ARPPU; 3.22 LTV; 3.23 fill rate; 3.24 win rate; 3.25 почему одна campaign выглядит по-разному с разных сторон.
+3.1 request и opportunity; 3.2 impression; 3.3 served/rendered/viewable impression (определение; методология — глава 37); 3.4 reach; 3.5 frequency (определение); 3.6 click; 3.7 CTR; 3.8 conversion; 3.9 CVR; 3.10 CPM; 3.11 eCPM (определение; publisher-side realized revenue per mille); 3.12 CPC; 3.13 CPA; 3.14 CPI; 3.15 CPL; 3.16 CAC; 3.17 revenue; 3.18 spend и cost; 3.19 ROAS; 3.20 ROI; 3.21 ARPU и ARPPU; 3.22 LTV (определение; cohort-анализ — глава 33); 3.23 fill rate (определение и denominators); 3.24 win rate (определение); 3.25 почему одна campaign выглядит по-разному с разных сторон.
 
 #### 4. Экономика и бизнес-модели AdTech
 
-4.1 CPM; 4.2 CPC; 4.3 CPA/CPI/CPL; 4.4 revenue share; 4.5 fixed fee и SaaS pricing; 4.6 markup; 4.7 take rate; 4.8 advertiser spend; 4.9 media cost; 4.10 publisher payout; 4.11 gross/net revenue; 4.12 gross margin; 4.13 arbitrage; 4.14 заработок посредников на одном рекламном долларе; 4.15 путь $100 от advertiser до publisher.
+4.1 CPM; 4.2 CPC; 4.3 CPA/CPI/CPL (4.1–4.3 — ракурс: contractual basis, billable event и risk allocation; формулы — глава 3); 4.4 revenue share; 4.5 fixed fee и SaaS pricing; 4.6 markup; 4.7 take rate; 4.8 advertiser spend; 4.9 media cost; 4.10 publisher payout; 4.11 gross/net revenue; 4.12 gross margin; 4.13 arbitrage; 4.14 заработок посредников на одном рекламном долларе; 4.15 путь $100 от advertiser до publisher.
 
 ### Часть II. Campaigns и Performance Marketing
 
 #### 5. Как устроена рекламная кампания
 
-5.1 advertiser account; 5.2 campaign; 5.3 ad group/ad set; 5.4 ad/creative; 5.5 placement; 5.6 campaign objective; 5.7 optimization event; 5.8 targeting; 5.9 bid strategy; 5.10 budget; 5.11 schedule; 5.12 tracking settings; 5.13 landing page; 5.14 lifecycle: draft → learning → active → paused → completed.
+5.1 advertiser account; 5.2 campaign; 5.3 ad group/ad set; 5.4 ad/creative; 5.5 placement (ракурс: поле конфигурации campaign; publisher-side slot — главы 1 и 10, targeting axis — 6.9, формат — 8.3); 5.6 campaign objective; 5.7 optimization event; 5.8 targeting (вводно; подробно — глава 6); 5.9 bid strategy (ракурс: выбранная policy; математика — глава 7); 5.10 budget; 5.11 schedule; 5.12 tracking settings; 5.13 landing page; 5.14 lifecycle: draft → learning → active → paused → completed.
 
 #### 6. Targeting и Audiences
 
-6.1 geography; 6.2 device; 6.3 OS/browser; 6.4 demographics; 6.5 interests; 6.6 behavior; 6.7 contextual; 6.8 keyword; 6.9 placement; 6.10 first-party audiences; 6.11 third-party audiences; 6.12 retargeting; 6.13 lookalikes; 6.14 suppression/exclusion; 6.15 overlap; 6.16 broad и algorithmic targeting; 6.17 targeting vs optimization.
+6.1 geography; 6.2 device; 6.3 OS/browser; 6.4 demographics; 6.5 interests; 6.6 behavior; 6.7 contextual; 6.8 keyword; 6.9 placement (ракурс: targeting axis); 6.10 first-party audiences; 6.11 third-party audiences; 6.12 retargeting; 6.13 lookalikes; 6.14 suppression/exclusion; 6.15 overlap; 6.16 broad и algorithmic targeting; 6.17 targeting vs optimization; 6.18 first-party data vs first-party identity; 6.19 addressability как ограничение (caveat; механика — глава 24, последствия — главы 40–42).
 
 #### 7. Budget, Bidding и Pacing
 
-7.1 bid; 7.2 max bid; 7.3 fixed bid; 7.4 dynamic bidding; 7.5 daily budget; 7.6 lifetime budget; 7.7 spend cap; 7.8 pacing; 7.9 even vs accelerated delivery; 7.10 frequency cap; 7.11 budget allocation; 7.12 underspend/overspend; 7.13 bid strategy; 7.14 optimization toward CPC/CPA/ROAS; 7.15 max bid vs actual price.
+7.1 bid; 7.2 max bid; 7.3 fixed bid; 7.4 dynamic bidding; 7.5 daily budget; 7.6 lifetime budget; 7.7 spend cap; 7.8 pacing (определение; алгоритм DSP — глава 20, realtime state — глава 46); 7.9 even vs accelerated delivery; 7.10 frequency cap (ракурс: настройка advertiser); 7.11 budget allocation; 7.12 underspend/overspend; 7.13 bid strategy (ракурс: семейство стратегий и их математика); 7.14 optimization toward CPC/CPA/ROAS; 7.15 почему actual price ≤ bid (first/second price — глава 18).
 
 #### 8. Creative, Placement и рекламные форматы
 
-8.1 creative; 8.2 ad unit; 8.3 placement; 8.4 display/banner; 8.5 native; 8.6 video; 8.7 interstitial; 8.8 rewarded video; 8.9 search; 8.10 social; 8.11 in-feed; 8.12 CTV; 8.13 responsive creatives; 8.14 dynamic creative optimization; 8.15 approval; 8.16 fatigue; 8.17 performance measurement.
+8.1 creative; 8.2 ad unit; 8.3 placement (ракурс: compatibility с форматом и ad unit); 8.4 display/banner; 8.5 native; 8.6 video; 8.7 interstitial; 8.8 rewarded video; 8.9 search (формат; search как рынок — глава 9); 8.10 social; 8.11 in-feed; 8.12 CTV (формат; экосистема — глава 49); 8.13 responsive creatives; 8.14 dynamic creative optimization; 8.15 approval; 8.16 fatigue; 8.17 performance measurement.
 
-#### 9. Performance и Affiliate Marketing
+#### 9. Walled Gardens, Self-Serve Platforms и Search
 
-9.1 performance marketing; 9.2 affiliate; 9.3 affiliate network; 9.4 advertiser/merchant; 9.5 offer; 9.6 media buyer; 9.7 traffic source; 9.8 CPA/CPL/CPI offers; 9.9 payout; 9.10 revenue и affiliate margin; 9.11 conversion cap; 9.12 GEO/offer targeting; 9.13 tracking link; 9.14 click ID; 9.15 subID; 9.16 S2S postback; 9.17 smartlink; 9.18 deep link; 9.19 incent/non-incent; 9.20 rewarded traffic; 9.21 media buying; 9.22 traffic arbitrage; 9.23 lead generation; 9.24 affiliate fraud; 9.25 affiliate flow end-to-end.
+9.1 self-serve platform vs open programmatic; 9.2 walled garden; 9.3 closed auction без SSP, exchange и OpenRTB; 9.4 search advertising как рынок; 9.5 keyword auction концептуально (relevance/quality и ad rank без формул); 9.6 social feed auction; 9.7 first-party data platform как основа targeting; 9.8 self-reporting и conversion claims; 9.9 SAN vs non-SAN; 9.10 Apple Search Ads как пример; 9.11 API-based integrations (MMP, conversions API) концептуально; 9.12 где walled gardens стоят в value chain; 9.13 почему главы 5–8 учили на Google и Meta и что из этого переносимо; 9.14 trade-offs для advertiser: reach и данные против прозрачности и контроля.
 
 ### Часть III. Publisher Side и продажа Inventory
 
 #### 10. Publisher Monetization
 
-10.1 что publisher продаёт; 10.2 advertising inventory; 10.3 ad unit; 10.4 placement; 10.5 page/app inventory; 10.6 available impressions; 10.7 sold/unsold inventory; 10.8 fill rate; 10.9 eCPM; 10.10 yield; 10.11 direct monetization; 10.12 indirect monetization; 10.13 monetization partners; 10.14 demand diversification; 10.15 revenue optimization.
+10.1 что publisher продаёт; 10.2 advertising inventory; 10.3 ad unit; 10.4 placement (ракурс: publisher-side slot); 10.5 page/app inventory; 10.6 available impressions; 10.7 sold/unsold inventory; 10.8 fill rate (ракурс: управляемый показатель yield); 10.9 eCPM (ракурс: инструмент сравнения demand); 10.10 yield; 10.11 direct monetization; 10.12 indirect monetization; 10.13 monetization partners; 10.14 demand diversification; 10.15 revenue optimization.
 
 #### 11. Ad Server и Ad Serving
 
-11.1 ad server; 11.2 publisher ad server; 11.3 advertiser ad server; 11.4 trafficking; 11.5 order; 11.6 line item; 11.7 creative; 11.8 placement/ad unit; 11.9 priority; 11.10 targeting; 11.11 creative selection; 11.12 frequency capping; 11.13 delivery rules; 11.14 guaranteed campaigns; 11.15 non-guaranteed campaigns; 11.16 inventory forecasting; 11.17 impression/click tracking; 11.18 serving flow.
+11.1 ad server; 11.2 publisher ad server; 11.3 advertiser ad server; 11.4 trafficking; 11.5 order; 11.6 line item; 11.7 creative; 11.8 маппинг placement → ad unit в ad server; 11.9 priority; 11.10 targeting; 11.11 creative selection; 11.12 frequency capping (ракурс: правило delivery в ad server); 11.13 delivery rules; 11.14 guaranteed campaigns; 11.15 non-guaranteed campaigns; 11.16 inventory forecasting; 11.17 impression/click tracking; 11.18 serving flow.
 
 #### 12. Waterfall, Mediation и Yield Optimization
 
-12.1 waterfall; 12.2 priority-based demand; 12.3 historical eCPM; 12.4 passback; 12.5 fill optimization; 12.6 mobile mediation; 12.7 mediation platform; 12.8 ad network mediation; 12.9 yield management; 12.10 dynamic allocation; 12.11 waterfall limitations; 12.12 переход к parallel auctions.
+12.1 primer: auction, bid и clearing price — минимум для этой главы (подробно — глава 18); 12.2 waterfall; 12.3 priority-based demand; 12.4 historical eCPM (ракурс: estimate для ranking); 12.5 passback; 12.6 fill optimization; 12.7 mobile mediation; 12.8 mediation platform; 12.9 ad network mediation; 12.10 yield management; 12.11 dynamic allocation; 12.12 waterfall limitations; 12.13 переход к parallel auctions.
 
 #### 13. Header Bidding и Prebid
 
-13.1 header bidding; 13.2 waterfall vs header bidding; 13.3 parallel auction; 13.4 wrapper; 13.5 Prebid.js; 13.6 bid adapter; 13.7 client-side; 13.8 server-side; 13.9 Prebid Server; 13.10 bid timeout; 13.11 latency; 13.12 price buckets; 13.13 key-value targeting; 13.14 winning bid в ad server; 13.15 web; 13.16 apps/video; 13.17 yield vs latency.
+13.1 header bidding; 13.2 waterfall vs header bidding; 13.3 parallel auction; 13.4 wrapper; 13.5 Prebid.js; 13.6 bid adapter; 13.7 client-side; 13.8 server-side; 13.9 Prebid Server; 13.10 bid timeout (ракурс: header bidding); 13.11 latency; 13.12 price buckets; 13.13 key-value targeting; 13.14 winning bid в ad server; 13.15 web; 13.16 apps/video; 13.17 yield vs latency.
 
 #### 14. Способы продажи Advertising Inventory
 
@@ -353,27 +371,29 @@ Translation pipeline запускается только для главы, пр
 
 #### 15. Что такое Programmatic Advertising
 
-15.1 manual media buying; 15.2 automated buying; 15.3 programmatic; 15.4 programmatic ≠ RTB; 15.5 demand side; 15.6 supply side; 15.7 automated guaranteed; 15.8 programmatic direct; 15.9 real-time bidding; 15.10 programmatic supply chain.
+15.1 manual media buying; 15.2 automated buying; 15.3 programmatic; 15.4 programmatic ≠ RTB; 15.5 demand side; 15.6 supply side; 15.7 automated guaranteed; 15.8 programmatic direct; 15.9 real-time bidding; 15.10 programmatic supply chain; 15.11 open programmatic vs closed platforms (связь с главой 9).
 
 #### 16. DSP, SSP, Exchange и Ad Network
 
-16.1 DSP; 16.2 SSP; 16.3 exchange; 16.4 ad network; 16.5 что продаёт SSP; 16.6 что покупает DSP; 16.7 функция exchange; 16.8 network aggregation; 16.9 demand aggregation; 16.10 supply aggregation; 16.11 money flow; 16.12 data flow; 16.13 совмещение ролей; 16.14 DSP vs network; 16.15 SSP vs exchange.
+Роли определены в 2.6–2.9 и 2.17; здесь — только то, что они покупают, продают и как через них движутся деньги и данные.
+
+16.1 что продаёт SSP; 16.2 что покупает DSP; 16.3 функция exchange; 16.4 network aggregation; 16.5 demand aggregation; 16.6 supply aggregation; 16.7 money flow (ракурс: auction-specific path — clearing price → fees → publisher); 16.8 data flow; 16.9 DSP vs network (глубокое сравнение: per-opportunity decision, ценовая прозрачность, principal vs agent); 16.10 SSP vs exchange (глубокое сравнение).
 
 #### 17. Один Impression от начала до конца
 
-17.1 user opens page/app; 17.2 ad opportunity; 17.3 publisher monetization stack; 17.4 SSP request; 17.5 bid request; 17.6 buyers; 17.7 DSP evaluation; 17.8 bid; 17.9 auction; 17.10 winner; 17.11 creative возвращается; 17.12 render; 17.13 impression tracking; 17.14 viewability; 17.15 click; 17.16 conversion; 17.17 reporting/billing; 17.18 карта IDs, событий и денег.
+17.1 user opens page/app; 17.2 ad opportunity; 17.3 publisher monetization stack; 17.4 SSP request; 17.5 bid request; 17.6 buyers; 17.7 DSP evaluation; 17.8 bid; 17.9 auction; 17.10 winner; 17.11 creative возвращается; 17.12 render; 17.13 impression tracking; 17.14 viewability (ракурс: место в flow одного impression); 17.15 click; 17.16 conversion; 17.17 reporting/billing; 17.18 карта IDs, событий и денег.
 
 #### 18. RTB Auction
 
-18.1 auction basics; 18.2 bid request; 18.3 bid response; 18.4 bid price; 18.5 bid floor; 18.6 first-price; 18.7 second-price; 18.8 clearing price; 18.9 winner; 18.10 win notification; 18.11 loss notification; 18.12 bid shading; 18.13 timeouts; 18.14 no-bid; 18.15 auction dynamics.
+18.1 auction basics; 18.2 bid request; 18.3 bid response; 18.4 bid price; 18.5 bid floor; 18.6 first-price; 18.7 second-price; 18.8 clearing price; 18.9 winner; 18.10 win notification; 18.11 loss notification; 18.12 bid shading; 18.13 timeouts (ракурс: auction); 18.14 no-bid; 18.15 auction dynamics.
 
 #### 19. OpenRTB
 
-19.1 зачем OpenRTB; 19.2 request structure; 19.3 `id`; 19.4 `imp`; 19.5 banner; 19.6 video; 19.7 native; 19.8 `site`; 19.9 `app`; 19.10 `device`; 19.11 `user`; 19.12 `source`; 19.13 `regs`; 19.14 `ext`; 19.15 bid response; 19.16 seatbid; 19.17 bid; 19.18 price; 19.19 creative markup; 19.20 notification URLs; 19.21 macros; 19.22 request JSON; 19.23 response JSON; 19.24 request-to-impression flow.
+19.1 зачем OpenRTB; 19.2 request structure; 19.3 `id`; 19.4 `imp`; 19.5 banner; 19.6 video; 19.7 native; 19.8 `site`; 19.9 `app`; 19.10 `device`; 19.11 `user` (включая `buyeruid` и связь с cookie sync — механика в 24.20); 19.12 `source`; 19.13 `regs`; 19.14 `ext`; 19.15 bid response; 19.16 seatbid; 19.17 bid; 19.18 price; 19.19 creative markup; 19.20 notification URLs; 19.21 macros; 19.22 request JSON; 19.23 response JSON; 19.24 request-to-impression flow (кратко; полный walkthrough — глава 17).
 
 #### 20. Как DSP принимает решение
 
-20.1 eligibility; 20.2 campaign matching; 20.3 targeting; 20.4 budget; 20.5 frequency caps; 20.6 pCTR; 20.7 pCVR; 20.8 expected value; 20.9 expected revenue; 20.10 eCPM; 20.11 bid calculation; 20.12 CPA optimization; 20.13 ROAS optimization; 20.14 pacing; 20.15 budget allocation; 20.16 exploration/exploitation; 20.17 feedback loop; 20.18 why bidder no-bids.
+20.1 eligibility; 20.2 campaign matching; 20.3 targeting; 20.4 budget; 20.5 frequency caps; 20.6 pCTR; 20.7 pCVR; 20.8 expected value; 20.9 expected revenue; 20.10 eCPM (ракурс: expected eCPM как bid normalization, не publisher eCPM главы 3/10); 20.11 bid calculation; 20.12 CPA optimization; 20.13 ROAS optimization; 20.14 pacing (ракурс: алгоритм DSP); 20.15 budget allocation (ракурс: алгоритм DSP); 20.16 exploration/exploitation; 20.17 feedback loop; 20.18 why bidder no-bids.
 
 ### Часть V. Tracking, Identity и Attribution
 
@@ -383,37 +403,37 @@ Translation pipeline запускается только для главы, пр
 
 #### 22. Click Tracking
 
-22.1 click URL; 22.2 tracking URL; 22.3 destination URL; 22.4 redirect; 22.5 redirect chain; 22.6 click ID; 22.7 campaign ID; 22.8 publisher ID; 22.9 creative ID; 22.10 sub IDs; 22.11 macros; 22.12 dynamic parameters; 22.13 landing page; 22.14 multiple trackers; 22.15 deduplication; 22.16 complete click flow.
+22.1 click URL; 22.2 tracking URL; 22.3 destination URL; 22.4 redirect; 22.5 redirect chain; 22.6 click ID; 22.7 campaign ID; 22.8 publisher ID как параметр tracking URL (не first-party identity publisher-а — 42.4); 22.9 creative ID; 22.10 sub IDs; 22.11 macros; 22.12 dynamic parameters (включая UTM как пример web-analytics параметров); 22.13 landing page; 22.14 multiple trackers; 22.15 deduplication; 22.16 complete click flow.
 
 #### 23. Conversion Tracking
 
-23.1 conversion; 23.2 registration; 23.3 lead; 23.4 purchase; 23.5 deposit; 23.6 subscription; 23.7 install; 23.8 in-app event; 23.9 browser pixel; 23.10 JavaScript; 23.11 SDK; 23.12 S2S; 23.13 conversion ID; 23.14 order ID; 23.15 revenue; 23.16 currency; 23.17 deduplication; 23.18 retries; 23.19 late conversions; 23.20 end-to-end flow.
+23.1 conversion; 23.2 registration; 23.3 lead; 23.4 purchase; 23.5 deposit; 23.6 subscription; 23.7 install; 23.8 in-app event; 23.9 browser pixel; 23.10 JavaScript; 23.11 SDK; 23.12 S2S; 23.13 conversion ID; 23.14 order ID; 23.15 revenue; 23.16 currency; 23.17 deduplication (ракурс: dedup rule в tracking contract); 23.18 retries; 23.19 late conversions (ракурс: attribution window); 23.20 browser + server dual tracking (CAPI-like) и dedup pixel ↔ server; 23.21 end-to-end flow.
 
 #### 24. User и Device Identity
 
-24.1 зачем identity; 24.2 cookie; 24.3 first-party cookie; 24.4 third-party cookie; 24.5 device ID; 24.6 IDFA; 24.7 GAID; 24.8 login ID; 24.9 hashed identifiers; 24.10 click ID; 24.11 IP; 24.12 User Agent; 24.13 fingerprinting; 24.14 deterministic matching; 24.15 probabilistic matching; 24.16 identity graph; 24.17 cross-device; 24.18 identity resolution; 24.19 identity vs tracking vs attribution.
+24.1 зачем identity; 24.2 cookie; 24.3 first-party cookie; 24.4 third-party cookie; 24.5 device ID; 24.6 IDFA; 24.7 GAID; 24.8 login ID; 24.9 hashed identifiers; 24.10 click ID; 24.11 IP; 24.12 User Agent; 24.13 fingerprinting; 24.14 deterministic matching; 24.15 probabilistic matching; 24.16 identity graph; 24.17 cross-device; 24.18 identity resolution; 24.19 identity vs tracking vs attribution; 24.20 cookie sync / ID matching между SSP и DSP (match tables, `buyeruid`).
 
 #### 25. Attribution
 
-25.1 attribution; 25.2 touchpoint; 25.3 click-through; 25.4 view-through; 25.5 last-click; 25.6 first-click; 25.7 multi-touch; 25.8 attribution window; 25.9 click lookback; 25.10 view lookback; 25.11 conversion window; 25.12 attribution priority; 25.13 reattribution; 25.14 assisted conversion; 25.15 organic conversion; 25.16 conflicts; 25.17 why platforms claim the same conversion; 25.18 limitations.
+25.1 attribution; 25.2 touchpoint; 25.3 click-through; 25.4 view-through; 25.5 last-click; 25.6 first-click; 25.7 multi-touch; 25.8 attribution window; 25.9 click lookback; 25.10 view lookback; 25.11 conversion window; 25.12 attribution priority; 25.13 reattribution; 25.14 assisted conversion; 25.15 organic conversion; 25.16 conflicts; 25.17 why platforms claim the same conversion (связь с 9.8); 25.18 limitations.
 
 ### Часть VI. Mobile Measurement и MMP
 
 #### 26. Mobile Advertising Ecosystem
 
-26.1 app inventory; 26.2 mobile web vs in-app; 26.3 advertising SDK; 26.4 SDK monetization; 26.5 banner; 26.6 interstitial; 26.7 rewarded; 26.8 native; 26.9 mobile ad network; 26.10 mediation; 26.11 UA campaign; 26.12 install campaign; 26.13 re-engagement; 26.14 SAN; 26.15 non-SAN; 26.16 mobile performance ecosystem.
+26.1 app inventory; 26.2 mobile web vs in-app; 26.3 advertising SDK; 26.4 SDK monetization; 26.5 mobile-specific отличия форматов — SDK rendering, rewarded economics (сами форматы — глава 8); 26.6 mobile ad network; 26.7 mediation (ракурс: роль в mobile stack; механика — глава 12); 26.8 UA campaign; 26.9 install campaign; 26.10 re-engagement; 26.11 SAN и non-SAN (ракурс: последствия для mobile measurement; модель — глава 9); 26.12 mobile performance ecosystem.
 
 #### 27. Почему Mobile Attribution сложнее Web Attribution
 
-27.1 click в browser; 27.2 App Store/Google Play; 27.3 install; 27.4 first launch; 27.5 потеря прямой связи; 27.6 device IDs; 27.7 click-to-install matching; 27.8 deterministic; 27.9 probabilistic; 27.10 referrer; 27.11 iOS limits; 27.12 Android limits; 27.13 reinstall/reattribution; 27.14 full mobile install flow.
+27.1 click в browser; 27.2 App Store/Google Play; 27.3 install; 27.4 first launch; 27.5 потеря прямой связи; 27.6 device IDs; 27.7 click-to-install matching; 27.8 deterministic; 27.9 probabilistic; 27.10 referrer; 27.11 iOS limits; 27.12 Android limits; 27.13 reinstall/reattribution; 27.14 Apple Search Ads attribution (AdServices) как третий canonical source; 27.15 full mobile install flow.
 
 #### 28. Что такое MMP
 
-28.1 Mobile Measurement Partner; 28.2 client; 28.3 зачем advertiser платит; 28.4 MMP SDK; 28.5 install measurement; 28.6 in-app events; 28.7 attribution; 28.8 network integrations; 28.9 partner postbacks; 28.10 conversion values; 28.11 revenue tracking; 28.12 cost aggregation; 28.13 cohort reporting; 28.14 deep linking; 28.15 deferred deep linking; 28.16 fraud prevention; 28.17 raw data export; 28.18 AppsFlyer; 28.19 Adjust; 28.20 Singular; 28.21 MMP vs product analytics; 28.22 MMP vs network reporting; 28.23 full MMP flow.
+28.1 Mobile Measurement Partner; 28.2 client; 28.3 зачем advertiser платит; 28.4 MMP SDK; 28.5 install measurement; 28.6 in-app events; 28.7 attribution; 28.8 network integrations; 28.9 partner postbacks; 28.10 revenue tracking; 28.11 cost aggregation; 28.12 cohort reporting; 28.13 deep linking; 28.14 deferred deep linking; 28.15 fraud prevention; 28.16 raw data export; 28.17 conversion value mapping (ракурс: роль MMP; сам механизм — 29.8); 28.18 MMP vs product analytics и MMP vs network reporting (одна сравнительная таблица); 28.19 full MMP flow. Vendor profiles (AppsFlyer, Adjust, Singular) — глава 53.
 
 #### 29. Privacy-Preserving Mobile Attribution
 
-29.1 ATT; 29.2 ATT consent; 29.3 IDFA availability; 29.4 limits of user-level attribution; 29.5 SKAdNetwork; 29.6 AdAttributionKit; 29.7 aggregated measurement; 29.8 conversion values; 29.9 delayed reporting; 29.10 privacy thresholds; 29.11 modeled attribution; 29.12 deterministic vs privacy-preserving measurement; 29.13 advertiser/MMP consequences.
+29.1 ATT (ракурс: последствия для attribution; как privacy-ограничение — 40.10); 29.2 ATT consent; 29.3 IDFA availability; 29.4 limits of user-level attribution; 29.5 SKAdNetwork; 29.6 AdAttributionKit; 29.7 aggregated measurement; 29.8 conversion values (определение); 29.9 delayed reporting; 29.10 privacy thresholds; 29.11 modeled attribution; 29.12 deterministic vs privacy-preserving measurement; 29.13 advertiser/MMP consequences.
 
 ### Часть VII. Analytics и Measurement
 
@@ -421,17 +441,19 @@ Translation pipeline запускается только для главы, пр
 
 30.1 event model; 30.2 request; 30.3 bid; 30.4 win; 30.5 impression; 30.6 click; 30.7 conversion; 30.8 revenue; 30.9 cost; 30.10 event IDs; 30.11 dimensions; 30.12 metrics; 30.13 campaign; 30.14 publisher; 30.15 creative; 30.16 GEO; 30.17 device; 30.18 time; 30.19 raw vs aggregate; 30.20 fact/dimension tables; 30.21 reporting dataset.
 
-#### 31. Reporting, Aggregation и Data Pipelines
+#### 31. Reporting, Aggregation, Data Pipelines и Event-Driven Architecture
 
-31.1 ingestion; 31.2 streaming; 31.3 queue/broker; 31.4 consumer; 31.5 raw storage; 31.6 batch; 31.7 stream processing; 31.8 aggregation; 31.9 rollups; 31.10 realtime reporting; 31.11 batch reporting; 31.12 analytical database; 31.13 high-cardinality dimensions; 31.14 retention; 31.15 backfill; 31.16 reprocessing; 31.17 typical pipeline.
+Аудитория уже знает queues, Kafka-like systems и stream processing (§1); глава объясняет только AdTech-specific delta: объёмы, cardinality, serving vs analytics paths, billing-grade data.
+
+31.1 ingestion; 31.2 streaming; 31.3 queue/broker; 31.4 consumer; 31.5 raw storage; 31.6 batch; 31.7 stream processing; 31.8 aggregation; 31.9 rollups; 31.10 realtime reporting; 31.11 batch reporting; 31.12 analytical database; 31.13 high-cardinality dimensions; 31.14 retention; 31.15 reprocessing (backfill как процесс исправления — 47.8); 31.16 batching; 31.17 serving vs analytics paths; 31.18 backpressure; 31.19 typical AdTech architecture.
 
 #### 32. Почему цифры не сходятся
 
-32.1 measurement points; 32.2 request vs render; 32.3 client loss; 32.4 network failures; 32.5 timeouts; 32.6 retries; 32.7 duplicates; 32.8 dedup differences; 32.9 fraud filtering; 32.10 bot filtering; 32.11 attribution differences; 32.12 windows; 32.13 timezones; 32.14 currency; 32.15 late events; 32.16 processing delays; 32.17 sampling; 32.18 privacy thresholds; 32.19 counting methodology; 32.20 reconciliation.
+32.1 measurement points; 32.2 request vs render; 32.3 client loss; 32.4 network failures; 32.5 timeouts (ракурс: источник discrepancy); 32.6 retries; 32.7 duplicates; 32.8 dedup differences (ракурс: как создаёт discrepancy); 32.9 fraud filtering; 32.10 bot filtering; 32.11 attribution differences; 32.12 windows; 32.13 timezones; 32.14 currency; 32.15 late events (ракурс: отчёт меняется задним числом); 32.16 processing delays; 32.17 sampling; 32.18 privacy thresholds; 32.19 counting methodology; 32.20 reconciliation (ракурс: почему не сходится; процесс сверки — глава 47).
 
 #### 33. Product Analytics, Cohorts, Retention и LTV
 
-33.1 acquisition funnel; 33.2 conversion funnel; 33.3 cohort; 33.4 acquisition cohort; 33.5 retention; 33.6 D1/D7/D30; 33.7 churn; 33.8 revenue cohort; 33.9 ARPU; 33.10 ARPPU; 33.11 LTV; 33.12 CAC; 33.13 payback; 33.14 ROAS over time; 33.15 acquired-user quality; 33.16 campaign profitability; 33.17 product vs advertising analytics.
+33.1 acquisition funnel; 33.2 conversion funnel; 33.3 cohort; 33.4 acquisition cohort; 33.5 retention; 33.6 D1/D7/D30; 33.7 churn; 33.8 revenue cohort; 33.9 ARPU; 33.10 ARPPU; 33.11 LTV; 33.12 CAC (33.9–33.12 — ракурс: cohort over time, payback, качество acquired users; определения — глава 3); 33.13 payback; 33.14 ROAS over time; 33.15 acquired-user quality; 33.16 campaign profitability; 33.17 product vs advertising analytics (включая web analytics / GA4-like tools vs ad tracking).
 
 #### 34. Attribution vs Incrementality vs MMM
 
@@ -445,11 +467,11 @@ Translation pipeline запускается только для главы, пр
 
 #### 36. Ad Fraud
 
-36.1 invalid traffic; 36.2 GIVT; 36.3 SIVT; 36.4 bots; 36.5 fake impressions; 36.6 fake clicks; 36.7 click spam; 36.8 click flooding; 36.9 click injection; 36.10 install fraud; 36.11 SDK spoofing; 36.12 attribution stealing; 36.13 cookie stuffing; 36.14 domain spoofing; 36.15 app spoofing; 36.16 ad stacking; 36.17 pixel stuffing; 36.18 incentive abuse; 36.19 conversion fraud; 36.20 signals; 36.21 detection; 36.22 false positives; 36.23 financial impact.
+36.1 invalid traffic; 36.2 GIVT; 36.3 SIVT; 36.4–36.19 таксономия (одной таблицей `тип → место в funnel → сигнал → кто теряет деньги`): 36.4 bots; 36.5 fake impressions; 36.6 fake clicks; 36.7 click spam; 36.8 click flooding; 36.9 click injection; 36.10 install fraud; 36.11 SDK spoofing; 36.12 attribution stealing; 36.13 cookie stuffing; 36.14 domain spoofing; 36.15 app spoofing; 36.16 ad stacking; 36.17 pixel stuffing; 36.18 incentive abuse; 36.19 conversion fraud; 36.20 signals; 36.21 detection; 36.22 false positives; 36.23 financial impact.
 
 #### 37. Ad Verification
 
-37.1 verification vs fraud detection; 37.2 viewability; 37.3 viewable impression; 37.4 IVT; 37.5 brand safety; 37.6 brand suitability; 37.7 content classification; 37.8 geo verification; 37.9 creative verification; 37.10 placement verification; 37.11 measurement tags; 37.12 OMID/OM SDK; 37.13 DoubleVerify; 37.14 IAS; 37.15 HUMAN; 37.16 value of an independent provider.
+37.1 verification vs fraud detection; 37.2 viewability (ракурс: методология и стандарты; определение — 3.3); 37.3 viewable impression; 37.4 IVT; 37.5 brand safety; 37.6 brand suitability; 37.7 content classification; 37.8 geo verification; 37.9 creative verification; 37.10 placement verification; 37.11 measurement tags; 37.12 OMID/OM SDK; 37.13 DoubleVerify; 37.14 IAS; 37.15 HUMAN; 37.16 value of an independent provider.
 
 #### 38. Supply Chain Transparency
 
@@ -463,15 +485,15 @@ Translation pipeline запускается только для главы, пр
 
 #### 40. Privacy в AdTech
 
-40.1 why AdTech is affected; 40.2 personal data; 40.3 pseudonymous identifiers; 40.4 GDPR conceptually; 40.5 CCPA/CPRA conceptually; 40.6 consent; 40.7 legitimate interest conceptually; 40.8 browser restrictions; 40.9 third-party cookie restrictions; 40.10 ATT; 40.11 mobile identifiers; 40.12 data minimization; 40.13 practical tracking/targeting consequences.
+40.1 why AdTech is affected; 40.2 personal data; 40.3 pseudonymous identifiers; 40.4 GDPR conceptually; 40.5 CCPA/CPRA conceptually; 40.6 consent; 40.7 legitimate interest conceptually; 40.8 browser restrictions; 40.9 third-party cookie restrictions; 40.10 ATT (ракурс: privacy-ограничение; attribution — глава 29); 40.11 mobile identifiers; 40.12 data minimization; 40.13 practical tracking/targeting consequences.
 
 #### 41. Consent Management
 
-41.1 CMP; 41.2 consent UI; 41.3 consent signal; 41.4 vendor; 41.5 purpose; 41.6 legal basis at a high level; 41.7 TCF; 41.8 GPP; 41.9 consent string; 41.10 propagation through the supply chain; 41.11 missing/invalid consent; 41.12 operational consequences.
+41.1 CMP; 41.2 consent UI; 41.3 consent signal (включая GPC; Do Not Track — как legacy); 41.4 vendor; 41.5 purpose; 41.6 legal basis at a high level; 41.7 TCF; 41.8 GPP; 41.9 consent string; 41.10 propagation through the supply chain; 41.11 missing/invalid consent; 41.12 operational consequences.
 
 #### 42. Мир без third-party identity
 
-42.1 first-party data; 42.2 first-party IDs; 42.3 contextual targeting; 42.4 publisher IDs; 42.5 identity providers; 42.6 deterministic identity; 42.7 probabilistic identity; 42.8 addressability; 42.9 frequency/campaign measurement limits; 42.10 trade-offs.
+42.1 first-party data; 42.2 first-party IDs; 42.3 contextual targeting; 42.4 publisher IDs как first-party identity publisher-а (не параметр tracking URL — 22.8); 42.5 identity providers (ракурс: альтернатива third-party cookies; роль — 2.15, механика — глава 24); 42.6 deterministic identity; 42.7 probabilistic identity (42.6–42.7 — ракурс: методы главы 24 в условиях без третьесторонних ID); 42.8 addressability; 42.9 frequency/campaign measurement limits (ракурс: ограничение без identity); 42.10 trade-offs.
 
 #### 43. Data Clean Rooms
 
@@ -483,57 +505,63 @@ Translation pipeline запускается только для главы, пр
 
 44.1 huge RPS; 44.2 low latency; 44.3 realtime decisions; 44.4 high-cardinality data; 44.5 massive event volume; 44.6 cost sensitivity; 44.7 availability; 44.8 why ordinary SaaS assumptions fail.
 
-#### 45. Event-driven архитектура
+#### 45. Reliability рекламных систем
 
-45.1 ingestion; 45.2 streams; 45.3 queues; 45.4 consumers; 45.5 batching; 45.6 aggregation; 45.7 realtime analytics; 45.8 serving vs analytics paths; 45.9 backpressure; 45.10 typical architecture.
+Runtime/serving reliability; offline-корректность данных — глава 47.
 
-#### 46. Reliability рекламных систем
+45.1 retries; 45.2 duplicate events; 45.3 idempotency; 45.4 eventual consistency; 45.5 event ordering; 45.6 late events (ракурс: event-time vs processing-time); 45.7 timeout handling (ракурс: reliability); 45.8 partial failure; 45.9 replay; 45.10 billing/measurement consequences.
 
-46.1 retries; 46.2 duplicate events; 46.3 idempotency; 46.4 eventual consistency; 46.5 event ordering; 46.6 late events; 46.7 timeout handling; 46.8 partial failure; 46.9 replay; 46.10 billing/measurement consequences.
+#### 46. Counters, Budgets и Realtime State
 
-#### 47. Counters, Budgets и Realtime State
+46.1 pacing counters (ракурс: realtime state); 46.2 spend; 46.3 frequency caps (ракурс: счётчик и его consistency); 46.4 limits; 46.5 cache/state; 46.6 race conditions; 46.7 atomicity; 46.8 stale state; 46.9 reconciliation (ракурс: realtime counter vs ledger); 46.10 correctness vs latency trade-off.
 
-47.1 pacing counters; 47.2 spend; 47.3 frequency caps; 47.4 limits; 47.5 cache/state; 47.6 race conditions; 47.7 atomicity; 47.8 stale state; 47.9 reconciliation; 47.10 correctness vs latency trade-off.
+#### 47. Data Quality и Reconciliation
 
-#### 48. Data Quality и Reconciliation
+Offline-обнаружение и исправление; runtime reliability — глава 45.
 
-48.1 anomalies; 48.2 missing events; 48.3 duplicates; 48.4 reconciliation advertiser/publisher; 48.5 billing-grade data; 48.6 schemas; 48.7 data contracts; 48.8 lineage; 48.9 correction/backfill; 48.10 operational checklist.
+47.1 anomalies; 47.2 обнаружение missing и duplicate events в данных; 47.3 reconciliation advertiser/publisher (ракурс: процесс сверки); 47.4 billing-grade data; 47.5 schemas; 47.6 data contracts; 47.7 lineage; 47.8 correction/backfill (единственное место для backfill); 47.9 operational checklist.
 
 ### Часть XI. Отдельные экосистемы
 
-#### 49. Video Advertising
+#### 48. Video Advertising
 
-49.1 VAST; 49.2 player; 49.3 pre/mid/post-roll; 49.4 video tracking; 49.5 quartiles; 49.6 completion rate; 49.7 skippable vs non-skippable; 49.8 video auction flow.
+48.1 VAST; 48.2 player; 48.3 pre/mid/post-roll; 48.4 video tracking; 48.5 quartiles; 48.6 completion rate; 48.7 skippable vs non-skippable; 48.8 video auction flow.
 
-#### 50. CTV
+#### 49. CTV
 
-50.1 connected TV; 50.2 CTV inventory; 50.3 SSAI vs CSAI; 50.4 ad pods; 50.5 household-level identity; 50.6 device graph; 50.7 measurement challenges; 50.8 CTV supply chain.
+49.1 connected TV; 49.2 CTV inventory; 49.3 SSAI vs CSAI; 49.4 ad pods; 49.5 household-level identity; 49.6 device graph; 49.7 measurement challenges; 49.8 CTV supply chain (ссылается на 48.8, не повторяет VAST).
 
-#### 51. Retail / Commerce Media
+#### 50. Retail / Commerce Media
 
-51.1 retailer as publisher; 51.2 purchase data; 51.3 sponsored products; 51.4 onsite ads; 51.5 offsite ads; 51.6 closed-loop measurement; 51.7 shopper audiences; 51.8 commerce-media economics.
+50.1 retailer as publisher; 50.2 purchase data; 50.3 sponsored products; 50.4 onsite ads; 50.5 offsite ads; 50.6 closed-loop measurement; 50.7 shopper audiences; 50.8 commerce-media economics.
+
+#### 51. Performance и Affiliate Marketing
+
+Механика tracking link, click ID, subID, S2S postback и deep link уже дана в главах 21–23 и 28; здесь — только их роль в affiliate flow.
+
+51.1 performance marketing; 51.2 affiliate; 51.3 affiliate network; 51.4 advertiser/merchant; 51.5 offer; 51.6 affiliate media buyer (покупает трафик за свой счёт; функция media buyer внутри advertiser/agency — 2.5); 51.7 traffic source; 51.8 CPA/CPL/CPI offers; 51.9 payout; 51.10 revenue и affiliate margin; 51.11 conversion cap; 51.12 GEO/offer targeting; 51.13 tracking link в affiliate flow; 51.14 click ID в affiliate flow; 51.15 subID в affiliate flow; 51.16 S2S postback в affiliate flow; 51.17 smartlink; 51.18 deep link в affiliate flow; 51.19 incent/non-incent; 51.20 rewarded traffic; 51.21 media buying; 51.22 traffic arbitrage (ракурс: как частный случай arbitrage главы 4); 51.23 lead generation; 51.24 affiliate fraud; 51.25 affiliate flow end-to-end.
 
 ### Часть XII. Карта рынка и продуктов
 
-#### 52. Категории AdTech-компаний
+#### 52. Категории AdTech-компаний и метод анализа продукта
 
-52.1 buying: DSP, ad networks, media-buying platforms; 52.2 selling: SSP, exchanges, publisher monetization; 52.3 infrastructure: ad servers, tracking, data infrastructure; 52.4 measurement: MMP, attribution, analytics, verification; 52.5 data: CDP, DMP, identity, clean rooms; 52.6 vertical ecosystems: mobile, CTV, retail media.
+Framework собирает role card главы 2 и vendor-economics checklist главы 4, не создавая третий.
 
-#### 53. Как анализировать любой AdTech-продукт
-
-53.1 customer; 53.2 payer; 53.3 problem; 53.4 chain position; 53.5 upstream; 53.6 downstream; 53.7 input data; 53.8 output data; 53.9 monetization; 53.10 competitors; 53.11 build-vs-buy; 53.12 moat; 53.13 integrations; 53.14 common confusion.
+52.1 buying: DSP, ad networks, media-buying platforms; 52.2 selling: SSP, exchanges, publisher monetization; 52.3 infrastructure: ad servers, tracking, data infrastructure; 52.4 measurement: MMP, attribution, analytics, verification; 52.5 data: CDP, DMP, identity, clean rooms; 52.6 vertical ecosystems: mobile, CTV, retail media, affiliate; 52.7 customer; 52.8 payer; 52.9 problem; 52.10 chain position; 52.11 upstream; 52.12 downstream; 52.13 input data; 52.14 output data; 52.15 monetization; 52.16 competitors; 52.17 build-vs-buy; 52.18 moat; 52.19 integrations; 52.20 common confusion.
 
 ### Часть XIII. Финальный разбор реальных компаний
 
-#### 54. Десять компаний — десять частей экосистемы
+#### 53. Десять компаний — десять частей экосистемы
 
-54.1 The Trade Desk — DSP; 54.2 Google Ad Manager — publisher ad serving/monetization; 54.3 Magnite — SSP; 54.4 AppLovin — mobile ecosystem; 54.5 AppsFlyer — MMP; 54.6 Adjust — MMP; 54.7 DoubleVerify — verification; 54.8 Criteo — commerce/performance advertising; 54.9 LiveRamp — identity/data connectivity; 54.10 Amazon Ads — retail media; 54.11 consistent framework for every company; 54.12 current product boundaries and caveats.
+Формат — reference-карточки по одному шаблону, не десять эссе.
+
+53.1 The Trade Desk — DSP; 53.2 Google Ad Manager — publisher ad serving/monetization; 53.3 Magnite — SSP; 53.4 AppLovin — mobile ecosystem; 53.5 AppsFlyer — MMP; 53.6 Adjust — MMP; 53.7 DoubleVerify — verification; 53.8 Criteo — commerce/performance advertising; 53.9 LiveRamp — identity/data connectivity; 53.10 Amazon Ads — retail media; 53.11 consistent framework for every company; 53.12 current product boundaries and caveats.
 
 Для каждой компании используй один framework: что за продукт, кто платит, какую проблему решает, где стоит в chain, какие данные получает и отдаёт, как зарабатывает, почему клиент не делает это сам, с кем интегрируется, конкуренты и частые misconceptions.
 
-#### 55. Финальный end-to-end case study
+#### 54. Финальный end-to-end case study
 
-55.1 advertiser; 55.2 campaign; 55.3 DSP/network; 55.4 publisher monetization; 55.5 auction; 55.6 ad serving; 55.7 impression; 55.8 click; 55.9 MMP; 55.10 install; 55.11 conversion; 55.12 attribution; 55.13 verification/fraud; 55.14 analytics; 55.15 revenue/ROAS; 55.16 IDs; 55.17 HTTP/event flows; 55.18 money changes; 55.19 reporting outputs; 55.20 reader redraws the complete chain.
+54.1 advertiser; 54.2 campaign; 54.3 DSP/network; 54.4 publisher monetization; 54.5 auction; 54.6 ad serving; 54.7 impression; 54.8 click; 54.9 MMP; 54.10 install; 54.11 conversion; 54.12 attribution; 54.13 verification/fraud; 54.14 analytics; 54.15 revenue/ROAS; 54.16 IDs; 54.17 HTTP/event flows; 54.18 money changes; 54.19 reporting outputs; 54.20 reader redraws the complete chain.
 
 ## 11. Приложения
 
@@ -542,7 +570,7 @@ Translation pipeline запускается только для главы, пр
 - `A. AdTech Glossary` — около 150 терминов по 1–3 предложения;
 - `B. Формулы` — CTR, CVR, CPM, eCPM, CPC, CPA, ROAS, margin, fill rate и другие;
 - `C. Кто с кем разговаривает` — reference-схема индустрии;
-- `D. Основные стандарты` — OpenRTB, VAST, OMID, ads.txt, sellers.json, schain, TCF/GPP и их роль без изучения полной спецификации.
+- `D. Основные стандарты` — OpenRTB, VAST, OMID, ads.txt, sellers.json, schain, TCF/GPP и их роль без изучения полной спецификации; сюда же — reference по объектам OpenRTB (разгружает главу 19) и одна строка о том, что DOOH, audio и in-game вне основного курса.
 
 ## 12. Что показывать пользователю
 
