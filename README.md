@@ -47,10 +47,11 @@
 ## Локально
 
 ```bash
-# сайт
+# сайт (Node 24.21.0 и pnpm 11 — версии закреплены в site/package.json;
+# Volta подхватит node автоматически, pnpm сам скачает нужный runtime)
 cd site
-npm install
-npm run dev        # http://localhost:4321
+pnpm install
+pnpm run dev       # http://localhost:4321
 
 # артефакты (нужны pandoc и Chrome/Chromium)
 make epub          # site/public/downloads/adtech-ru.epub

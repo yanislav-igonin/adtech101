@@ -3,6 +3,17 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -14,5 +25,9 @@
     "astro": "^7.2.9",
     "astro-pagefind": "^2.0.1",
     "satteri": "^0.10.5"
-  }
+  },
+  "volta": {
+    "node": "24.21.0"
+  },
+  "devDependencies": {}
 }
