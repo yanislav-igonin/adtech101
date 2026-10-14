@@ -39,7 +39,7 @@ publisher surface
 - Повторное объяснение ролей advertiser, publisher, agency, DSP, SSP, exchange, ad server, MMP и verification provider, а также полного data/money flow — это уже сделано в главе 2. Здесь роли используются только как measurement perspectives.
 - Pricing contracts, revenue share, fixed/SaaS fee, markup, take rate, gross/net revenue, gross margin, arbitrage и путь `$100` до publisher — глава 4. В главе 3 нужны определения, формулы и perspective boundaries, но не экономика договоров.
 - Campaign hierarchy, objectives, bidding, budget, pacing и optimization mechanics — главы 5–7. Здесь метрики оценивают результат, но не раскрывают настройку campaign.
-- Publisher yield strategy, mediation, header bidding и способы увеличения fill/eCPM — главы 10 и 14. Здесь только базовый смысл и denominator метрик.
+- Publisher yield strategy, mediation, header bidding и способы увеличения fill/eCPM — главы 10, 12–14. Здесь только базовый смысл и denominator метрик.
 - Ad-serving internals, порядок выбора line items, billing triggers и impression tracking implementation — глава 11.
 - OpenRTB payloads, auction topology, bidstream fan-out, clearing price и transaction mechanics — главы 15–20. Здесь допустим только маленький conceptual flow, достаточный для различия request/opportunity/win.
 - Tracking redirects, event IDs, postbacks, attribution models/windows и identity resolution — главы 21–29. Здесь conversion и attributed value объясняются как входы в метрики, не как технически решённая attribution-задача.
@@ -70,7 +70,7 @@ publisher surface
 - **LTV всегда имеет cohort/horizon/model contract.** GA4 User Lifetime объединяет lifetime interactions и может показывать total, average и percentiles; identity method и sampling влияют на результат. В course plan различить observed cumulative LTV и predicted LTV, revenue LTV и contribution/profit LTV. Не давать «вечную ценность пользователя» как известный scalar без горизонта и assumptions.
 - **Fill rate — publisher/ad-server metric с неоднозначным denominator.** Current Google Ad Manager sell-through documentation использует `Total impressions / Total ad requests`; для optimized video pods requests/unfilled units частично выводятся из duration и configured ad opportunity duration. Другие product metrics используют returned responses или matched requests. Значит, `fill rate` нужно читать вместе с request/opportunity unit, response-vs-impression numerator, format и stage.
 - **Win rate — auction metric, не fill rate со стороны buyer.** В legacy Google Ad Manager Reports metrics `Deals win rate = winning bids / bids`; рядом есть bid rate `bids / bid requests`. Этот Reports tool deactivated в июне 2026 года, поэтому страницу использовать только как датированный официальный пример denominator, а не как current UI instruction. В vendor-neutral тексте требовать явное `wins / submitted bids` либо другое раскрытое определение.
-- **Одна campaign закономерно выглядит по-разному.** Publisher агрегирует все demand sources и считает opportunities, fill, impressions, eCPM и publisher revenue; advertiser видит купленную им subset и связывает её с conversions/value; DSP/SSP/ad server видят только traversed events и применяют собственные filters, clocks, currency и billing rules. До chapter 35 достаточно научить задавать семь вопросов: `кто считает? что считается? где? когда? после каких filters? в каком denominator? чьи деньги?`.
+- **Одна campaign закономерно выглядит по-разному.** Publisher агрегирует все demand sources и считает opportunities, fill, impressions, eCPM и publisher revenue; advertiser видит купленную им subset и связывает её с conversions/value; DSP/SSP/ad server видят только traversed events и применяют собственные filters, clocks, currency и billing rules. До главы 32 достаточно научить задавать семь вопросов: `кто считает? что считается? где? когда? после каких filters? в каком denominator? чьи деньги?`.
 
 # Терминология
 
@@ -237,7 +237,7 @@ ROAS = 480 / 96 = 5.0x
    - Publisher view того же period: все buyers, `100,000` eligible ad requests, `80,000` counted impressions, `$800` recognized revenue → fill rate `80%`, eCPM `$10`; эти totals не обязаны равняться advertiser subset.
    - Platform view: `60,000` eligible bid requests, `45,000` bids, `9,000` wins → bid rate `75%`, win rate `20%`; только `8,000` events стали counted/billable impressions по chosen contract.
    - Финальная comparison table: `advertiser → outcomes/efficiency`, `publisher → delivery/monetization`, `platform → auction/serving boundary`; рядом семь diagnostic questions из раздела 1.
-   - Обязательная caveat: согласованность arithmetic внутри каждого metric contract не доказывает согласованность raw events между системами; detailed reconciliation — глава 35.
+   - Обязательная caveat: согласованность arithmetic внутри каждого metric contract не доказывает согласованность raw events между системами; detailed reconciliation — глава 32.
    - Покрывает: 3.25; закрепляет 3.1–3.24 без второго глоссария.
 
 # Ключевые примеры

@@ -25,14 +25,14 @@
 
 - Формулы CPM/CPC/CPA, revenue share, markup, take rate, margin, gross/net revenue и путь `$100` — глава 4. Здесь показывать только направление и тип оплаты.
 - Campaign hierarchy, targeting, bidding, budget и optimization mechanics — главы 5–7.
-- Publisher yield, fill, direct/indirect monetization и способы продажи inventory — главы 10 и 14.
+- Publisher yield, fill, direct/indirect monetization и способы продажи inventory — главы 10, 12 и 14.
 - Ad-serving internals: order, line item, priority, trafficking, creative selection, frequency capping и serving flow — глава 11.
 - Programmatic и auction mechanics, demand/supply aggregation internals, bid request/response, подробный money/data flow и глубокие сравнения `DSP vs ad network`, `SSP vs exchange` — главы 15–20, особенно глава 16. В главе 2 нужны рабочие distinctions, достаточные для чтения карты ролей.
 - Tracking points, redirects, event identifiers, attribution models и identity-resolution algorithms — главы 21–25.
 - MMP SDK, install matching, network integrations, postbacks, cost aggregation, deep linking, privacy-preserving attribution и vendor comparison — главы 27–29, особенно глава 28.
 - Viewability definitions, IVT, brand safety/suitability, OMID/OM SDK и verification vendors — главы 36–37, особенно глава 37.
 - Privacy law, consent mechanics и legal basis — главы 40–42.
-- Исчерпывающий vendor landscape и разбор реальных компаний — главы 52–54.
+- Исчерпывающий vendor landscape и разбор реальных компаний — главы 52–53.
 
 # Результаты исследования
 

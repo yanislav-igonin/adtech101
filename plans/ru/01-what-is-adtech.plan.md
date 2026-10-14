@@ -23,7 +23,7 @@
 - Формальные определения и формулы impression, viewability, CTR, CPM, eCPM, CPA, ROAS и других метрик — глава 3.
 - Pricing, fees, take rate, margin и разбор пути `$100` — глава 4. Здесь только направление денег и факт разных способов оплаты посредников.
 - Campaign hierarchy, targeting, bidding, budget, pacing и подробные campaign states — главы 5–7.
-- Детальная модель publisher inventory, fill и yield — главы 10 и 14.
+- Детальная модель publisher inventory, fill и yield — главы 10 и 12.
 - Programmatic, RTB, auction mechanics, OpenRTB payloads и алгоритм DSP — главы 15–20. RTB допустим только как один пример автоматизированной сделки, не как синоним AdTech.
 - HTTP tracking, identifiers, attribution, MMP flow и mobile privacy mechanisms — главы 21–29.
 - Event schemas, pipelines, discrepancies, incrementality и analytics — главы 30–35.

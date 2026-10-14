@@ -1,6 +1,20 @@
+<!-- Повторный аудит после редакторского прохода 2026-10-09. Предыдущий аудит доредакционной версии заменён; независимое ревью, по которому делались правки, — review-2026-10-09/ch05.md -->
+
+# Повторный аудит главы 5 «Как устроена рекламная кампания» (2026-10-09)
+
+Входы: `chapters/ru/05-campaign-structure.md`, `chapters/en/05-campaign-structure.md`, `plans/ru/05-campaign-structure.plan.md`, `master-prompt.md` §3, §7 (Stage B «Контракт оформления главы»), §10 (строка `#### 5.`), `glossary.md`, `agents/auditor.md`, `agents/translation-auditor.md`. Режим — только чтение. Предыдущие аудиты (`audits/ru/*.audit.md`, `review-2026-10-09/ch05.md`) до вынесения вердиктов не читались; сравнение с §7 предыдущего отчёта вынесено в отдельный раздел в конце.
+
+Объём чистой прозы RU (без front matter, таблиц, code blocks, заголовков): **≈2 510 слов** без раздела источников; ≈2 770 слов, если считать список источников.
+
+---
+
+# РОЛЬ 1 — Coverage & Accuracy Auditor (RU)
+
 # Резюме аудита
 
-Глава полно покрывает требования 5.1–5.14 и выдерживает Planner Brief: campaign показана как иерархическая control-plane-конфигурация, а не как отчёт, денежный flow или единая vendor schema. Все обязательные понятия объяснены через назначение, scope и причинную связь; central distinctions `account ≠ legal advertiser`, `ad ≠ creative`, `objective ≠ optimization event`, `targeting ≠ placement`, `bid strategy ≠ bid`, `tracking path ≠ destination path` и `configured status ≠ effective/learning status` проведены последовательно. Материальных ошибок, пропусков и устаревших механизмов как current practice не обнаружено. Найдено 0 блокеров, 0 важных проблем и 3 необязательных уточнения.
+По содержанию глава сильная: все 14 requirements TOC раскрыты на нужной глубине, пометки ракурса для 5.5, 5.8 и 5.9 соблюдены (placement как buy-side поле конфигурации с явным разведением с publisher-side slot, targeting axis главы 6 и формата главы 8; targeting вводно с передачей главы 6; bid strategy как policy с передачей математики главе 7). Фактических ошибок, устаревших утверждений или vendor-specific поведения, выданного за универсальное, не найдено: Google-/Meta-примеры везде помечены как product-specific. Causal chain, state-vector модель lifecycle и сквозной subscription-app пример согласованы между схемами, таблицами и прозой.
+
+Вердикт определяется контрактом оформления: три группы IMPORTANT-нарушений — пропущенные глоссарные сноски (`bid`, `auction`, `publisher`, `payer`, `audience exclusion`; сноска `billing basis` стоит не при первом упоминании), английские нетерминологические заголовок и шапки таблиц (`## Execution tree…`, `Setting`, `Unit/basis`, `Creative promise`) и бытовые английские слова в prose (`boundary` ×5 — слово из явного списка контракта, плюс `result`, `interval`, `label`, `limits` и др.). Блокеров нет.
 
 # Блокеры
 
@@ -8,54 +22,132 @@ None.
 
 # Важные проблемы
 
-None.
+1. **Глоссарные термины без сноски / сноска не при первом упоминании.** Контракт: «каждый термин, имеющий статью в `glossary.md`, получает сноску… при первом упоминании».
+   - `bid` (`{#g-bid}`) — 15 упоминаний, сноски нет; первое в прозе — строка 78: «ad set обычно хранит audience, placements[^g-placement], optimization, bid, budget и schedule». Главы 2–4 сноску `[^g-bid]` ставят.
+   - `auction` (`{#g-auction}`) — 3 упоминания, сноски нет; первое — строка 193: «policy, которая переводит optimization goal и ограничения в auction bids».
+   - `publisher` (`{#g-publisher}`) — строка 182: «на publisher side placement — конкретный slot», сноски нет (главы 1–4 и 6 её ставят).
+   - `payer` (`{#g-payee-payer}`) — строка 40: «С ним связаны payer, billing profile…», сноски нет (глава 4 ставит).
+   - `audience exclusion` (`{#g-audience-exclusion}`) — таблица, строка 186: «Geo `DE`, mobile devices, keyword category, audience exclusion», сноски нет (глава 6 ставит).
+   - Упоминания `identity` (строки 84, 40 — «advertiser identity», «billing identity») не относятся к `{#g-identity-provider}` и нарушением не считаются. Сноска `[^g-billable-event]` (строка 176) стоит в абзаце с первым упоминанием термина `billable event`, то есть правило «при первом упоминании» соблюдено; но маркер прикреплён к фразе «Billing basis», а не к самому термину — см. OPTIONAL 1.
+
+2. **Английские нетерминологические заголовок и шапки таблиц.** Контракт: «заголовки секций и шапки таблиц — по-русски; английский в них только как established term».
+   - Строка 71: `## Execution tree: campaign, ad group/ad set, ad и creative` — «execution tree» не устоявшийся термин (аналог запрещённого контрактом примера `## Contract arithmetic`). Остальные заголовки (`### Bid strategy`, `### Objective и optimization event`, `## Lifecycle без ложной линейности`) проходят как термины.
+   - Строка 217: шапка `| Setting | Возможная scope | Unit/basis | …` — `Setting`, `Unit/basis` бытовые слова.
+   - Строка 277: шапка `| Creative promise | Destination | Наблюдаемый event | …` — `Creative promise` бытовая фраза (`Destination` — термин, допустим).
+
+3. **Бытовые английские слова в prose.** Контракт (§3) прямо называет `boundary` нарушением; в главе оно встречается 5 раз вне кода: строка 64 («Product, access и billing boundary»), 75 («промежуточная scope boundary»), 252 («attribution configuration boundary»), 366 («product/access/billing boundary»), 376 («administrative boundary»). Того же рода: `result` (163: «наблюдаемый result, вероятность или value»), `interval` (213: «spend за весь interval»), `label` (128, 157, 176), `limits` (367: «Parent settings и limits меняют behavior children»), `rules`/`children`/`descendants`/`parent` (73, 84, 130, 367). Инженерный жаргон (`policy`, `payload`, `mapping`, `override`, `tenant`) и AdTech-термины не оспариваются.
 
 # Необязательные улучшения
 
-1. **Не распространять переносимую namespace-модель на любой `event ID`.** Раздел «Зачем кампании нужна иерархия: account как корень управления» утверждает: «Campaign, ad и event IDs уникальны как минимум в контексте platform/account». Для campaign/ad resource IDs это понятная иллюстрация namespace, но scope и uniqueness event identifiers зависят от event source и deduplication contract; один identifier иногда намеренно передают в нескольких копиях одного события. Безопаснее ограничить тезис resource IDs либо прямо назвать product-specific scope event IDs. Это локальная оговорка и не ослабляет основное объяснение account boundary.
-2. **Согласовать географию сквозного примера.** В разделе про account показаны отдельные `ad account EU` и `ad account US`, после чего текст выбирает EU account для сквозного примера. Однако JSON-like дерево содержит `"account_id": "acct_eu_1"` и одновременно группы `grp_us_1` и `grp_de_1`. Такая configuration возможна, но без пояснения reader может решить, что regional label account либо обязательно ограничивает targeting, либо вообще ничего не означает. Один согласованный набор labels или короткая оговорка снимет лишнюю неоднозначность.
-3. **Точнее развести `manager account` и способ выдачи agency access.** Раздел про account говорит: «Manager account или agency access — административный слой над несколькими ad accounts». Manager account действительно может централизовать несколько accounts, но agency access может быть выдан и непосредственно к одному account без отдельного multi-account layer. Основной вывод — access не является delivery level — корректен; уточнение нужно только против слишком буквального обобщения.
+1. Терминологический дрейф с главой 4: глава 4 использует термин `pricing basis` (`{#g-pricing-basis}`), глава 5 — `billing basis` (строки 174, 176, 368, 386), причём маркер `[^g-billable-event]` на строке 176 прикреплён к фразе «Billing basis», а не к термину `billable event` в конце того же абзаца. Лучше либо единый термин со сноской на `g-pricing-basis`, либо перенести маркер на слово `billable event`.
+2. Объём прозы ≈2 510 слов — на ~4 % выше ориентира 2 400; не «материальное» превышение, но при правках по пп. 1–3 текст не стоит наращивать.
+3. «С чем это часто путают» (6) + «Что важно запомнить» (8) = 14 пунктов — верхняя граница контракта; пять пар дублируют друг друга по сути (account ≠ company ↔ п. 2; campaign ≠ папка ↔ п. 2; objective/event/billing ↔ п. 4; enabled/learning ↔ п. 8; tracking URL ≠ landing page ↔ п. 7). Формулировки комплементарны (отрицательная/положительная), но один-два пункта можно сократить. Раздел «Как читать любую campaign» также частично повторяет выводы.
+4. Аббревиатуры `CTA` (строка 84) и `CRO` (строка 283) не расшифрованы; для технически сильного читателя без AdTech-фона `CRO` неочевидна.
+5. Строка 82: «insertion order и line item (главы 11 и 16)» — в TOC главы 11 есть `order`/`line item`, в главе 16 insertion order не заявлен; ссылку на главу 16 стоит проверить при финальной сборке перекрёстных ссылок.
 
 # Проверка корректности
 
-- Раздел «Зачем кампании нужна иерархия: account как корень управления» корректно определяет ad account как tenant и administrative boundary для ownership/access, billing context, currency/time zone и shared configuration. Legal advertiser, ad account и manager account явно разведены; inheritance назван product-specific contract, а не универсальным порядком override.
-- Раздел «Execution tree: campaign, ad group/ad set, ad и creative» не выдаёт Google-like и Meta-like модели за одинаковую schema. Campaign описана как общий delivery scope, middle layer — как scope shared execution rules, ad — как delivery binding, creative — как content/assets. Повторное использование `cr_video_a` двумя ads substantively показывает, зачем ad и creative являются разными объектами.
-- Раздел «Objective и optimization event» корректно отделяет high-level business intent от наблюдаемого signal, конкретной conversion action, набора tracked events, bid strategy и billing basis. Пример `install` versus `paid_subscription` объясняет причинный trade-off signal depth, delay, reliability и volume, не объявляя самый глубокий event автоматически лучшим.
-- Раздел «Targeting и placement» последовательно различает eligibility по opportunity/user/context и media environment/slot. Возможное API nesting placements внутри `targeting` не превращено в conceptual equivalence; audience engineering, identity и privacy явно переданы главе 6.
-- Раздел «Bid strategy» правильно различает strategy, target/cap, actual bid и price/charge. Auction calculation, pacing и tuning не симулируются и отложены до главы 7; billing/optimization distinction из главы 4 используется только как prerequisite reminder.
-- Раздел «Ресурсы и время: budget и schedule» не обещает жёсткую универсальную semantics daily budget: текст допускает hard cap, average daily target и другие product rules. Daily, lifetime и shared/ad-set scopes разведены; `€700 / 7 days ≠ €100/day` и `≠ €350 per ad set` корректно показывают отсутствие гарантии равномерного allocation. Schedule раскрыт через start/end, account time zone, dayparting и effective eligibility.
-- Раздел «Куда приходит user и откуда система получает сигналы» отделяет destination от measurement path, перечисляет URL/macros/templates и pixel/SDK/server/MMP integration points, а attribution оставляет configuration boundary. Parallel tracking прямо маркирован как Google-specific example, не universal behavior. Фраза «MMP также не получает campaign hierarchy магически» корректно требует mapping IDs и event names.
-- Раздел «Lifecycle без ложной линейности» немедленно опровергает буквальное чтение mnemonic `draft → learning → active → paused → completed`. State vector, четырёхосевая таблица, Google example `Eligible + Learning`, Meta example `Active + Learning`, обратимый pause и scheduled end согласованы. Significant edits и thresholds явно названы vendor-specific; causal explanation повторного learning не обещает universal duration или reset rule.
-- Технические заявления, чувствительные к platform behavior, привязаны к Google Ads или Meta и согласуются с датированными 2026-08-31 official sources из Planner Brief. Legacy tracking, universal status enums или фиксированные learning thresholds как current industry standard не представлены.
+Ошибок не найдено. Проверенные утверждения:
+
+- Иерархия подана как scope/inheritance model, а не как единый industry schema; расположение budget/targeting/optimization везде привязано к Google-like/Meta-like модели (строки 75–80, 92–97).
+- Google Ads parallel tracking описан верно и явно помечен как implementation Google, а не гарантия для любой platform/MMP (строка 273).
+- Статусы Google (`Eligible` campaign + `Learning` bidding strategy) и Meta (active ad set в learning phase) соответствуют официальным моделям и помечены как product-specific (строка 320).
+- Список significant edits Meta (targeting, creative, optimization event, состав ads, bid strategy, длительная пауза; budget — в зависимости от масштаба) соответствует текущей документации Meta и явно не переносится на Google/DSP/ad network (строка 342).
+- Billing basis ≠ optimization event ≠ tracked event — continuity с главой 4 без переобъяснения экономики (строки 174–176).
+- Placement размежёван по четырём ракурсам (publisher-side slot — главы 1 и 10; buy-side sites/apps — глава 6; Meta positions; формат — глава 8), что соответствует пометке TOC 5.5 (строка 182).
+- Namespace IDs: campaign/ad IDs уникальны «как минимум» в контексте platform/account; click ID и event ID отнесены к главам 21–23 — соответствует TOC (22.6 click ID, 21.11 event ID).
+- Daily budget как «жёсткий cap, average daily target или иная форма» — корректное обобщение без ложной универсальности (строка 212).
+- Learning как под-состояние active delivery, обратимость pause, completion по end condition — верно (строки 297–311, 350).
 
 # Проверка границ и плотности
 
-Границы Planner Brief соблюдены. Глава не повторяет pricing models, risk transfer, spend/revenue/payout ledgers, take rate и путь `$100` из главы 4. Строка `Billing basis` и различие `target CPA`/actual bid/charge — короткая необходимая связь с prerequisite, а не повтор economics.
+- Повтора главы 4 нет: billing basis использован только как distinction, без путей денег и take rate.
+- Targeting ограничен обзором (geo/device/context/audience/keyword/exclusions) с передачей главы 6; bid strategy — policy boundary с передачей главы 7; формат/compatibility — глава 8; attribution mechanics, postbacks, privacy — отложены (строка 254). Границы Planner Brief соблюдены.
+- Нет лишней истории и vendor-minutiae: enum-значения приведены только как примеры.
+- Проза ≈2 510 слов (ориентир 2 400) — см. OPTIONAL 2; закрывающие списки на верхней границе 14 пунктов — см. OPTIONAL 3.
 
-Материал главы 3 о click measurement points, conversions и attribution не пересказывается. Глава 5 использует только минимальный user/measurement path, чтобы объяснить configuration ownership, destination и event-source integration. Served/rendered/viewable, metric formulas и discrepancy analysis не затрагиваются.
+# Проверка контракта оформления
 
-Targeting/data/privacy, bidding algorithms/pacing, format production, attribution mechanics, mobile privacy, CRO, moderation и reporting остаются за заявленными границами. Упоминания этих тем выполняют роль integration boundary и явно передают глубину последующим главам. Итоговые misconceptions и checklist повторяют central distinctions для самопроверки, но не добавляют filler или второй параллельный walkthrough.
+| Пункт контракта | Результат |
+|---|---|
+| Ровно один H1 | ✅ строка 14 |
+| Вводная секция `## Суть` | ✅ строка 16 |
+| Хвост: `## С чем это часто путают`, `## Что важно запомнить`, `## Проверьте себя`, `## Источники и дополнительное чтение` — уровень `##`, порядок | ✅ строки 364, 373, 384, 391 |
+| Заголовки секций по-русски / только established terms | ❌ `## Execution tree: …` (строка 71) — IMPORTANT 2 |
+| Шапки таблиц по-русски / только termы | ❌ `Setting`, `Unit/basis` (217), `Creative promise` (277) — IMPORTANT 2 |
+| Бытовые английские слова в prose | ❌ `boundary` ×5 и др. — IMPORTANT 3 |
+| Каждая `[^g-id]` существует в `glossary.md` | ✅ 36/36 якорей разрешаются |
+| Один термин — одна сноска | ✅ все 36 сносок по одному разу |
+| Сноска при первом упоминании | ✅ все 36 сносок при первом упоминании термина (ранние вхождения `destination`, `creative`, `inventory`, `bid strategy` — только внутри code blocks); `[^g-billable-event]` стоит в абзаце первого упоминания `billable event` (176), хотя прикреплён к фразе «Billing basis» — OPTIONAL 1 |
+| Каждый глоссарный термин имеет сноску | ❌ `bid`, `auction`, `publisher`, `payer`, `audience exclusion` — IMPORTANT 1 |
+| Нет дат проверки / research-пометок в prose | ✅ даты `2026-09-07`/`2026-09-14` (строки 234–235) — учебные значения schedule в code block, не research-даты; «проверено»/«на дату» в prose нет |
+| YAML front matter полный и согласован с TOC | ✅ `id: ch-05`, `toc_requirements` 5.1–5.14, `language: ru`, `prerequisites: [ch-01..ch-04]` |
 
 # Coverage Table
 
 | Requirement | Status | Evidence / Explanation |
 |---|---|---|
-| 5.1 | ✅ COVERED | «Зачем кампании нужна иерархия: account как корень управления» определяет advertiser/ad account как tenant, раскрывает ownership/access, billing identity, currency/time zone, shared configuration и inheritance, а также отделяет legal advertiser и manager/agency access от delivery hierarchy. |
-| 5.2 | ✅ COVERED | «Execution tree» определяет campaign как верхнеуровневый container одного business intent/flight и shared delivery scope; parent pause, schedule и limits показаны как влияющие на descendants, при этом расположение полей названо product-specific. |
-| 5.3 | ✅ COVERED | Ad group/ad set объяснён как middle scope shared execution rules; Google-like grouping ads/criteria и Meta-like audience/placements/optimization/bid/budget/schedule сопоставлены без ложной взаимозаменяемости. JSON-like дерево показывает несколько groups и ads. |
-| 5.4 | ✅ COVERED | Ad определён как executable delivery binding parent, identity, creative, destination, tracking и status; creative — как message/assets, inline или reusable object. Повторный `creative_id` при разных ad IDs/parents демонстрирует различие на практике. |
-| 5.5 | ✅ COVERED | «Targeting и placement» определяет placement как media environment и slot, приводит feed/stories/search/video/in-app examples, отделяет его от audience и связывает с format eligibility, оставляя format depth главе 8. |
-| 5.6 | ✅ COVERED | «Objective и optimization event» раскрывает campaign objective как high-level intent/setup guidance, приводит awareness/traffic/leads/app promotion/sales и предупреждает, что labels/combinations product-specific и не равны exact optimization event. |
-| 5.7 | ✅ COVERED | Optimization event/performance goal объяснён как observable result для delivery decisions; conversion action и primary/secondary grouping обозначены, а `install` versus `paid_subscription` раскрывает роль signal volume, delay, reliability и event source. |
-| 5.8 | ✅ COVERED | Targeting определён как eligibility rules и model inputs по geo, device, context, audience/keyword criteria и exclusions; distinction с placement дано в таблице, а data provenance, identity и privacy явно переданы главе 6. |
-| 5.9 | ✅ COVERED | Bid strategy определена как policy, переводящая goal и constraints в auction bids. Схема отдельно показывает strategy, target/cap, actual bid и price/charge; mechanics и pacing переданы главе 7. |
-| 5.10 | ✅ COVERED | Budget раскрыт как resource constraint, а не гарантия result/spend/invoice; разобраны daily, lifetime/campaign-total, shared, campaign-level и ad-set scopes, allocation/inheritance и неравномерность pacing на примере `€700`. |
-| 5.11 | ✅ COVERED | Schedule/flight раскрыт через start/end, account time zone, optional dayparting и eligibility. Future start даёт enabled-but-pending example, end приводит к ended/completed даже с остатком budget; interaction со status объяснён. |
-| 5.12 | ✅ COVERED | Tracking settings включают IDs, URL parameters/macros/templates, pixel/SDK/server/MMP integration, conversion actions и attribution boundary. Двойная схема user/measurement paths, URL example и mapping caveat объясняют назначение и общий механизм. |
-| 5.13 | ✅ COVERED | Landing page/destination/final URL определён как web page, store listing или deep link после interaction и отделён от tracking record/template. Таблица creative promise → destination → event показывает semantic alignment без ухода в CRO. |
-| 5.14 | ✅ COVERED | Lifecycle mnemonic приведён и сразу заменён корректной state-vector model. Draft, learning, active, paused и completed/ended объяснены; review/schedule/effective/learning axes, reversible pause, scheduled completion и material-edit re-entry показаны отдельно. |
+| 5.1 advertiser account | ✅ COVERED | «Зачем кампании нужна иерархия»: account как tenant, пять границ (ownership/access, billing identity, currency/time zone, namespace, shared configuration), legal entity ≠ account, manager account как administrative layer, дерево и таблица «Объект / Что представляет / Чего нельзя заключить», сквозной EU account (строки 33–69) |
+| 5.2 campaign | ✅ COVERED | «Execution tree»: верхнеуровневый delivery container для одного intent/flight, объединяет objective, limits, channel/type; pause/schedule родителя останавливает descendants; строка таблицы Campaign (73, 94, 130) |
+| 5.3 ad group/ad set | ✅ COVERED | Промежуточная scope boundary; Google-like (related ads + keywords) vs Meta-like (audience, placements, optimization, bid, budget, schedule); явный запрет универсальных утверждений; IO/line item как аналог в DSP/ad server (75–82, 95) |
+| 5.4 ad/creative | ✅ COVERED | Ad как исполняемая delivery-единица (parent, identity, creative, destination, tracking, status), creative как message + assets, inline vs reusable; схема creative/ad; JSON-дерево с `cr_video_a` в двух ads (84–130) |
+| 5.5 placement (ракурс: поле конфигурации campaign) | ✅ COVERED | «Targeting и placement»: определение «в каком media environment и slot»; четыре ракурса термина с ссылками на главы 1/10, 6, 8; таблица осей; «API может хранить placements внутри `targeting`» (182–189) |
+| 5.6 campaign objective | ✅ COVERED | «Objective и optimization event»: high-level intent/setup guidance, platform предлагает types/defaults, objective ≠ предсказываемое событие; volatility названий `App promotion`/`Sales` (157–161, таблица 170) |
+| 5.7 optimization event | ✅ COVERED | Наблюдаемый result, вероятность/value которого увеличивает delivery system; conversion action, primary/secondary; trade-off install vs paid subscription (volume, delay, event source); таблица слоёв (163–176) |
+| 5.8 targeting (вводно) | ✅ COVERED | Eligibility rules и inputs модели; обзор geo/device/context/audience/keyword/exclusions; передача источников данных, identity и privacy главе 6; таблица осей (180, 184–189) |
+| 5.9 bid strategy (ракурс: policy) | ✅ COVERED | Policy, переводящая goal и ограничения в bids; четырёхчастная схема strategy / target-cap / actual bid / price-charge; `target CPA` ≠ bid ≠ billable amount; математика → глава 7 (191–204) |
+| 5.10 budget | ✅ COVERED | Daily vs lifetime/campaign-total, scope campaign/shared/group, allocation; таблица «что ограничивает / чего не гарантирует»; `€700` на 7 дней ≠ `€100/day`, ≠ `€350` на группу (206–224) |
+| 5.11 schedule | ✅ COVERED | Start/end, account time zone, dayparting; пример `Europe/Berlin`; `pending` до start, `ended/completed` после end при недотраченном бюджете; взаимодействие budget/schedule/status (226–238) |
+| 5.12 tracking settings | ✅ COVERED | Инвентарь: IDs, URL parameters/macros/template/suffix, pixel/SDK/S2S/MMP как event source, conversion actions, attribution boundary; две схемы путей; учебный URL; parallel tracking как Google-пример; MMP mapping caveat (246–285) |
+| 5.13 landing page | ✅ COVERED | Landing page/destination/final URL как первая поверхность (web, store listing, deep link), часть user path, не tracking record; таблица creative promise → destination → event → проверка согласованности; CRO вне scope (244, 277–283) |
+| 5.14 lifecycle: draft → learning → active → paused → completed | ✅ COVERED | Мнемоника дана и сразу аннотирована по пяти состояниям; state graph; таблица четырёх осей (configured/effective/review/learning); Google и Meta примеры; change scenario с возвратом в learning при `active`; pause не обязателен перед completion (287–350) |
 
 # Вердикт
 
-PASS
-Оркестратор применил все три необязательных улучшения 2026-08-31: namespace-тезис ограничен resource IDs; labels в JSON-дереве снабжены оговоркой; manager account и agency access разведены точнее. Coverage Table не изменяется: правки соответствуют рекомендациям аудита и не влияют на статусы.
+**REVISION REQUIRED** — блокеров и проблем покрытия нет, но три группы нарушений контракта оформления (IMPORTANT 1–3) блокируют PASS по правилу Stage C.
+
+---
+
+## Сравнение с предыдущим аудитом (`review-2026-10-09/ch05.md`, §7) — прочитано после вынесения вердикта
+
+Все пять IMPORTANT предыдущего отчёта исправлены:
+
+| № | Рекомендация §7 | Статус в текущем тексте |
+|---|---|---|
+| 1 | Служебные секции `###` → `##` | ✅ строки 352, 364, 373, 384 — `##` |
+| 2 | `# Sources and Further Reading` → `## Источники и дополнительное чтение` | ✅ строка 391 |
+| 3 | Развести `optimization event` и `optimization target` в глоссарии, переключить сноску | ✅ `{#g-optimization-event}` существует, сноска `[^g-optimization-event]` на строке 163; `g-optimization-target` содержит оговорку «не путать с параметром стратегии» |
+| 4 | Строка о DSP/ad-server naming (insertion order / line item) | ✅ строка 82 |
+| 5 | Нейтрализовать generic «ad set» | ✅ «группе (ad group/ad set)» (215), «в Meta-like setup — два ad sets» (224), «Strategy/ad set» (318) |
+
+NICE-TO-HAVE: выполнены 6 (предложение про deduplication удалено), 7 (сноски `g-cpc`, `g-cpa`, `g-inventory`), 8 («длительную паузу ad set»), 9 (пояснение `review`), 11 (мост о многозначности `placement`), 13 («CPM или CPC»), 14 (`## Суть`), 15 («Юридическое лицо»). Частично — 12: `Conversion action` в глоссарии есть, `Configured status / effective status` и `Significant edit` статьями не добавлены (глава определяет их inline, нарушением контракта это не является). Не выполнено — 10: дублирование «С чем это часто путают» / «Что важно запомнить» сохраняется (см. OPTIONAL 3 выше).
+
+Новые IMPORTANT текущего аудита (сноски `bid`/`auction`/`publisher`/`payer`/`audience exclusion`, английские заголовок и шапки таблиц, бытовые английские слова) в предыдущем отчёте не поднимались — они следуют из добавленной сегодня секции «Formatting and Language Contract».
+
+---
+
+# РОЛЬ 2 — Translation Auditor (RU ↔ EN)
+
+SOURCE_FILE: `chapters/ru/05-campaign-structure.md`; TRANSLATION_FILE: `chapters/en/05-campaign-structure.md`.
+
+## Проверки
+
+- **Полнота и структурный паритет.** Заголовки 17/17 с идентичными уровнями и порядком; code blocks 15/15 с теми же языками (`text`/`json`), в 7 текстовых блоках переведены только слова, числа и структура строк сохранены; строки таблиц 40/40; элементы списков 56/56; абзацы 54/54; ссылки 12/12 с идентичными URL; inline-code спаны 43/43 с идентичным набором; выделения `**…**` 46/46.
+- **Front matter.** Отличия только `title: "How an Ad Campaign Is Structured"` и `language: en`; `id`, `toc_requirements`, `prerequisites`, `status`, `slug` идентичны.
+- **Якоря.** 36 сносок `[^g-…]` — тот же набор, каждая ровно один раз в обоих файлах, без переименований и добавлений.
+- **Числа и примеры.** `€700`, `€350`, `€100/day`, даты `2026-09-07`/`2026-09-14`, `Europe/Berlin`, все ID (`cmp_subscriptions_42`, `ad_7`, `cr_video_a`…), URL `https://example.com/app?campaign_id=…` — побайтно совпадают.
+- **Русский текст в EN.** Кириллицы в теле нет.
+- **Служебные секции.** `## The Core Idea`, `## Common Confusions`, `## What to Remember`, `## Check Yourself`, `## Sources and Further Reading` — названия и уровень корректны.
+- **Терминология.** Термины, оставленные в RU на английском, сохранены; маппинг консистентен: ad set/ad group, flight, destination/landing page/final URL, optimization event/performance goal, learning phase, significant edit, material change — по одному английскому эквиваленту на понятие по всему файлу. Различения current/legacy и universal/platform-specific сохранены (parallel tracking — «Google's implementation»; Meta significant edits — «cannot be transferred to Google Ads, a DSP, or an ad network»).
+
+## Findings
+
+```text
+[MINOR] строка 73 («согласованного flight — периода размещения с датами начала и конца») — переведено как "a coherent flight — a placement period with a start and an end date"; слово "placement" коллидирует с термином placement, определяемым ниже в той же главе; точнее "a run period" / "a delivery window".
+[MINOR] строка 94 (таблица, «Objective и, при выбранной модели, campaign-level budget») — "Objective and, for the chosen model, a campaign-level budget" читается неестественно; смысл RU — «когда выбрана такая модель» ("when that model is selected").
+[MINOR] строка 311 («learning может быть под-состоянием active delivery, а не предшествующим запретом показов») — EN: "rather than a stage preceding the permission to show"; RU говорит, что learning не является предшествующим *запретом* показов, EN — что это не этап *перед разрешением*; смысл («learning не блокирует delivery») сохранён, нюанс сдвинут.
+```
+
+## Вердикт
+
+**PASS** — FAIL-находок нет; три MINOR не блокируют.

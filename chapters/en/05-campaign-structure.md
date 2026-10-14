@@ -6,12 +6,14 @@ chapter: 5
 slug: campaign-structure
 title: "How an Ad Campaign Is Structured"
 language: en
-status: draft
+status: reviewed
 toc_requirements: ["5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14"]
 prerequisites: [ch-01, ch-02, ch-03, ch-04]
 ---
 
 # How an Ad Campaign Is Structured
+
+## The Core Idea
 
 An ad campaign[^g-campaign] is not a single banner or a line in a report. It is a **control-plane configuration** that translates the business intent of an advertiser[^g-advertiser] into delivery rules: what the system must optimize for, which ad opportunities are allowed, where the ad may appear, how much and when it may spend, which content to show, where to bring the user, and which signals to use for measurement.
 
@@ -35,14 +37,14 @@ A single advertiser runs different products, countries, billing scopes, and team
 An account usually forms several boundaries at once:
 
 - **Ownership and access.** It defines the owner of resources and the roles and permissions of operators.
-- **Billing identity.** A payer, billing profile, or another contractual entity is associated with it. The exact set of fields depends on the product.
+- **Billing identity.** A payer[^g-payee-payer], billing profile, or another contractual entity is associated with it. The exact set of fields depends on the product.
 - **Currency and time zone.** These values affect reporting, budget periods, and the schedule; in some products they are hard or impossible to change after creation.
-- **Namespace.** Campaign and ad resource IDs are unique at least within the platform/account context. The scope and semantics of event identifiers depend on the event source and its deduplication contract and are not required to follow this rule.
-- **Shared configuration.** Data sources, conversion actions[^g-conversion], brand assets, URL settings, and defaults may be shared across several campaigns.
+- **Namespace.** Campaign and ad resource IDs are unique at least within the platform/account context. Event identifiers (click ID, event ID) belong to other namespaces and do not follow this rule — see chapters 21–23.
+- **Shared configuration.** Data sources, conversion actions[^g-conversion-action], brand assets, URL settings, and defaults may be shared across several campaigns.
 
-The advertiser's legal company and the ad account are not the same thing. One company may have separate accounts for regions, brands, currencies, or billing entities. Conversely, one account may serve several initiatives of a single legal entity.
+The advertiser's legal entity and the ad account are not the same thing. One company may have separate accounts for regions, brands, currencies, or different payers. Conversely, one account may serve several initiatives of a single legal entity.
 
-A **manager account**[^g-manager-account] is an administrative layer that gives an agency[^g-agency] or an internal team centralized access to several ad accounts. Access to an individual account can also be granted without such a layer. In either case it is administrative access, not an additional delivery layer inside the campaign.
+A **manager account**[^g-manager-account] is an administrative layer that gives an agency[^g-agency] or an internal team centralized access to several ad accounts. Access to an individual account can also be granted without it; in either case it is administrative access, not a delivery layer inside the campaign.
 
 ```text
 Subscription App Ltd.
@@ -68,16 +70,18 @@ For the running example, take an EU account of a subscription app. The agency ha
 
 ## The execution tree: campaign, ad group/ad set, ad, and creative
 
-A **campaign** is the top-level delivery container for a single business intent or a coherent flight. It consolidates settings that must apply across several child groups and ads: the objective[^g-campaign-objective], shared limits, the channel/type, and other product-specific controls. A campaign is not just a folder for reporting: pausing it, rescheduling it, or constraining it can stop or change the delivery of all its descendants.
+A **campaign** is the top-level delivery container for a single business intent or a coherent flight — a delivery period with a start and an end date. It consolidates settings that must apply across several child groups and ads: the objective[^g-campaign-objective], shared limits, the channel/type, and other product-specific controls. A campaign is not just a folder for reporting: pausing it, rescheduling it, or constraining it can stop or change the delivery of all its descendants.
 
 An **ad group**[^g-ad-set] or **ad set** is an intermediate scope boundary for a group of ads. Both entities answer the question "which ads share execution rules?", but neither has a universally identical schema:
 
 - in the Google-like model, an ad group usually bundles closely related ads and triggering criteria, such as related keywords;
-- in the Meta-like model, an ad set usually holds the audience, placements[^g-placement], optimization, bid, budget, and schedule.
+- in the Meta-like model, an ad set usually holds the audience, placements[^g-placement], optimization, bid[^g-bid], budget, and schedule.
 
 So statements like "targeting always lives in the ad group" or "budget is always set at the campaign" are wrong without naming the platform and campaign type.
 
-An **ad** is the executable delivery unit. It binds the parent group, advertiser identity, creative[^g-creative], destination[^g-destination], tracking, and status. The **creative** carries the message and the assets — text, image, video, audio, CTA, and metadata. A creative may be an inline part of the ad or a separate reusable object. Even if the UI shows them as one card, logically these are different responsibilities:
+In a DSP[^g-dsp] and an ad server[^g-ad-server], the same levels are often called insertion order and line item (chapters 11 and 16): the functions match, the names do not.
+
+An **ad** is the executable delivery unit. It binds the parent group, advertiser identity, creative[^g-creative], destination[^g-destination], tracking, and status. The **creative** carries the message and the assets — text, image, video, audio, CTA (call to action), and metadata. A creative may be an inline part of the ad or a separate reusable object. Even if the UI shows them as one card, logically these are different responsibilities:
 
 ```text
 creative: what the user will see
@@ -87,7 +91,7 @@ ad:       where and under which parent rules this creative runs,
 
 | Level | Portable function | Google-like example | Meta-like example |
 |---|---|---|---|
-| Campaign | Shared intent and delivery scope | Campaign settings, channel/type, and budget link | Objective and, for the chosen model, a campaign-level budget |
+| Campaign | Shared intent and delivery scope | Campaign settings, channel/type, and budget link | Objective and, when that model is selected, a campaign-level budget |
 | Middle layer | A group of ads with shared execution rules | Ad group: related ads and keywords/criteria | Ad set: audience, placements, optimization, bid, budget/schedule |
 | Ad | Delivery unit | Ad inside an ad group | Ad with a parent `adset_id` and creative reference |
 | Creative | Content and assets | Assets/ad content | A separate `creative_id` can be reused |
@@ -156,7 +160,7 @@ The names `App promotion` and `Sales` and the available combinations are product
 
 The **campaign objective** is the high-level business intent or setup guidance: awareness, traffic, leads, app promotion, sales. Based on it, the platform may suggest campaign types, features, and defaults. The objective does not have to be the event that the optimizer directly predicts.
 
-The **optimization event**[^g-optimization-target], or **performance goal**, is the observable result, probability, or value that the delivery system tries to increase. It may be an impression[^g-impression], a click[^g-click], a landing-page view, an install, a purchase, or conversion value. A specific **conversion action** defines which tracking event counts as the selected input for bidding and/or reporting; some products group several actions into a conversion goal and distinguish primary and secondary events.
+The **optimization event**[^g-optimization-event], or **performance goal**, is the observable result, probability, or value that the delivery system tries to increase. It may be an impression[^g-impression], a click[^g-click], a landing-page view, an install, a purchase, or conversion[^g-conversion] value. A specific **conversion action** defines which tracking event counts as the selected input for bidding and/or reporting; some products group several actions into a conversion goal and distinguish primary and secondary events.
 
 A deep event such as a paid subscription is closer to business value but not automatically better for optimization. It may be rare, delayed, or unreliably transmitted from the event source. An install occurs earlier and more often but is only a proxy for the subscription. The choice requires sufficient signal volume and correct measurement[^g-measurement]; the algorithmic trade-off is discussed in chapter 7.
 
@@ -167,26 +171,26 @@ A deep event such as a paid subscription is closer to business value but not aut
 | Optimization event | Which signal drives delivery decisions? | `install` first, `paid_subscription` later |
 | Tracked events | Which events are observed at all? | Install, trial, purchase, renewal |
 | Bid strategy[^g-bid-strategy] | How does the policy translate the goal and constraints into bids? | Maximize conversions with a given control |
-| Billing basis | Which qualifying event triggers a charge? | For example CPC; the basis is known from the contract and need not match the optimization |
+| Billing/pricing basis[^g-pricing-basis] | Which qualifying event triggers a charge? | For example CPM[^g-cpm] or CPC[^g-cpc]; the basis is known from the contract and need not match the optimization |
 
-The billing basis[^g-billable-event], as shown in the previous chapter, is set separately. So the label `subscription campaign` proves nothing about the billable event.
+The billing basis, as shown in the previous chapter, is set separately. So the label `subscription campaign` proves nothing about the billable event[^g-billable-event].
 
 ### Targeting and placement
 
 **Targeting** defines the eligibility rules and inputs of the delivery model: which opportunities[^g-ad-opportunity], users, or contexts are allowed or preferred. At an overview level these may be geo, device, context, audience/keyword criteria, and exclusions. The sources of audience data, identity, and privacy are discussed in chapter 6.
 
-**Placement** answers a different question: in which media environment and slot the ad may appear. Examples are feed, stories, search results, video pre-roll, an in-app banner, or a rewarded slot. Placement is tied to creative format eligibility, but the formats, assets, and compatibility themselves are covered in detail in chapter 8.
+**Placement** answers a different question: in which media environment and slot the ad may appear. Examples are feed, stories, search results, video pre-roll, an in-app banner, or a rewarded slot. The term is overloaded: on the publisher[^g-publisher] side a placement is a specific slot (chapters 1 and 10); on the buy side, in Google-like products it means the selected sites/apps (chapter 6), and in Meta-like products positions such as feed/stories; here it means the buy-side configuration field. Placement is tied to creative format eligibility, but the formats, assets, and compatibility themselves are covered in detail in chapter 8.
 
 | Axis | Main question | Example constraint |
 |---|---|---|
-| Targeting | For which opportunities/users/contexts is delivery possible? | Geo `DE`, mobile devices, keyword category, audience exclusion |
+| Targeting | For which opportunities/users/contexts is delivery possible? | Geo `DE`, mobile devices, keyword category, audience exclusion[^g-audience-exclusion] |
 | Placement | Where exactly is delivery possible? | Feed, search results, in-app rewarded slot |
 
 An API may store placements inside an object named `targeting`; that is the nesting of a specific product, not proof that audience and placement are one concept. An opportunity must pass the constraints of both axes.
 
 ### Bid strategy
 
-A **bid strategy** is the policy that translates the optimization goal and constraints into auction bids. The strategy may seek to maximize conversions, value, or another result, and it may take a target or a cap into account. Here it is important to separate four entities:
+A **bid strategy** is the policy that translates the optimization goal and constraints into auction[^g-auction] bids. The strategy may seek to maximize conversions, value, or another result, and it may take a target or a cap into account. Here it is important to separate four entities:
 
 ```text
 bid strategy  = the decision-making rule
@@ -195,29 +199,29 @@ actual bid    = the decision for a specific auction opportunity
 price/charge  = the outcome of the auction and the billing contract
 ```
 
-A numeric `target CPA` is not an actual bid, and an actual bid does not by itself determine the billable amount. How bids are computed, how budget is distributed, and how pacing[^g-pacing] works is covered in chapter 7.
+A numeric `target CPA`[^g-cpa] is not an actual bid, and an actual bid does not by itself determine the billable amount. How bids are computed, how budget is distributed, and how pacing[^g-pacing] works is covered in chapter 7.
 
-So the objective is not the optimization event; the placement is not the audience; the strategy is not the bid amount. These distinctions let you read a campaign configuration without the false assumption that one UI label simultaneously describes the business goal, the delivery signal, and the money.
+These three distinctions — objective ≠ optimization event, placement ≠ audience, strategy ≠ bid amount — let you read a campaign configuration without assuming that one UI label simultaneously describes the business goal, the delivery signal, and the money.
 
 ## Resources and time: budget and schedule
 
-Even a correctly chosen decision policy acts only within resource and time constraints. The **budget** caps the available spend on a given scope and time basis. It guarantees neither inventory, nor conversions, nor an even rate of spend, nor an exact invoice amount.
+Even a correctly chosen decision policy acts only within resource and time constraints. The **budget** caps the available spend on a given scope and time basis. It guarantees neither inventory[^g-inventory], nor conversions, nor an even rate of spend, nor an exact invoice amount.
 
 Two temporal semantics are common:
 
 - A **daily budget** sets a daily basis. The specific product determines whether the value is a hard calendar cap, an average daily target, or another form of constraint.
 - A **lifetime**, **campaign-total**, or flight budget caps the spend over the whole interval.
 
-Scope also varies. A budget may belong to a campaign, be shared between campaigns, or be set on an individual ad set. With campaign-level allocation the system distributes the shared resource among children; with ad-set budgets each group has its own limit. Neither model is universal.
+Scope also varies. A budget may belong to a campaign, be shared between campaigns, or be set on an individual group (ad group/ad set). With campaign-level allocation the system distributes the shared resource among children; with group-level budgets each group has its own limit.
 
 | Setting | Possible scope | Unit/basis | What it limits | What it does not guarantee |
 |---|---|---|---|---|
-| Daily budget | Campaign or ad set | Currency per day | Available spend on a daily basis | The same spend every hour or day across all products |
-| Lifetime budget | Campaign or ad set | Currency per flight | Cumulative spend until the end condition | Even distribution across days |
+| Daily budget | Campaign or group | Currency per day | Available spend on a daily basis | The same spend every hour or day across all products |
+| Lifetime budget | Campaign or group | Currency per flight | Cumulative spend until the end condition | Even distribution across days |
 | Shared budget | Several campaigns | Currency on a shared pool | The shared resource of the group | A fixed share for each child |
 | Bid target/cap | Strategy scope | Currency per predicted/result unit | The decision policy or a bid constraint | Total spend and the number of results |
 
-In the running example the campaign gets an **illustrative** lifetime budget of `€700` for a seven-day flight and contains two ad sets. You cannot automatically write down `€100/day`: the available opportunities and allocation may change, and pacing may distribute spend unevenly. Nor can you conclude, without the product configuration, that each ad set will get `€350`.
+In the running example the campaign gets an **illustrative** lifetime budget of `€700` for a seven-day flight and contains two groups (in a Meta-like setup, two ad sets). You cannot automatically write down `€100/day`: the available opportunities and allocation may change, and pacing may distribute spend unevenly. Nor can you conclude, without the product configuration, that each group will get `€350`.
 
 The **schedule**, or **flight**, defines temporal eligibility:
 
@@ -266,7 +270,7 @@ https://example.com/app?campaign_id=cmp_subscriptions_42&ad_id=ad_7
 
 The parameter names are not an industry standard. Platform macros can substitute the actual IDs at click time; the destination or analytics then stores them for mapping. A tracking template governs the measurement path but is not a landing page.
 
-Google Ads provides a product-specific example of separating the paths: with parallel tracking, the user is directed to the final URL while click measurement happens in the background. This illustrates a general principle but does not guarantee such behavior in every platform, browser, app, or MMP link.
+Google Ads provides a product-specific example of separating the paths: with parallel tracking, the user is directed to the final URL while click measurement happens in the background. This is Google's implementation, not a guarantee for every platform, browser, or MMP link.
 
 For the subscription app, the ad with `creative_id=cr_video_a` promises premium features and leads a new user to the store listing. After the install, the SDK or MMP registers the install; the backend may later pass the trial and the paid subscription. For the platform to use the subscription for optimization, it is not enough to see this event in analytics: the right conversion action must be correctly mapped and selected in the campaign configuration.
 
@@ -276,9 +280,9 @@ For the subscription app, the ad with `creative_id=cr_video_a` promises premium 
 | "Continue setting up your subscription" | Deep link for the installed app | Subscription-start screen view | The deep link opens the expected state |
 | "Compare plans" | Web pricing page | Landing-page view, purchase | The URL leads to the right locale/currency version |
 
-This semantic alignment affects the understanding of the flow, but landing-page optimization and CRO belong to other topics.
+Landing-page optimization and CRO (conversion rate optimization) are separate topics.
 
-An MMP also does not receive the campaign hierarchy magically. The platform, the tracking link, and the MMP must agree on the mapping of IDs and event names. Having an `ad_id` without parent mapping does not automatically restore account/campaign/ad-set relationships. Conversely, a correct hierarchy in the platform does not prove that the downstream event source passes the required identifiers.
+An MMP also does not receive the campaign hierarchy magically. The platform, the tracking link, and the MMP must agree on the mapping of IDs and event names. Having an `ad_id` without parent mapping does not automatically restore account/campaign/group relationships. Conversely, a correct hierarchy in the platform does not prove that the downstream event source passes the required identifiers.
 
 ## Lifecycle without false linearity
 
@@ -291,8 +295,8 @@ draft → learning → active → paused → completed
 But this is a mnemonic, not a universal linear state machine. It mixes the state of the configuration, the permission to deliver, the schedule, and the state of the optimizer. The real object is better described as a **vector of states**.
 
 - **Draft**: the configuration has not been published yet. In some systems the draft exists only in the UI or the client and is not yet a server-side campaign.
-- **Learning**[^g-learning-phase]: the delivery/bidding model gathers evidence after launch or a material change. Impressions and spend may already be happening during this time.
-- **Active/enabled**: the operator has permitted delivery. Actual impressions additionally depend on the parent, review, schedule, budget, errors, and the availability of eligible opportunities.
+- **Learning**[^g-learning-phase]: the delivery/bidding model gathers performance data after launch or a material configuration change. Impressions and spend may already be happening during this time.
+- **Active/enabled**: the operator has permitted delivery. Actual impressions additionally depend on the parent, review (the platform's policy and technical check of ads), schedule, budget, errors, and the availability of eligible opportunities.
 - **Paused**: the operator has stopped delivery. This is usually a reversible transition; resuming does not create a new campaign.
 - **Completed/ended**: the end condition has occurred, most often the schedule end. The object, reporting, and history are usually preserved; this is not a synonym for deleted.
 
@@ -304,7 +308,7 @@ active or paused → end condition → completed/ended
 material edit → learning again
 ```
 
-The arrow `learning → active` is misleading: learning can be a sub-state of active delivery rather than a stage preceding the permission to show.
+The arrow `learning → active` is misleading: learning can be a sub-state of active delivery rather than a prohibition on impressions that precedes it.
 
 | Axis | Who or what defines it | Possible states | Example of one moment |
 |---|---|---|---|
@@ -317,7 +321,7 @@ In the Google-specific view, a campaign may have the status `Eligible` while the
 
 ### Changing the campaign and re-learning
 
-Before the change, the running ad set is optimized on installs:
+Before the change, the running group is optimized on installs:
 
 ```text
 configured: active
@@ -335,17 +339,17 @@ review:     approved or pending for the new creative
 optimizer:  learning on paid_subscription event
 ```
 
-Meta, for example, counts changes to targeting, creative, optimization event, the composition of ads, and the bid strategy among possible significant edits; the effect of a budget change depends on the product rules and magnitude. This list cannot be transferred to Google Ads, a DSP[^g-dsp], or an ad network[^g-ad-network], and the thresholds and duration must not be assumed constant. The general causal link is only this:
+Meta, for example, counts changes to targeting, creative, optimization event, the composition of ads, the bid strategy, and a prolonged pause of the ad set among possible significant edits; the effect of a budget change depends on the product rules and magnitude. This list cannot be transferred to Google Ads, a DSP, or an ad network[^g-ad-network], and the thresholds and duration must not be assumed constant. The general causal link is only this:
 
 ```text
 material configuration change
-  → prior evidence describes the new decisions less well
-  → the optimizer gathers evidence again
+  → prior data describe the new decisions less well
+  → the optimizer gathers data again
 ```
 
-Pause does not have to precede completion. A campaign can end on the end date straight from active delivery, and a paused campaign can remain paused until a manual resume or still transition to ended when the end condition occurs.
+Pause does not have to precede completion: a campaign can end on the end date straight from active delivery, and a paused campaign can remain paused until a manual resume or transition to ended when the end condition occurs.
 
-### How to read any campaign
+## How to read any campaign
 
 1. Who owns the ad account, who has access, and which currency/time zone are in effect?
 2. At which object level does each setting live, and who inherits it?
@@ -357,42 +361,34 @@ Pause does not have to precede completion. A campaign can end on the end date st
 8. Where does the user land after the interaction?
 9. What are the configured, effective, review, and learning states right now?
 
-### What this is often confused with
+## Common Confusions
 
 - **An account is not the advertiser company.** It is a product/access/billing boundary; a manager account grants access, it does not add a delivery level.
 - **A campaign is not just a folder.** Parent settings and limits change the behavior of children.
-- **Ad group and ad set are not one universal schema.** Their role as the middle layer is similar, but the fields are vendor-specific.
-- **An ad is not a creative.** The creative contains the message/assets; the ad binds it to a parent, destination, tracking, and status.
-- **A placement is not an audience.** Placement answers "where", targeting answers "for which opportunities/users/contexts".
 - **Objective, optimization event, tracked conversion, and billing basis need not coincide.** They are different configuration and contract layers.
-- **A bid strategy is not an actual bid.** The strategy is the policy; a bid is one concrete decision.
-- **A budget does not promise spend or results.** It is a resource constraint, not a forecast and not an invoice.
-- **Enabled does not mean delivering right now.** Parent status, schedule, review, budget, errors, and eligibility can stop delivery.
-- **Learning does not mean inactive.** The optimizer can adapt during active delivery.
-- **Pause does not mean completed.** Pause is reversible; completion usually follows the end condition.
+- **Enabled does not mean delivering right now, and learning does not mean inactive.** Parent status, schedule, review, budget, errors, and eligibility can stop delivery; the optimizer can adapt during active delivery.
+- **Pause does not mean completed.** Pause is reversible, although on some platforms a prolonged pause itself counts as a significant edit; completion usually follows the end condition.
 - **A tracking URL is not a landing page.** The measurement path and the user path solve different problems.
 
-### Key takeaways
+## What to Remember
 
-1. Campaign hierarchy is a model of scope and inheritance, not a single cross-platform schema.
-2. The ad account sets the administrative boundary; the campaign translates one intent/flight into shared delivery rules.
-3. An ad group/ad set groups ads with shared execution rules; the exact placement of fields depends on the product.
-4. The ad is the delivery binding, the creative is the content; one creative can be used by several ads.
-5. The objective describes the overall intent, the optimization event the observable signal for decisions.
-6. Targeting limits the allowed opportunities; placement limits the media environment and slot.
-7. Bid strategy, strategy target, actual bid, and billable price are different objects.
-8. Budget and schedule constrain resources and time but guarantee neither even spend nor results.
-9. The destination leads the user; tracking settings tie IDs and event sources to measurement/optimization.
-10. The operational lifecycle must be read as several axes: configured, effective, review, and learning status.
+1. Campaign hierarchy is a model of scope and inheritance, not a single cross-platform schema; every setting has a source: `account default`, `campaign value`, or `ad-level override`.
+2. The ad account sets the administrative boundary; the campaign translates one intent/flight into shared delivery rules; an ad group/ad set groups ads with shared execution rules, and the exact placement of fields depends on the product.
+3. The ad is the delivery binding, the creative is the content; one creative can be used by several ads.
+4. The objective describes the overall intent, the optimization event the observable signal for decisions; bid strategy, strategy target, actual bid, and billable price are different objects.
+5. Targeting limits the allowed opportunities; placement limits the media environment and slot.
+6. Budget and schedule constrain resources and time but guarantee neither even spend nor results.
+7. The destination leads the user; tracking settings tie IDs and event sources to measurement/optimization.
+8. The operational lifecycle must be read as several axes: configured, effective, review, and learning status.
 
-### Test yourself
+## Check Yourself
 
-1. A campaign has the objective `App promotion`, is optimized on `paid_subscription`, tracks install, trial, and subscription, and its billing basis is CPC. Why do these values not contradict one another?
+1. A campaign has the objective `App promotion`, is optimized on `paid_subscription`, tracks install, trial, and subscription, and its billing basis is CPM. Why do these values not contradict one another?
 2. An ad is set to active but receives no impressions. Which parent, schedule, review, budget, and eligibility states should you check?
 3. Why can changing the optimization event from install to subscription return the optimizer to learning without changing the configured status `active`?
 4. Which settings would you expect to share between two ads and which to keep separate, if they use one creative but lead to different regions and destinations?
 
-# Sources and Further Reading
+## Sources and Further Reading
 
 1. [Google Ads Help — Account, campaign, and ad group performance](https://support.google.com/google-ads/answer/2404036?hl=en) and [Google Ads API — Campaigns overview](https://developers.google.com/google-ads/api/docs/campaigns/overview) — the Google-specific hierarchy and campaign resources; the placement of fields depends on the campaign type and API version.
 2. [Meta Marketing API — Basic Ad Creation](https://developers.facebook.com/docs/marketing-api/get-started/basic-ad-creation/) — separate campaign, ad set, creative, and ad in the Meta Graph API; this is a vendor schema, not an industry standard.

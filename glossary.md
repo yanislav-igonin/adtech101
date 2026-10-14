@@ -17,6 +17,18 @@ language: ru
 
 **Пример:** user открывает новостное приложение. Publisher через SSP выставляет показ на аукцион; несколько DSP, играя за разных advertisers, за ~100 мс возвращают ставки; победившая реклама доставляется в приложение до того, как user увидит контент.
 
+### Bid {#g-bid}
+
+**Bid (ставка)** — предложение buyer заплатить определённую цену за конкретную ad opportunity, обычно выраженное как CPM. Bid — это решение до события: он не равен итоговой цене (clearing price) и не равен billable amount; в programmatic bid формируется DSP на каждый bid request отдельно.
+
+**Пример:** DSP оценивает запрос из игрового приложения и отвечает bid `$12 CPM`; аукцион может закрыться по `$10`, а advertiser по договору заплатит за qualifying impressions.
+
+### Auction {#g-auction}
+
+**Auction (аукцион)** — механизм выбора победителя среди нескольких bids на одну ad opportunity и определения цены (clearing price) по правилам аукциона — first-price, second-price и их варианты. Auction win — событие выбора победителя; оно не равно показу и не делает impression billable само по себе.
+
+**Пример:** на один показ пришли bids `$12`, `$10` и `$7`; при first-price победитель платит `$12`, при second-price — цену второго bid (или floor), и только после доставки creative событие может стать billable.
+
 ### Agency {#g-agency}
 
 **Agency** — компания-подрядчик, которая планирует и выполняет marketing- и media-работу от имени advertiser: разрабатывает стратегию, готовит `creative`, выбирает каналы, запускает `campaign` и ведёт отчётность. Advertiser может держать покупку media in-house, отдать её agency целиком или разделить ответственность. Agency — организация и договорная роль, в отличие от media buyer — операционной функции, которая может работать и внутри advertiser.
@@ -67,7 +79,7 @@ language: ru
 
 ### Supply {#g-supply}
 
-**Supply (предложение)** — доступные рекламные возможности publisher; сторона рынка, вокруг которой группируются `sell side` / `supply side` — люди и системы, помогающие описывать, продавать и доставлять рекламу (SSP, ad network). Supply — это совокупность inventory на продажу, а не название платформы.
+**Supply (предложение)** — доступные рекламные возможности publisher; сторона рынка, вокруг которой группируются `sell side` / `supply side` — люди и системы, помогающие описывать, продавать и доставлять рекламу (SSP, publisher ad server). Supply — это совокупность inventory на продажу, а не название платформы. Ad network агрегирует и supply, и demand, поэтому стоит между сторонами, а не внутри одной из них.
 
 **Пример:** игровое приложение с двадцатью рекламными местами и правилами их показа — supply; SSP, через которую оно открывает доступ покупателям, — supply side.
 
@@ -151,7 +163,7 @@ language: ru
 
 ### Intermediary {#g-intermediary}
 
-**Intermediary (посредник)** — участник, который соединяет стороны рынка или выполняет специализированную функцию: agency, ad network, exchange, ad server, measurement-, verification- и data-провайдеры. Оправдан, когда ценность его функции (reach, aggregation, interoperability, скорость, measurement, контроль риска) выше стоимости и сложности; не обязан присутствовать в каждой сделке.
+**Intermediary (посредник)** — участник, который соединяет стороны рынка или выполняет специализированную функцию: agency, DSP, ad network, exchange, SSP, ad server, measurement-, verification- и data-провайдеры. Оправдан, когда ценность его функции (reach, aggregation, interoperability, скорость, measurement, контроль риска) выше стоимости и сложности; не обязан присутствовать в каждой сделке и не обязательно удерживает долю media money — часть посредников получает отдельный service или SaaS fee.
 
 **Пример:** небольшой advertiser покупает показы у ad network, потому что не готов вести десятки интеграций с publisher напрямую, — функция агрегации оправдывает fee.
 
@@ -159,13 +171,25 @@ language: ru
 
 **Media spend (рекламные расходы)** — деньги, которые advertiser выделяет и тратит на покупку рекламы. Проходят через продавцов media и в итоге образуют publisher revenue, уменьшаясь по пути на fees; не синоним publisher revenue и не синоним intermediary fee — это разные суммы одной цепочки.
 
-**Пример:** из $100 media spend $70 доходит до publisher как revenue, $20 забирают платформы, $10 — fee agency; data-провайдер получает отдельную подписку вне media money.
+**Пример:** из $100 media spend network удерживает $20, SSP — $12, publisher получает $68; MMP и ad server получают отдельные SaaS fee вне media money.
 
 ### Publisher revenue {#g-publisher-revenue}
 
-**Publisher revenue (выручка publisher)** — часть media spend, дошедшая до владельца inventory после удержаний посредников и платформ; отличается от advertiser spend на сумму всех fees в цепочке. Формируется только из медиаплатежей: service- и SaaS-fee участников вне media money к ней не относятся.
+**Publisher revenue (выручка publisher)** — сумма, которую publisher признаёт выручкой по своим правилам учёта из медиаплатежей за своё inventory; в простом случае равна publisher payout, но признание (accrued / billed / settled) следует policy publisher, а не моменту платежа. Отличается от advertiser spend на сумму всех fees в цепочке; service- и SaaS-fee участников вне media money к ней не относятся.
 
-**Пример:** advertiser потратил $100, из которых после exchange и SSP publisher получил $68 — это его publisher revenue по этой сделке.
+**Пример:** advertiser потратил $100; network удержала $20, SSP — $12; publisher получил payout $68 и признал их своей revenue за period, в котором состоялись показы.
+
+### Settlement (accrued / billed / settled) {#g-settlement}
+
+**Settlement (расчёт)** — фактическое движение денег между участниками по итогам периода, в отличие от invoice (выставленного требования) и от начисления. Одна сумма проходит три состояния: `accrued` — начислена по событиям, `billed` — выставлена в invoice или statement, `settled` — оплачена; на каждом шаге сумма может измениться из-за adjustments, fraud filtering, credits и FX. Для одной стороны это receivable (ожидаемое поступление), для другой — payable.
+
+**Пример:** publisher видит в dashboard accrued `$68` за сентябрь; statement от SSP приходит в октябре на `$66` после вычета invalid traffic; оплата (settlement) поступает через 60 дней.
+
+### Publisher payout {#g-publisher-payout}
+
+**Publisher payout (выплата publisher)** — сумма, которую по договору продавца должны перечислить publisher после revenue share, fees и adjustments; для SSP или network это payable, для publisher — receivable. Payout — договорная и платёжная величина; какую часть и в каком периоде publisher признаёт выручкой, определяет его accounting policy (см. publisher revenue).
+
+**Пример:** из $80, полученных SSP от network, после удержания 15% publisher причитается payout $68.
 
 ### MarTech {#g-martech}
 
@@ -173,17 +197,23 @@ language: ru
 
 **Пример:** покупка подписки — outcome signal для AdTech measurement и одновременно триггер email-цепочки удержания в MarTech.
 
-### Data / identity provider {#g-data-provider}
+### Data provider {#g-data-provider}
 
-**Data / identity provider (поставщик данных и идентичности)** — поперечная категория провайдеров, которые поставляют или связывают допустимые data signals: помогают системам интерпретировать контекст и связывать данные об одном пользователе между участниками. Работают параллельно цепочке покупки, а не «между» двумя обязательными соседями.
+**Data provider (поставщик данных)** — провайдер, который продаёт или предоставляет datasets, attributes или готовые audience segments для targeting, measurement и enrichment. Работает параллельно цепочке покупки, а не «между» двумя обязательными соседями; за third-party segments обычно платит buyer — часто как data CPM, начисляемый через buying platform поверх media cost. Не путать с identity provider: тот не поставляет данные, а устанавливает соответствие identifiers.
 
-**Пример:** identity-провайдер даёт общий ключ, по которому DSP и publisher в рамках разрешённых правил узнают в разных запросах одного и того же пользователя.
+**Пример:** DSP подключает сегмент «интерес к фитнесу» от внешнего data provider; за каждую тысячу показов по этому сегменту к media CPM добавляется data fee провайдера.
 
 ### Media buyer {#g-media-buyer}
 
 **Media buyer** — человек, команда или функция, которая выбирает media, platforms и условия покупки, распределяет spend и настраивает campaigns. Это операционная роль, а не организация: media buyer может работать внутри advertiser, внутри agency или другой buying organization. Не синоним agency (организация-подрядчик) и не синоним DSP: человек формулирует и настраивает решения, платформа исполняет часть buying workflow в масштабе.
 
 **Пример:** media buyer в agency получает план каналов и бюджет, заводит campaign в DSP, задаёт аудитории и ставки, а по ходу месяца перераспределяет spend между platforms по результатам отчётов.
+
+### Vertical integration {#g-vertical-integration}
+
+**Vertical integration (вертикальная интеграция)** — ситуация, когда одна компания занимает несколько ролей цепочки (например, DSP, exchange и SSP, или ad network и MMP) и совмещает их в одном продукте или бренде. Даёт customer удобство и единый invoice, но создаёт конфликты интересов: компания одновременно представляет buyer и seller, сама себя измеряет или управляет аукционом, в котором участвует. Отраслевой термин для того, что в курсе также называется совмещением ролей.
+
+**Пример:** платформа продаёт advertiser managed media, при этом владеет exchange, через который продаёт собственный inventory, и отчитывается о результатах собственным measurement — три роли на одной карте экосистемы.
 
 ### Brand advertising {#g-brand-advertising}
 
@@ -221,6 +251,12 @@ language: ru
 
 **Пример:** advertiser и publisher используют разные идентификаторы одного пользователя; identity-провайдер переводит их в общий identifier, чтобы частота показов считалась по человеку, а не дважды.
 
+### Activation {#g-activation}
+
+**Activation (активация)** — передача данных или audience segment в систему, которая может их использовать для targeting, suppression, personalization или measurement: из CDP/DMP в DSP, из CRM advertiser в walled garden, из identity graph в SSP. До activation данные — запись в хранилище; после — правило, влияющее на реальные показы. Activation требует match identifiers между источником и принимающей платформой и разрешённого правового основания.
+
+**Пример:** список trial-пользователей без оплаты загружен в buying platform и после matching стал retargeting-аудиторией — это activation сегмента.
+
 ### Metric contract {#g-metric-contract}
 
 **Metric contract (контракт метрики)** — полное определение метрики, по которому её число можно воспроизвести и интерпретировать: event definition, measurement point, filters и deduplication, numerator/denominator, dimensions, period и окна, currency, perspective и ledger boundary. Название метрики без контракта не задаёт смысла: одна и та же формула на разных contracts отвечает на разные вопросы.
@@ -238,6 +274,18 @@ language: ru
 **Conversion (конверсия)** — valuable action или outcome, который advertiser определил как значимый (install, trial, первая оплата, renewal, purchase) и который система засчитала по measurement и attribution rules. Conversions нельзя складывать без явного counting rule: один click может привести к нескольким conversions. Observed conversion — зарегистрированное событие; attributed conversion — событие, которому attribution rule назначил credit; ни то ни другое не доказывает causality.
 
 **Пример:** click привёл к install, затем к trial и оплате подписки — по правилам отчёта это три conversions одного interaction, и итоговая сумма зависит от режима подсчёта (одна или каждая conversion на interaction).
+
+### Served impression {#g-served-impression}
+
+**Served impression (отданный показ)** — impression, засчитанный по факту того, что ad server или selling platform отдала creative (или ссылку на него) в ответ на запрос; доказывает отправку, но не загрузку, не отрисовку и не видимость. Самое раннее и самое крупное число в лестнице `served → rendered → viewable`.
+
+**Пример:** ad server вернул 100,000 ответов с creative — 100,000 served impressions, хотя часть пользователей закрыла экран до загрузки баннера.
+
+### Rendered impression {#g-rendered-impression}
+
+**Rendered impression (отрисованный показ)** — impression, засчитанный после того, как creative загрузился и был отрисован на устройстве пользователя (обычно по сигналу от клиентского кода: pixel или SDK-событие после render). Доказывает отрисовку, но не то, что creative попал в видимую область экрана или был замечен; MRC-стандарт для display считает impression именно по факту загрузки/render на стороне клиента.
+
+**Пример:** из 100,000 served impressions 92,000 отправили render pixel — 92,000 rendered impressions; сколько из них оказались viewable, покажет отдельное измерение.
 
 ### Viewable impression {#g-viewable-impression}
 
@@ -313,9 +361,9 @@ language: ru
 
 ### Revenue {#g-revenue}
 
-**Revenue (выручка)** — сумма, признанная выбранной entity по её правилам учёта на её ledger boundary. Estimated dashboard value, invoiced amount, settled amount и recognized revenue могут быть разными состояниями одной цепочки; для сравнения нужно согласовать period, timezone, currency conversion, taxes/refunds и participant.
+**Revenue (выручка)** — сумма, признанная выбранной entity по её правилам учёта на её ledger boundary. Estimated dashboard value, invoiced amount, settled amount и recognized revenue могут быть разными состояниями одной цепочки; для сравнения нужно согласовать period, timezone, currency conversion, taxes/refunds и participant. Сколько из прошедших через платформу денег она признаёт revenue, зависит от её роли principal или agent (gross/net presentation), а не от размера invoice.
 
-**Пример:** platform признала $100 revenue по сделке, а publisher — $68: обе суммы верны, но это разные entities с разными правилами признания выручки.
+**Пример:** через network прошли $100 advertiser, publisher получил $68. При gross presentation network признаёт $100 revenue, при net — только свои $20; обе записи корректны для своей boundary и своей accounting conclusion.
 
 ### Cost {#g-cost}
 
@@ -343,7 +391,7 @@ language: ru
 
 ### ARPPU (Average Revenue per Paying User) {#g-arppu}
 
-**ARPPU (Average Revenue per Paying User)** — purchase revenue на paying users: `ARPPU = selected purchase revenue / paying users`. Делит только на payers и требует payer event, purchase revenue, правил refunds и period; всегда выше ARPU той же population.
+**ARPPU (Average Revenue per Paying User)** — revenue на paying users: `ARPPU = selected revenue от payers / paying users`. Делит только на payers и требует payer event, состав revenue (purchase, subscription), правил refunds и period. Обычно выше ARPU той же population, но не всегда: если ARPU включает ad revenue от неплатящих users, а ARPPU — только purchase revenue, соотношение может перевернуться; какой revenue входит в numerator — часть contract метрики.
 
 **Пример:** те же $1,000 purchase revenue от 100 платящих из 1,000 users — ARPPU $10 при ARPU $1.
 
@@ -355,9 +403,9 @@ language: ru
 
 ### Fill rate {#g-fill-rate}
 
-**Fill rate** — доля eligible ad requests, приведшая к fill, например `counted filled impressions / eligible ad requests`. Publisher/ad server metric перехода request → delivery; безопасного vendor-neutral denominator нет — product может делить impressions, matched responses или другой fill event на requests, opportunities или ad units. Fill — не конечный outcome: matched response может не render-иться и не стать counted impression. Не синоним match, response и delivery rate.
+**Fill rate** — доля eligible ad requests, на которые нашёлся ответ с рекламой (fill), например `filled responses / eligible ad requests`. Publisher/ad server metric перехода request → fill; безопасного vendor-neutral denominator нет — product может делить filled responses, matched bids или counted impressions на requests, opportunities или ad units, и это разные метрики. Fill — не конечный outcome: filled response может не render-иться и не стать counted impression, поэтому fill rate на response basis выше доли реально доставленных показов. Не синоним match, response и delivery rate.
 
-**Пример:** 80,000 counted impressions на 100,000 eligible ad requests — fill rate 80%; часть filled responses не стала impressions, поэтому fill rate не равен итоговой доставке показов.
+**Пример:** 80,000 filled responses на 100,000 eligible ad requests — fill rate 80%; если 78,000 из них стали counted impressions, доля доставленных показов — 78%, и product может называть fill rate любую из двух величин.
 
 ### Win rate {#g-win-rate}
 
@@ -369,7 +417,7 @@ language: ru
 
 **Ledger boundary (граница учёта)** — граница, внутри которой entity признаёт и регистрирует суммы и события по собственным правилам: одна и та же сумма является revenue на одной boundary и downstream media/traffic cost на другой. Из-за разных ledger boundaries отчёты advertiser, platform и publisher об одной сделке закономерно не совпадают и не обязаны совпадать.
 
-**Пример:** advertiser потратил $100; buying platform признала $100 revenue на своей boundary, publisher увидел $68 — числа разные, потому что каждая запись живёт в своём ledger.
+**Пример:** advertiser потратил $100; network на своей boundary записала $100 billed и $80 payable (признав revenue $100 или $20 в зависимости от gross/net presentation); publisher увидел $68 receivable — числа разные, потому что каждая запись живёт в своём ledger.
 
 ### Pricing basis {#g-pricing-basis}
 
@@ -383,6 +431,12 @@ language: ru
 
 **Пример:** в OpenRTB win notice (`nurl`) и billing notice (`burl`) разделены — аукцион выбрал bid победителем, но начисление возникает только после договорного события, например rendered impression.
 
+### Payee / payer {#g-payee-payer}
+
+**Payee / payer** — две стороны одного платёжного обязательства: payer платит за billable event, payee получает оплату. В pricing model распределение риска описывается через них: при CPM payee получает право на charge раньше воронки, а post-impression risk несёт payer; при CPA payee принимает на себя весь риск до конверсии. Одна компания может быть payee в одном договоре и payer в другом.
+
+**Пример:** в сделке advertiser → network → SSP → publisher network — payee по договору с advertiser и payer по договору с SSP.
+
 ### Revenue share {#g-revenue-share}
 
 **Revenue share** — договорное распределение названной revenue или proceeds base между сторонами в заданной доле. Без раскрытия базы не определён: нужно знать, чьи proceeds, на какой ledger boundary, за какой период, до или после каких agreed adjustments и кто выполняет расчёт; доля от одной boundary не равна доле от исходного advertiser spend.
@@ -391,9 +445,9 @@ language: ru
 
 ### Fixed fee {#g-fixed-fee}
 
-**Fixed fee** — заранее согласованная сумма за period, scope или deliverable, не зависящая от объёма media transaction. Полностью отдельный money flow относительно media money: не вычитается из media dollar и не становится publisher payout или take rate. Provider несёт риск, что согласованный scope потребует больше работы.
+**Fixed fee** — заранее согласованная сумма за period, scope или deliverable, не зависящая от объёма media transaction: agency retainer, setup или managed-service fee, minimum monthly commitment, flat sponsorship fee. Обычно это отдельный от media money поток: он не вычитается из media dollar и не становится publisher payout или take rate — если только конкретный договор не объединяет software и media charges в один invoice. Выбирают ради предсказуемости и чтобы снять конфликт «fee растёт вместе со spend»; provider несёт риск, что согласованный scope потребует больше работы.
 
-**Пример:** `$2,000/month` за доступ к ad server и usage tier — service charge по отдельному договору, даже если число обработанных impressions влияет на tier.
+**Пример:** `$2,000/month` за доступ к ad server — service charge по отдельному договору; если сверх этого действует usage tier по числу обработанных impressions, это уже usage pricing, а не fixed fee.
 
 ### SaaS pricing {#g-saas-pricing}
 
@@ -473,11 +527,17 @@ language: ru
 
 **Пример:** посредник купил impressions за `$80` в расчёте на 100 clicks, зарегистрировано 60 — выручка по CPC не покрывает media cost.
 
+### Optimization event {#g-optimization-event}
+
+**Optimization event** — наблюдаемое событие, под которое система доставки обучается и оптимизирует показы: install, trial start, paid subscription, purchase. Выбирается advertiser в настройках campaign (у разных platforms — conversion action, conversion goal, performance goal). Не равно campaign objective (бизнес-намерение), не равно billable event (за что платят) и не равно параметру стратегии вроде `target CPA`. Более глубокое событие даёт меньше сигналов и дольше learning.
+
+**Пример:** objective «рост paid subscriptions», optimization event сначала `install` (много сигналов), затем переключён на `paid_subscription`; billing при этом остался CPM.
+
 ### Optimization target {#g-optimization-target}
 
-**Optimization target** — outcome, под который bidding system настраивает будущие решения, например `target CPA`. Не превращает договор в CPA billing: payment model устанавливает contract, realized metrics описывают случившееся post-fact, optimization target влияет только на decisions до события.
+**Optimization target** — outcome, под который bidding system настраивает будущие решения: чаще всего это optimization event (install, paid subscription) плюс цель по нему. Не путать с параметром стратегии: `target CPA $4` — это ограничение bid strategy, а не событие, которое система предсказывает. Не превращает договор в CPA billing: payment model устанавливает contract, realized metrics описывают случившееся post-fact, optimization target влияет только на decisions до события.
 
-**Пример:** advertiser платит CPC за qualifying clicks, а система оптимизируется под `target CPA` по подписке — billing basis и optimization target сосуществуют в одной кампании.
+**Пример:** advertiser платит CPC за qualifying clicks, а система оптимизируется под paid subscription с ограничением `target CPA $4` — billing basis, optimization event и параметр стратегии сосуществуют в одной кампании.
 
 ### Ad account (advertiser account) {#g-ad-account}
 
@@ -511,9 +571,9 @@ language: ru
 
 ### Targeting {#g-targeting}
 
-**Targeting (таргетинг)** — eligibility rules кампании: какие opportunities, users или contexts допустимы либо предпочтительны для показа — geo, device, context, audience/keyword criteria, exclusions. Targeting отвечает на вопрос «для каких opportunities/users/contexts возможен показ», в отличие от placement («где именно»); даже если API хранит их в одном объекте, это разные оси, и opportunity должна пройти ограничения обеих.
+**Targeting (таргетинг)** — правила кампании о том, кому и где может быть показана реклама: hard controls (eligibility rules — geo, device, context, audience/keyword criteria, exclusions), которые ограничивают множество допустимых opportunities, и signals/hints, которые в algorithmic products лишь направляют delivery, не сужая eligible set. Targeting отвечает на вопрос «для каких opportunities/users/contexts возможен показ», в отличие от placement («где именно») и optimization («какой из допустимых показов выбрать»); даже если API хранит их в одном объекте, это разные оси.
 
-**Пример:** ad set ограничен geo `DE`, мобильными устройствами и exclusion «уже установили приложение»; внутри этих правил показ возможен только в выбранных placements.
+**Пример:** ad set ограничен geo `DE`, мобильными устройствами и exclusion «уже установили приложение» (hard controls); seed-аудитория ценных подписчиков передана как signal — система может показывать и вне неё, но внутри `DE + mobile`.
 
 ### Bid strategy {#g-bid-strategy}
 
@@ -551,6 +611,12 @@ language: ru
 
 **Пример:** tracking template ведёт click через measurement-домен с macros `{campaignid}` и `{creative}`: platform подставляет фактические IDs в момент click, а user идёт к destination своей дорогой.
 
+### Conversion action {#g-conversion-action}
+
+**Conversion action** — настроенное на платформе определение события, которое считается conversion для отчётности и optimization: источник (pixel, SDK, S2S, импорт), имя события, правила counting (одна или каждая на interaction), value и окно. Platform может иметь несколько conversion actions на account; какие из них primary (используются для optimization) и какие secondary (только отчётность) — часть конфигурации campaign.
+
+**Пример:** в account настроены conversion actions `install`, `trial_started` и `paid_subscription`; campaign оптимизируется под primary `paid_subscription`, остальные видны в отчёте как secondary.
+
 ### Learning phase {#g-learning-phase}
 
 **Learning phase (learning status, фаза обучения)** — состояние optimizer, в котором delivery/bidding model собирает evidence после запуска или material configuration change: прежние данные хуже описывают новые решения. Learning — одна из осей operational state наряду с configured, effective и review status, а не противоположность active: показы и spend идут, а vendor-specific significant edits (targeting, creative, optimization event, состав ads, bid strategy) могут вернуть optimizer в learning без изменения configured status.
@@ -563,6 +629,18 @@ language: ru
 **Audience segment** — addressable set entities, membership которого задают named rule, data source/provenance, observation window и platform matching/activation contract; entity может быть user, account, device, browser, household или modeled profile, поэтому segment не обязательно является списком известных людей.
 
 **Пример:** segment `trial_started AND no paid_subscription within 7d` содержит только те platform-addressable entities, которых удалось сопоставить с подходящими product events.
+
+### Observation window {#g-observation-window}
+
+**Observation window (окно наблюдения)** — период, за который событие учитывается при формировании audience segment: «trial начат за последние 7 дней», «посещал страницу цен за 30 дней». Определяет свежесть membership и размер сегмента. Не путать с attribution/lookback window (за какой срок до conversion учитывать touchpoint) и с conversion window (сколько ждать conversion после click): это окна разных механизмов.
+
+**Пример:** сегмент `trial_started ≥ 7d ago AND no paid_subscription` — observation window отбирает пользователей, у которых trial начался не менее недели назад.
+
+### Addressable {#g-addressable}
+
+**Addressable (адресуемый)** — пользователь, устройство или домохозяйство, которые платформа способна опознать по доступному identifier и доставить им конкретный показ; addressability — доля inventory или аудитории, для которой это возможно. Зависит от среды (browser, iOS, Android, CTV), consent и доступных identifiers, поэтому один и тот же сегмент может быть активируемым на одной платформе и пустым на другой.
+
+**Пример:** список из 100,000 email-адресов после matching дал 40,000 addressable users в одной платформе и 25,000 — в другой: остальных платформы опознать не смогли.
 
 ### First-party audience {#g-first-party-audience}
 
@@ -588,6 +666,18 @@ language: ru
 
 **Пример:** user начал trial, но не купил subscription за семь дней, поэтому входит в segment для повторного показа premium-offer.
 
+### Seed audience {#g-seed-audience}
+
+**Seed audience (исходная аудитория)** — набор известных entities (например, платящие подписчики с высокой ценностью), который advertiser передаёт платформе как образец для построения lookalike или как signal для algorithmic delivery. Качество и размер seed определяют качество модели: слишком маленький seed даёт шум, слишком широкий — размывает признаки. Seed сам по себе не является целевой аудиторией показа; многие платформы по умолчанию исключают его из lookalike.
+
+**Пример:** seed — `paid subscribers with 90-day value > €50`; платформа строит по нему lookalike из новых пользователей с похожими признаками.
+
+### Prospecting {#g-prospecting}
+
+**Prospecting (привлечение новых)** — направление кампании на пользователей, у которых ещё не было взаимодействия с advertiser: lookalike, interest, contextual или broad targeting. Противоположность retargeting и re-engagement, которые обращаются к уже известным пользователям. Для prospecting характерны меньшая конверсия и большая ценность incremental результата, поскольку пользователь не пришёл бы сам.
+
+**Пример:** campaign с lookalike по seed платящих подписчиков и exclusion всех текущих пользователей приложения — prospecting; campaign на trial-пользователей без оплаты — retargeting.
+
 ### Lookalike audience {#g-lookalike-audience}
 
 **Lookalike audience** — modeled audience новых prospects, найденных по similarity или predicted relevance к seed audience; результат зависит от seed quality и platform model, а использование lookalike в delivery может быть hard constraint или suggestion согласно product contract.
@@ -606,8 +696,9 @@ language: ru
 
 **Пример:** часть entities одновременно входит в `trial_no_purchase` и `existing_paid`, что указывает проверить event freshness и membership rules.
 
-### Algorithmic targeting {#g-algorithmic-targeting}
+### Algorithmic / broad targeting {#g-algorithmic-targeting}
 
-**Algorithmic targeting** — delivery mode, в котором model использует optimization goal, context, audience seeds и другие signals для поиска и ранжирования opportunities, потенциально за пределами suggested segments, но внутри заявленных hard controls и exclusions. Broad targeting — setup с минимумом positive audience restrictions, а не отсутствие constraints.
+**Algorithmic targeting** — delivery mode, в котором model использует optimization goal, context, audience seeds и другие signals для поиска и ранжирования opportunities, потенциально за пределами suggested segments, но внутри заявленных hard controls и exclusions. **Broad targeting** — setup с минимумом positive audience restrictions, а не отсутствие constraints.
 
 **Пример:** system ищет likely subscribers вне lookalike seed, сохраняя hard controls `DE + mobile` и exclusion current paid subscribers.
+

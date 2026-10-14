@@ -35,7 +35,7 @@ GLOSSARY_IDS (list of stable glossary anchors referenced in the source, if any)
 8. **Translate meaning, not words.** The result must read like a book originally written in English for the same audience: zero assumed AdTech knowledge, high assumed engineering knowledge. Prefer the industry-standard English phrasing over a literal rendering of Russian phrasing.
 9. **Numbers, units, examples, and illustrative values are copied exactly.** Do not recompute, round differently, or substitute examples.
 10. **Internal links and footnote references are preserved** with the same link targets and labels; translate only link display text where it displays prose.
-11. **The `# Sources and Further Reading` / `# Источники и дополнительное чтение` heading** translates to `# Sources and Further Reading` when present, keeping the same heading level so the EPUB/PDF pipeline splits chapters identically.
+11. **The closing sections** translate to fixed English names at the same `##` level: `## С чем это часто путают` → `## Common Confusions`, `## Что важно запомнить` → `## What to Remember`, `## Проверьте себя` → `## Check Yourself`, `## Источники и дополнительное чтение` → `## Sources and Further Reading`; `## Суть` → `## The Core Idea`. Never promote any of them to `#`: the EPUB/PDF pipeline splits on H1.
 
 ## Terminology Discipline
 

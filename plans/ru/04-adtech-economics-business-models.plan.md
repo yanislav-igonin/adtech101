@@ -33,12 +33,12 @@ business problem и распределение риска
 
 - Повтор формул и measurement contracts `CPM/eCPM/CPC/CPA/CPI/CPL`, `spend/cost/revenue`, `ROAS/ROI` из главы 3. Глава 4 использует их как подготовленный vocabulary и меняет вопрос с «как посчитать?» на «за что стороны договорились платить и кто несёт риск?».
 - Campaign hierarchy, objective, optimization event, bid strategy, budget, schedule и setup — глава 5. Здесь `optimization metric` появляется только для отделения от billing basis.
-- Affiliate offer mechanics, affiliate payout, postback, conversion cap, affiliate margin и traffic arbitrage end-to-end — глава 9. Здесь CPA/CPI/CPL и arbitrage рассматриваются как общие договорные модели.
+- Affiliate offer mechanics, affiliate payout, postback, conversion cap, affiliate margin и traffic arbitrage end-to-end — глава 51. Здесь CPA/CPI/CPL и arbitrage рассматриваются как общие договорные модели.
 - Publisher yield, demand diversification, direct/indirect monetization и revenue optimization — глава 10. Здесь publisher нужен как ledger boundary и получатель payout.
 - Direct IO, sponsorship, guaranteed/open auction, PMP, preferred deal и programmatic guaranteed — глава 14. Эти способы продажи могут использовать разные economic terms, но их выбор не разбирается.
 - Повтор ролей DSP, SSP, exchange и ad network, bundling ролей и полный money/data flow — глава 16. Здесь роли используются только для economics одного примера.
 - Auction theory и mechanics: bid, floor, first/second price, clearing price, bid shading, winner selection — главы 18–20. `Billable event` объясняется без вывода auction price.
-- Reporting pipelines, aggregation, backfill и reprocessing — глава 31; подробные discrepancy causes и reconciliation — глава 32; billing-grade schemas, lineage и correction operations — глава 48. Здесь достаточно показать, какие contractual records должны попасть в ledger и почему invoice/cash могут не совпасть по времени.
+- Reporting pipelines, aggregation, backfill и reprocessing — глава 31; подробные discrepancy causes и reconciliation — глава 32; billing-grade schemas, lineage и correction operations — глава 47. Здесь достаточно показать, какие contractual records должны попасть в ledger и почему invoice/cash могут не совпасть по времени.
 - Supply-chain fee transparency и SPO как отдельные operating disciplines — главы 38–39. Историческое исследование fees используется лишь как доказательство вариативности denominators и цепочек, не как current benchmark.
 - Advanced accounting и юридическая квалификация договоров: performance obligations, variable consideration, collectability, multi-element allocation, detailed principal-agent case analysis, local statutory rules, audits и disclosures.
 - Taxes, VAT/sales tax, FX, rebates, refunds, make-goods, credit risk, bad debt, payment guarantees и working-capital mechanics — кроме одной boundary caveat о том, что они могут изменить invoiced/settled amount.

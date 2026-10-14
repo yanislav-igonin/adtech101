@@ -17,6 +17,18 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** a user opens a news app. The publisher puts the impression up for auction through an SSP; several DSPs, bidding on behalf of different advertisers, return bids within ~100 ms; the winning ad is delivered to the app before the user sees the content.
 
+### Bid {#g-bid}
+
+**Bid** — a buyer's offer to pay a certain price for a specific ad opportunity, usually expressed as a CPM. A bid is a pre-event decision: it is neither the final price (clearing price) nor the billable amount; in programmatic, the DSP forms a bid for each bid request separately.
+
+**Example:** the DSP evaluates a request from a gaming app and responds with a bid of `$12 CPM`; the auction may clear at `$10`, and the advertiser pays for qualifying impressions under the contract.
+
+### Auction {#g-auction}
+
+**Auction** — the mechanism for choosing a winner among several bids for one ad opportunity and for determining the price (clearing price) under the auction's rules — first-price, second-price, and their variants. An auction win is the event of choosing a winner; it is not an impression and does not by itself make the impression billable.
+
+**Example:** bids of `$12`, `$10`, and `$7` arrive for one impression; under first-price the winner pays `$12`, under second-price the second bid's price (or the floor), and only after the creative is delivered can the event become billable.
+
 ### Agency {#g-agency}
 
 **Agency** — a contractor company that plans and executes marketing and media work on behalf of an advertiser: develops strategy, prepares `creative`, selects channels, launches a `campaign`, and reports on results. An advertiser can keep media buying in-house, hand it to an agency in full, or split the responsibility. An agency is an organization and a contractual role, as opposed to a media buyer — an operational function that can also work inside an advertiser.
@@ -67,7 +79,7 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### Supply {#g-supply}
 
-**Supply** — the advertising opportunities available from publishers; the market side around which the `sell side` / `supply side` groups — the people and systems that help describe, sell, and deliver advertising (SSPs, ad networks). Supply is the set of inventory for sale, not the name of a platform.
+**Supply** — the advertising opportunities available from publishers; the market side around which the `sell side` / `supply side` groups — the people and systems that help describe, sell, and deliver advertising (SSPs, publisher ad servers). Supply is the set of inventory for sale, not the name of a platform. An ad network aggregates both supply and demand, so it sits between the sides rather than inside one of them.
 
 **Example:** a game app with twenty ad slots and rules for showing them — that is supply; the SSP through which it opens access to buyers is the supply side.
 
@@ -151,7 +163,7 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### Intermediary {#g-intermediary}
 
-**Intermediary** — a participant that connects market sides or performs a specialized function: agencies, ad networks, exchanges, ad servers, measurement, verification, and data providers. It is justified when the value of its function (reach, aggregation, interoperability, speed, measurement, risk control) exceeds the cost and complexity; it need not be present in every deal.
+**Intermediary** — a participant that connects market sides or performs a specialized function: agencies, DSPs, ad networks, exchanges, SSPs, ad servers, measurement, verification, and data providers. It is justified when the value of its function (reach, aggregation, interoperability, speed, measurement, risk control) exceeds the cost and complexity; it need not be present in every deal and does not necessarily retain a share of the media money — some intermediaries receive a separate service or SaaS fee.
 
 **Example:** a small advertiser buys impressions from an ad network because it is not ready to maintain dozens of integrations with publishers directly — the aggregation function justifies the fee.
 
@@ -159,13 +171,25 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Media spend** — the money an advertiser allocates and spends on buying advertising. It passes through the media sellers and ultimately forms publisher revenue, shrinking along the way by fees; it is not a synonym for publisher revenue, nor for intermediary fees — these are different amounts in one chain.
 
-**Example:** of $100 in media spend, $70 reaches the publisher as revenue, platforms take $20, and the agency's fee is $10; the data provider receives a separate subscription outside the media money.
+**Example:** of $100 in media spend, the network retains $20 and the SSP $12, and the publisher receives $68; the MMP and the ad server receive separate SaaS fees outside the media money.
 
 ### Publisher revenue {#g-publisher-revenue}
 
-**Publisher revenue** — the part of media spend that reached the inventory owner after deductions by intermediaries and platforms; it differs from advertiser spend by the sum of all fees in the chain. It is formed only from media payments: participants' service and SaaS fees outside the media money do not count toward it.
+**Publisher revenue** — the amount the publisher recognizes as revenue under its own accounting rules from media payments for its inventory; in the simple case it equals the publisher payout, but recognition (accrued / billed / settled) follows the publisher's policy, not the moment of payment. It differs from advertiser spend by the sum of all fees in the chain; participants' service and SaaS fees outside the media money do not count toward it.
 
-**Example:** the advertiser spent $100, of which the publisher received $68 after the exchange and the SSP — that is its publisher revenue for this deal.
+**Example:** the advertiser spent $100; the network retained $20 and the SSP $12; the publisher received a payout of $68 and recognized it as its revenue for the period in which the impressions occurred.
+
+### Settlement (accrued / billed / settled) {#g-settlement}
+
+**Settlement** — the actual movement of money between participants for a period, as distinct from the invoice (the issued claim) and from accrual. One amount passes through three states: `accrued` — recorded from events, `billed` — issued in an invoice or statement, `settled` — paid; at each step the amount may change because of adjustments, fraud filtering, credits, and FX. For one side it is a receivable (expected inflow), for the other a payable.
+
+**Example:** the publisher sees `$68` accrued for September in the dashboard; the SSP's statement arrives in October for `$66` after invalid traffic is deducted; the payment (settlement) comes 60 days later.
+
+### Publisher payout {#g-publisher-payout}
+
+**Publisher payout** — the amount that, under the seller's contract, must be transferred to the publisher after revenue share, fees, and adjustments; for the SSP or the network it is a payable, for the publisher a receivable. The payout is a contractual and payment quantity; which part of it, and in which period, the publisher recognizes as revenue is determined by its accounting policy (see publisher revenue).
+
+**Example:** of the $80 the SSP received from the network, after retaining 15%, the publisher is owed a payout of $68.
 
 ### MarTech {#g-martech}
 
@@ -173,17 +197,23 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** a subscription purchase is an outcome signal for AdTech measurement and, at the same time, a trigger for a retention email chain in MarTech.
 
-### Data / identity provider {#g-data-provider}
+### Data provider {#g-data-provider}
 
-**Data / identity provider** — a cross-cutting category of providers that supply or link permissible data signals: they help systems interpret context and connect data about the same user across participants. They work in parallel to the buying chain, not "between" two mandatory neighbors.
+**Data provider** — a provider that sells or supplies datasets, attributes, or ready-made audience segments for targeting, measurement, and enrichment. It works in parallel to the buying chain, not "between" two mandatory neighbors; third-party segments are usually paid for by the buyer — often as a data CPM charged through the buying platform on top of the media cost. Not to be confused with an identity provider, which does not supply data but establishes correspondence between identifiers.
 
-**Example:** an identity provider issues a shared key by which, within permitted rules, the DSP and the publisher recognize the same user across different requests.
+**Example:** a DSP attaches a "fitness interest" segment from an external data provider; for every thousand impressions against that segment, the provider's data fee is added to the media CPM.
 
 ### Media buyer {#g-media-buyer}
 
 **Media buyer** — a person, team, or function that selects media, platforms, and buying terms, allocates spend, and sets up campaigns. It is an operational role, not an organization: a media buyer can work inside an advertiser, inside an agency, or at another buying organization. Not a synonym for an agency (a contractor organization) and not a synonym for a DSP: the person formulates and configures decisions, while the platform executes part of the buying workflow at scale.
 
 **Example:** a media buyer at an agency receives a channel plan and a budget, creates the campaign in a DSP, sets audiences and bids, and redistributes spend between platforms over the month based on report results.
+
+### Vertical integration {#g-vertical-integration}
+
+**Vertical integration** — the situation in which one company occupies several roles in the chain (for example, DSP, exchange, and SSP, or ad network and MMP) and combines them in one product or brand. It gives the customer convenience and a single invoice but creates conflicts of interest: the company represents the buyer and the seller at once, measures itself, or runs the auction it takes part in. The industry term for what the course also calls role bundling.
+
+**Example:** a platform sells managed media to the advertiser while owning the exchange through which it sells its own inventory and reporting results through its own measurement — three roles on one ecosystem map.
 
 ### Brand advertising {#g-brand-advertising}
 
@@ -221,6 +251,12 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** an advertiser and a publisher use different identifiers for the same user; the identity provider translates them into a common identifier so that impression frequency is counted per person rather than twice.
 
+### Activation {#g-activation}
+
+**Activation** — handing data or an audience segment to a system that can use it for targeting, suppression, personalization, or measurement: from a CDP/DMP to a DSP, from the advertiser's CRM to a walled garden, from an identity graph to an SSP. Before activation, data is a record in storage; after it, a rule that affects real impressions. Activation requires matching identifiers between the source and the receiving platform and a permitted legal basis.
+
+**Example:** a list of trial users without a purchase is uploaded to the buying platform and, after matching, becomes a retargeting audience — that is activating the segment.
+
 ### Metric contract {#g-metric-contract}
 
 **Metric contract** — the complete definition of a metric by which its number can be reproduced and interpreted: the event definition, measurement point, filters and deduplication, numerator/denominator, dimensions, period and windows, currency, perspective, and ledger boundary. A metric's name without a contract does not fix its meaning: the same formula on different contracts answers different questions.
@@ -238,6 +274,18 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 **Conversion** — a valuable action or outcome that the advertiser has defined as significant (install, trial, first payment, renewal, purchase) and that a system has counted under its measurement and attribution rules. Conversions cannot be summed without an explicit counting rule: one click can lead to several conversions. An observed conversion is a recorded event; an attributed conversion is an event to which an attribution rule assigned credit; neither proves causality.
 
 **Example:** a click led to an install, then to a trial and a subscription payment — under the reporting rules these are three conversions of one interaction, and the total depends on the counting mode (one or each conversion per interaction).
+
+### Served impression {#g-served-impression}
+
+**Served impression** — an impression counted on the fact that the ad server or selling platform returned the creative (or a reference to it) in response to a request; it proves sending, but not loading, rendering, or visibility. The earliest and largest number in the `served → rendered → viewable` ladder.
+
+**Example:** the ad server returned 100,000 responses with a creative — 100,000 served impressions, even though some users closed the screen before the banner loaded.
+
+### Rendered impression {#g-rendered-impression}
+
+**Rendered impression** — an impression counted after the creative has loaded and been rendered on the user's device (usually on a signal from client-side code: a pixel or an SDK event after render). It proves rendering, but not that the creative entered the visible area of the screen or was noticed; the MRC standard for display counts an impression precisely on client-side load/render.
+
+**Example:** of 100,000 served impressions, 92,000 fired the render pixel — 92,000 rendered impressions; a separate measurement shows how many of them turned out viewable.
 
 ### Viewable impression {#g-viewable-impression}
 
@@ -313,9 +361,9 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### Revenue {#g-revenue}
 
-**Revenue** — the amount recognized by the chosen entity under its accounting rules on its ledger boundary. Estimated dashboard value, invoiced amount, settled amount, and recognized revenue can be different states of one chain; for comparison, the period, timezone, currency conversion, taxes/refunds, and participant must be agreed.
+**Revenue** — the amount recognized by the chosen entity under its accounting rules on its ledger boundary. Estimated dashboard value, invoiced amount, settled amount, and recognized revenue can be different states of one chain; for comparison, the period, timezone, currency conversion, taxes/refunds, and participant must be agreed. How much of the money passing through a platform it recognizes as revenue depends on its principal or agent role (gross/net presentation), not on the size of the invoice.
 
-**Example:** the platform recognized $100 of revenue for the deal, while the publisher recognized $68: both amounts are correct, but they are different entities with different revenue-recognition rules.
+**Example:** $100 from the advertiser passed through the network and the publisher received $68. Under gross presentation the network recognizes $100 of revenue, under net only its own $20; both entries are correct for their own boundary and accounting conclusion.
 
 ### Cost {#g-cost}
 
@@ -343,7 +391,7 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### ARPPU (Average Revenue per Paying User) {#g-arppu}
 
-**ARPPU (Average Revenue per Paying User)** — the purchase revenue per paying user: `ARPPU = selected purchase revenue / paying users`. It divides only by payers and requires a payer event, purchase revenue, refund rules, and a period; it is always higher than the ARPU of the same population.
+**ARPPU (Average Revenue per Paying User)** — revenue per paying user: `ARPPU = selected revenue from payers / paying users`. It divides only by payers and requires a payer event, the composition of revenue (purchase, subscription), refund rules, and a period. It is usually higher than the ARPU of the same population, but not always: if ARPU includes ad revenue from non-paying users while ARPPU counts only purchase revenue, the ratio can flip; which revenue enters the numerator is part of the metric's contract.
 
 **Example:** the same $1,000 of purchase revenue from 100 payers out of 1,000 users — an ARPPU of $10 with an ARPU of $1.
 
@@ -355,9 +403,9 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### Fill rate {#g-fill-rate}
 
-**Fill rate** — the share of eligible ad requests that led to a fill, for example `counted filled impressions / eligible ad requests`. A publisher/ad server metric of the request → delivery transition; there is no safe vendor-neutral denominator — a product may divide impressions, matched responses, or another fill event by requests, opportunities, or ad units. A fill is not a final outcome: a matched response may not render and may not become a counted impression. Not a synonym for match, response, or delivery rate.
+**Fill rate** — the share of eligible ad requests that received an ad response (a fill), for example `filled responses / eligible ad requests`. A publisher/ad server metric of the request → fill transition; there is no safe vendor-neutral denominator — a product may divide filled responses, matched bids, or counted impressions by requests, opportunities, or ad units, and these are different metrics. A fill is not a final outcome: a filled response may not render and may not become a counted impression, so a response-based fill rate is higher than the share of impressions actually delivered. Not a synonym for match, response, or delivery rate.
 
-**Example:** 80,000 counted impressions on 100,000 eligible ad requests — a fill rate of 80%; some filled responses did not become impressions, so the fill rate does not equal final impression delivery.
+**Example:** 80,000 filled responses on 100,000 eligible ad requests — a fill rate of 80%; if 78,000 of them became counted impressions, the delivered share is 78%, and a product may label either figure "fill rate."
 
 ### Win rate {#g-win-rate}
 
@@ -369,7 +417,7 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Ledger boundary** — the boundary within which an entity recognizes and records amounts and events under its own rules: the same amount is revenue on one boundary and a downstream media/traffic cost on another. Because of different ledger boundaries, the reports of the advertiser, the platform, and the publisher about the same deal naturally do not match and do not have to match.
 
-**Example:** the advertiser spent $100; the buying platform recognized $100 of revenue on its boundary, and the publisher saw $68 — the numbers differ because each entry lives in its own ledger.
+**Example:** the advertiser spent $100; on its boundary the network recorded $100 billed and $80 payable (recognizing $100 or $20 of revenue depending on gross/net presentation); the publisher saw $68 receivable — the numbers differ because each entry lives in its own ledger.
 
 ### Pricing basis {#g-pricing-basis}
 
@@ -383,6 +431,12 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** in OpenRTB the win notice (`nurl`) and the billing notice (`burl`) are separate — the auction picked a bid as the winner, but the accrual arises only after the contractual event, for example a rendered impression.
 
+### Payee / payer {#g-payee-payer}
+
+**Payee / payer** — the two sides of one payment obligation: the payer pays for the billable event, the payee receives the payment. Risk allocation in a pricing model is described through them: under CPM the payee earns the right to charge early in the funnel and the post-impression risk sits with the payer; under CPA the payee takes on all the risk up to the conversion. One company can be the payee in one contract and the payer in another.
+
+**Example:** in the deal advertiser → network → SSP → publisher, the network is the payee under its contract with the advertiser and the payer under its contract with the SSP.
+
 ### Revenue share {#g-revenue-share}
 
 **Revenue share** — the contractual distribution of a named revenue or proceeds base between the parties in a specified share. Without disclosure of the base it is undefined: you need to know whose proceeds, on which ledger boundary, for which period, before or after which agreed adjustments, and who performs the calculation; a share of one boundary does not equal a share of the original advertiser spend.
@@ -391,9 +445,9 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### Fixed fee {#g-fixed-fee}
 
-**Fixed fee** — an amount agreed in advance for a period, a scope, or a deliverable that does not depend on the volume of media transactions. An entirely separate money flow relative to media money: it is not deducted from the media dollar and does not become a publisher payout or a take rate. The provider bears the risk that the agreed scope will require more work.
+**Fixed fee** — an amount agreed in advance for a period, a scope, or a deliverable that does not depend on the volume of media transactions: an agency retainer, a setup or managed-service fee, a minimum monthly commitment, a flat sponsorship fee. It is usually a flow separate from media money: it is not deducted from the media dollar and does not become a publisher payout or a take rate — unless a specific contract bundles software and media charges into one invoice. It is chosen for predictability and to remove the "fee grows with spend" conflict; the provider bears the risk that the agreed scope will require more work.
 
-**Example:** `$2,000/month` for access to an ad server and a usage tier — a service charge under a separate contract, even if the number of processed impressions affects the tier.
+**Example:** `$2,000/month` for access to an ad server is a service charge under a separate contract; if a usage tier based on processed impressions applies on top, that part is usage pricing, not a fixed fee.
 
 ### SaaS pricing {#g-saas-pricing}
 
@@ -473,11 +527,17 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** an intermediary bought impressions for `$80` expecting 100 clicks, but 60 were recorded — the CPC revenue does not cover the media cost.
 
+### Optimization event {#g-optimization-event}
+
+**Optimization event** — the observable event that the delivery system learns from and optimizes impressions toward: install, trial start, paid subscription, purchase. The advertiser selects it in the campaign settings (different platforms call it a conversion action, conversion goal, or performance goal). It is not the campaign objective (the business intent), not the billable event (what is paid for), and not a strategy parameter such as `target CPA`. A deeper event yields fewer signals and a longer learning phase.
+
+**Example:** the objective is "grow paid subscriptions"; the optimization event is first `install` (many signals), then switched to `paid_subscription`; billing stays CPM throughout.
+
 ### Optimization target {#g-optimization-target}
 
-**Optimization target** — the outcome toward which a bidding system tunes its future decisions, for example `target CPA`. It does not turn the contract into CPA billing: the payment model establishes the contract, the realized metrics describe what happened post-fact, and the optimization target influences only decisions before the event.
+**Optimization target** — the outcome toward which a bidding system tunes its future decisions: most often an optimization event (install, paid subscription) plus a goal for it. Not to be confused with a strategy parameter: `target CPA $4` is a bid-strategy constraint, not the event the system predicts. It does not turn the contract into CPA billing: the payment model establishes the contract, the realized metrics describe what happened post-fact, and the optimization target influences only decisions before the event.
 
-**Example:** the advertiser pays CPC for qualifying clicks while the system optimizes toward a `target CPA` on subscriptions — the billing basis and the optimization target coexist in one campaign.
+**Example:** the advertiser pays CPC for qualifying clicks while the system optimizes toward paid subscriptions under a `target CPA $4` constraint — the billing basis, the optimization event, and the strategy parameter coexist in one campaign.
 
 ### Ad account (advertiser account) {#g-ad-account}
 
@@ -511,9 +571,9 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 ### Targeting {#g-targeting}
 
-**Targeting** — the campaign's eligibility rules: which opportunities, users, or contexts are permitted or preferred for showing an ad — geo, device, context, audience/keyword criteria, exclusions. Targeting answers the question "for which opportunities/users/contexts is showing possible," as opposed to placement ("where exactly"); even if the API stores them in one object, these are different axes, and an opportunity must pass the constraints of both.
+**Targeting** — the campaign's rules about to whom and where an ad may be shown: hard controls (eligibility rules — geo, device, context, audience/keyword criteria, exclusions) that restrict the set of permitted opportunities, and signals/hints that in algorithmic products only steer delivery without narrowing the eligible set. Targeting answers the question "for which opportunities/users/contexts is showing possible," as opposed to placement ("where exactly") and optimization ("which of the permitted impressions to choose"); even if the API stores them in one object, these are different axes.
 
-**Example:** an ad set is limited to the geo `DE`, mobile devices, and the exclusion "already installed the app"; within these rules, showing is possible only in the selected placements.
+**Example:** an ad set is limited to the geo `DE`, mobile devices, and the exclusion "already installed the app" (hard controls); a seed audience of valuable subscribers is passed as a signal — the system may deliver outside it, but within `DE + mobile`.
 
 ### Bid strategy {#g-bid-strategy}
 
@@ -551,6 +611,12 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** the tracking template routes the click through a measurement domain with the macros `{campaignid}` and `{creative}`: the platform substitutes the actual IDs at the moment of the click, and the user goes to the destination their own way.
 
+### Conversion action {#g-conversion-action}
+
+**Conversion action** — a platform-configured definition of an event that counts as a conversion for reporting and optimization: the source (pixel, SDK, S2S, import), the event name, counting rules (one or every per interaction), the value, and the window. A platform may have several conversion actions per account; which are primary (used for optimization) and which secondary (reporting only) is part of the campaign configuration.
+
+**Example:** the account has conversion actions `install`, `trial_started`, and `paid_subscription`; the campaign optimizes toward the primary `paid_subscription`, while the others appear in reports as secondary.
+
 ### Learning phase {#g-learning-phase}
 
 **Learning phase (learning status)** — the state of the optimizer in which the delivery/bidding model gathers evidence after launch or a material configuration change: earlier data describe the new decisions less accurately. Learning is one of the axes of the operational state alongside the configured, effective, and review statuses, not the opposite of active: impressions and spend continue, and vendor-specific significant edits (targeting, creative, optimization event, the set of ads, the bid strategy) can return the optimizer to learning without changing the configured status.
@@ -562,6 +628,18 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 **Audience segment** — an addressable set of entities whose membership is defined by a named rule, data source/provenance, observation window, and platform matching/activation contract; an entity can be a user, account, device, browser, household, or modeled profile, so a segment is not necessarily a list of known people.
 
 **Example:** the segment `trial_started AND no paid_subscription within 7d` contains only those platform-addressable entities that could be matched to the relevant product events.
+
+### Observation window {#g-observation-window}
+
+**Observation window** — the period over which an event counts toward forming an audience segment: "trial started in the last 7 days," "visited the pricing page within 30 days." It determines the freshness of membership and the size of the segment. Not to be confused with the attribution/lookback window (how far before a conversion a touchpoint counts) or the conversion window (how long to wait for a conversion after a click): these are windows of different mechanisms.
+
+**Example:** the segment `trial_started ≥ 7d ago AND no paid_subscription` — the observation window selects users whose trial started at least a week ago.
+
+### Addressable {#g-addressable}
+
+**Addressable** — a user, device, or household that a platform can recognize by an available identifier and deliver a specific impression to; addressability is the share of inventory or audience for which this is possible. It depends on the environment (browser, iOS, Android, CTV), consent, and available identifiers, so the same segment can be activatable on one platform and empty on another.
+
+**Example:** a list of 100,000 email addresses yielded 40,000 addressable users on one platform after matching and 25,000 on another: the platforms could not recognize the rest.
 
 ### First-party audience {#g-first-party-audience}
 
@@ -587,6 +665,18 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** a user started a trial but did not purchase a subscription within seven days, so they are included in a segment to be shown the premium-offer again.
 
+### Seed audience {#g-seed-audience}
+
+**Seed audience** — a set of known entities (for example, high-value paying subscribers) that the advertiser hands to a platform as a sample for building a lookalike or as a signal for algorithmic delivery. The quality and size of the seed determine the quality of the model: too small a seed yields noise, too broad a seed dilutes the features. The seed itself is not the target audience for delivery; many platforms exclude it from the lookalike by default.
+
+**Example:** the seed is `paid subscribers with 90-day value > €50`; the platform builds a lookalike of new users with similar features from it.
+
+### Prospecting {#g-prospecting}
+
+**Prospecting** — directing a campaign at users who have not yet interacted with the advertiser: lookalike, interest, contextual, or broad targeting. The opposite of retargeting and re-engagement, which address already-known users. Prospecting typically shows lower conversion rates and a higher value of the incremental result, since the user would not have come on their own.
+
+**Example:** a campaign with a lookalike built on a seed of paying subscribers and an exclusion of all current app users is prospecting; a campaign aimed at trial users without a purchase is retargeting.
+
 ### Lookalike audience {#g-lookalike-audience}
 
 **Lookalike audience** — a modeled audience of new prospects found by similarity or predicted relevance to a seed audience; the result depends on seed quality and the platform model, and the use of a lookalike in delivery can be a hard constraint or a suggestion according to the product contract.
@@ -605,8 +695,9 @@ Definitions of the course's key terms. In the chapters, these terms are marked w
 
 **Example:** some entities belong to both `trial_no_purchase` and `existing_paid`, indicating that event freshness and membership rules should be checked.
 
-### Algorithmic targeting {#g-algorithmic-targeting}
+### Algorithmic / broad targeting {#g-algorithmic-targeting}
 
-**Algorithmic targeting** — a delivery mode in which a model uses an optimization goal, context, audience seeds, and other signals to find and rank opportunities, potentially beyond suggested segments but within the stated hard controls and exclusions. Broad targeting is a setup with minimal positive audience restrictions, not an absence of constraints.
+**Algorithmic targeting** — a delivery mode in which a model uses an optimization goal, context, audience seeds, and other signals to find and rank opportunities, potentially beyond suggested segments but within the stated hard controls and exclusions. **Broad targeting** is a setup with minimal positive audience restrictions, not an absence of constraints.
 
 **Example:** the system looks for likely subscribers outside the lookalike seed while retaining the hard controls `DE + mobile` and the exclusion of current paid subscribers.
+

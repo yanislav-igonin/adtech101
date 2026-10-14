@@ -6,7 +6,7 @@
 **[Читать онлайн →](https://adtech101.h0b0.dev)** · [EPUB](https://adtech101.h0b0.dev/downloads/adtech-ru.epub) · [PDF](https://adtech101.h0b0.dev/downloads/adtech-ru.pdf) · [Read in English →](https://adtech101.h0b0.dev/en/) ([EPUB](https://adtech101.h0b0.dev/downloads/adtech-en.epub) · [PDF](https://adtech101.h0b0.dev/downloads/adtech-en.pdf))
 
 [![Deploy to GitHub Pages](https://github.com/yanislav-igonin/ad-tech-education/actions/workflows/deploy.yml/badge.svg)](https://github.com/yanislav-igonin/ad-tech-education/actions/workflows/deploy.yml)
-![Status](https://img.shields.io/badge/глав_написано-5_из_55-b23a1e)
+![Status](https://img.shields.io/badge/глав_написано-6_из_54-b23a1e)
 
 | Главная | Глава |
 | --- | --- |
@@ -20,7 +20,7 @@
 без маркетинговой воды, зато с HTTP, аукционами, метриками и деньгами.
 
 - **Для кого**: люди с инженерным бэкграундом и нулевым знанием AdTech
-- **Формат**: учебник на 55 глав, сгруппированных в части, с прогрессом чтения и офлайн-версиями
+- **Формат**: учебник на 54 главы, сгруппированных в части, с прогрессом чтения и офлайн-версиями
 - **Языки**: русский + английский (перевод — отдельный агентный пайплайн, [`agents/translator.md`](agents/translator.md))
 
 ## Структура книги
@@ -47,10 +47,11 @@
 ## Локально
 
 ```bash
-# сайт
+# сайт (Node 24.21.0 и pnpm 11 — версии закреплены в site/package.json;
+# Volta подхватит node автоматически, pnpm сам скачает нужный runtime)
 cd site
-npm install
-npm run dev        # http://localhost:4321
+pnpm install
+pnpm run dev       # http://localhost:4321
 
 # артефакты (нужны pandoc и Chrome/Chromium)
 make epub          # site/public/downloads/adtech-ru.epub

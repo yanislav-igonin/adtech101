@@ -66,18 +66,29 @@ Separate money flow and data flow when they differ. Use compact flows, tables, f
 
 Keep established industry terms in English: `impression`, `publisher`, `advertiser`, `DSP`, `attribution`, `conversion`, `bid request`, `pacing`, `postback`, and so on. Surround them with clear Russian explanation. Explain each important term on first substantive use.
 
+Everyday words are **not** terms and must be Russian: write «вывод», «представление в отчётности», «сторона/компания», «граница», «совокупность», «семантика», «владелец», «стадия» — not `conclusion`, `presentation`, `entity`, `boundary`, `population`, `semantics`, `owner`, `stage`. Section headings and table header cells are Russian; English inside them is allowed only for an established term (`### Bid strategy` is fine, `### Contract arithmetic` is not).
+
+## Formatting Contract (mandatory, audited)
+
+- Exactly one H1 (the chapter title). Sections are `##`, subsections `###`.
+- Opening section: `## Суть` (a subtitle after a colon is allowed).
+- Closing sections, in this order, all at `##` level and with exactly these names: `## С чем это часто путают`, `## Что важно запомнить`, `## Проверьте себя`, `## Источники и дополнительное чтение`. Never use `#` for the sources section: the EPUB build splits on H1 and would turn it into a separate chapter.
+- Glossary footnotes `[^g-id]` go at the **first** mention of the term in the chapter, not at the "defining" mention. Every term that has an entry in `glossary.md` gets a footnote; one footnote per term per chapter. Check `glossary.md` before writing; if an important new term is missing, add an entry (see master-prompt §8) — do not invent a second anchor for an existing concept.
+- No research dates or planner notes in prose: no «на дату DD.MM.YYYY», no «проверено», no history of deprecated vendor reports. Vendor examples are undated («в Google Ads …») or say «на момент написания». Dates belong only in the sources list.
+- Length: plain prose (excluding front matter, tables, diagrams) should stay around 2,400 words. `С чем это часто путают` and `Что важно запомнить` must not duplicate each other (together at most 12–14 items).
+
 ## Preferred Chapter Shape
 
 Use this shape unless the topic clearly benefits from another structure:
 
-1. **The Core Idea** — short explanation understandable within 30–60 seconds.
+1. **The Core Idea** (`## Суть`) — short explanation understandable within 30–60 seconds.
 2. **Why It Exists** — the industry problem it solves.
 3. **How It Works** — participants, flow, data, IDs, economics, and technical mechanics.
 4. **Concrete Walkthrough** — one realistic scenario from beginning to end.
 5. **Engineering View** — only details that add useful understanding.
-6. **Common Confusions** — explicit distinctions.
-7. **What to Remember** — approximately 5–10 high-value takeaways.
-8. **Check Yourself** — 2–4 short questions when useful, not by rote.
+6. **Common Confusions** (`## С чем это часто путают`) — explicit distinctions.
+7. **What to Remember** (`## Что важно запомнить`) — approximately 5–10 high-value takeaways.
+8. **Check Yourself** (`## Проверьте себя`) — 2–4 short questions when useful, not by rote.
 
 TOC requirements are coverage requirements, not mandatory headings. Avoid excessive nested bullets.
 
@@ -88,10 +99,10 @@ Do not deeply explain material assigned to another chapter. Give only enough pre
 If external research was used, end with:
 
 ```markdown
-# Sources and Further Reading
+## Источники и дополнительное чтение
 ```
 
-Include only 3–8 useful, preferably primary, sources.
+Include only 3–8 useful, preferably primary, sources, each with the date it was checked (this is the only place where check dates belong).
 
 ## Technical Example Rules
 
@@ -111,5 +122,6 @@ Before returning the chapter:
 6. Remove repetition and out-of-scope material.
 7. Confirm the chapter is a coherent narrative, not a glossary.
 8. Confirm the reader can explain the central mechanism after reading.
+9. Run the Formatting Contract checklist: one H1, `##` closing sections with the fixed names, Russian headings and table headers, footnotes at first mention, no dates in prose.
 
 Return only the finished chapter. Do not include internal planning notes, audit claims, or chain-of-thought. Do not claim that coverage is complete; the Auditor decides that.

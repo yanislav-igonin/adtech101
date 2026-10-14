@@ -6,46 +6,42 @@ chapter: 2
 slug: adtech-ecosystem-participants
 title: "AdTech Ecosystem Participants"
 language: en
-status: draft
+status: reviewed
 toc_requirements: ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.11", "2.12", "2.13", "2.14", "2.15", "2.16", "2.17"]
 prerequisites: [ch-01]
 ---
 
 # AdTech Ecosystem Participants
 
-## The essence: roles, not boxes
+## The Core Idea: roles, not boxes
 
 In the first chapter we saw the two economic sides of the market: `advertiser`[^g-advertiser] creates demand[^g-demand], while `publisher`[^g-publisher] creates supply[^g-supply]. Many systems may sit between them, but the map of AdTech[^g-adtech] becomes clear once you look not at company names but at **roles** — logical functions in an advertising deal.
 
 `Role`, `company`, and `product` are different levels:
 
-- **role** answers the question "what function is performed here?";
-- **company** — an organization that signs the contract and may perform several roles;
+- **role** — the function performed here;
+- **company** — the organization that signs the contract; it may perform several roles;
 - **product** — a specific offering of that company: a UI, an API, a managed service, or a set of tools.
 
-Therefore, a logo cannot be placed in a single cell of the map forever. One product suite may simultaneously buy media, sell access to inventory[^g-inventory], deliver ads, and build reporting. Conversely, the advertiser role may be split between the company's own team and several providers.
+Therefore a logo cannot be placed in one cell of the map forever: one product suite may buy media, sell access to inventory[^g-inventory], deliver ads, and build reporting, while one role may be split by the advertiser between its own team and several providers.
 
-To analyze any role, use a single card:
+To analyze any role, use a single card (role card):
 
 | Question | What it clarifies |
 |---|---|
 | What problem does the role solve? | The reason it exists |
 | Who is the customer? | Who uses the product or service |
 | Who is the beneficiary? | Who receives the economic benefit |
-| Who is the payer? | Who pays for media or the service under contract |
+| Who is the payer?[^g-payee-payer] | Who pays for media or the service under contract |
 | What data comes in and goes out? | The technical boundaries of the function |
 | What decision is made or executed? | The actual work, not a marketing label |
 | How does money move? | Media money, a separate fee, or no payment in this flow |
 
-Customer, beneficiary, and payer may not coincide. For example, a media buyer[^g-media-buyer] works in a platform's UI, the advertiser receives the benefit, and the agency[^g-agency] may pay the invoice. This distinction matters especially when reading contracts, data flows, and reports.
+Customer, beneficiary, and payer may not coincide: a media buyer[^g-media-buyer] works in a platform's UI, the advertiser receives the benefit, and the agency[^g-agency] pays the invoice. Without this distinction, contracts, data flows, and reports are hard to read.
 
-Let's fill in the card for the main economic participant. The advertiser wants to change the knowledge or behavior of an audience, funds the campaign[^g-campaign], hands over the goal, budget, and ad materials, and receives outcomes and reporting. The **creative**[^g-creative] is the ad material itself: for example, an image, a video, or text. The advertiser is usually the beneficiary and the source of money, but may delegate the operational work and the payment of specific invoices to an agency.
-
-Such an analysis is more useful than a linear diagram of seventeen mandatory boxes: in a specific campaign some roles will be absent, and several others will hide behind a single contract.
+Let's fill in the card for the main economic participant. The advertiser wants to change the knowledge or behavior of an audience, funds the campaign[^g-campaign], hands over the goal, the budget, and the **creative**[^g-creative] — the ad material itself: an image, a video, or text — and receives outcomes and reporting. The advertiser is usually the beneficiary and the source of money, but may delegate the operational work and the payment of specific invoices to an agency. In a specific campaign some roles will be absent and others will hide behind a single contract — which is why the card is more useful than a linear diagram of seventeen mandatory boxes.
 
 ## Who sets the goal and who executes the purchase
-
-Let's start not with platforms but with those for whom the market exists.
 
 **Advertiser** — an organization that funds advertising for the sake of a business outcome. For an app with a paid subscription, the outcome may be immediate — a trial or a paid subscription — or more delayed: knowledge of the product and the willingness to consider it later. The advertiser defines the goal, the acceptable spend, the audience, and the success criteria; on its own or through contractors, it decides where to buy media.
 
@@ -65,20 +61,18 @@ Between the advertiser's business goal and the technical purchase there often st
 
 Agency and media buyer are not synonyms: the former is an organization and a contractual role, the latter an operational function. A media buyer is also not a DSP[^g-dsp]: a human formulates and configures decisions, while a DSP executes part of the buying workflow at scale.
 
-| Role | Problem and beneficiary | Typical payer | Data in | Decision or output |
+| Role | Problem and beneficiary | Typical payer | Data in | Decision or result |
 |---|---|---|---|---|
 | Advertiser | Achieve a business outcome; the advertiser itself receives the benefit | Source of media spend[^g-media-spend] and many service fees | Business goal, constraints, customer data | Campaign goal, budget, success criteria |
 | Publisher | Monetize the media environment; the publisher receives the benefit | Usually not a payer in the media sale; may pay technology providers | Placements, context, inventory rules | Available opportunities, delivery rules, publisher revenue |
 | Agency | Perform the work for which the advertiser does not build a team or expertise | Advertiser; sometimes the agency acts as payer on downstream invoices | Brief, budget, creatives, results | Plan, settings, execution, and reporting |
 | Media buyer | Turn the goal and budget into concrete purchases | Not a separate payer as a function; paid by employer/client | Campaign goals, available channels, reports | Choice of media and platforms, allocation, and settings |
 
-The advertiser may keep buying in-house, hand it entirely to an agency, or split the responsibility. This changes the control boundary: who has access to the account, raw data, and the contract; who is responsible for setup mistakes; and who can reallocate spend.
+The advertiser may buy media with its own team (in-house), hand the buying entirely to an agency, or split the responsibility. This determines the control boundary: who has access to the account, raw data, and the contract; who is responsible for setup mistakes; and who can reallocate spend.
 
 ## Who connects demand and supply
 
-A single advertiser cannot manually evaluate every short-lived opportunity at thousands of publishers, and a publisher cannot phone around for a buyer for each impression. The next group of roles solves the scale problem, but does so from different sides.
-
-The possible paths look like this:
+Neither the advertiser nor the publisher can negotiate every short-lived impression with thousands of counterparties by hand. The next group of roles solves the scale problem, but does so from different sides:
 
 ```text
 advertiser ───────────── direct buying ─────────────→ publisher
@@ -89,11 +83,11 @@ advertiser ad server and publisher ad server can support different branches;
 no single line is a mandatory universal pipeline.
 ```
 
-**Ad network**[^g-ad-network] aggregates supply and/or demand and sells a managed media offering. The buyer usually chooses the available offer, the goal, and the constraints, while the network takes on a significant share of traffic distribution and publisher relationships. The network may accept media money and settle with supply partners; the specific commercial model depends on the contract.
+**Ad network**[^g-ad-network] aggregates supply and/or demand and sells a managed media offering. The buyer usually chooses the available offer, the goal, and the constraints, while the network takes on a significant share of traffic distribution and publisher relationships. The pricing axis belongs to the network: it usually sets its own price for the buyer and itself decides from which publisher, and at what price, to take the impression, so the purchase price is opaque to the buyer. The network usually accepts media money and settles with supply partners; the specific commercial model depends on the contract.
 
-**DSP (Demand-Side Platform)** — a buying platform that helps a media buyer evaluate and purchase opportunities from several supply sources according to campaign rules. The customer is an advertiser, an agency, or another buyer. The DSP receives campaign settings, creatives, and available opportunity signals; accepts or executes buying decisions; and returns results and reporting. Compared to a managed network offering, a DSP usually gives the buyer more campaign-level control, but real products may combine both models.
+**DSP (Demand-Side Platform)** — a buying platform that helps a media buyer evaluate and purchase opportunities from several supply sources according to campaign rules. The customer is an advertiser, an agency, or another buyer. The key trait: the decision is made for each incoming opportunity separately and in real time — in programmatic[^g-programmatic] this is a bid[^g-bid] in an auction[^g-auction]; the deep comparison with networks is in chapter 16, auction mechanics in chapter 18.
 
-**SSP (Supply-Side Platform)**[^g-ssp] — a sell-side platform for the publisher. It describes available opportunities, gives demand sources access to inventory, and helps manage its sale. The SSP receives inventory rules and context signals from the publisher side, passes an admissible description of the opportunity to buyers, and returns the sale decision and related metadata. The publisher is the primary customer and beneficiary, although the SSP often takes its payment within the media settlement.
+**SSP (Supply-Side Platform)**[^g-ssp] — a sell-side platform for the publisher. It describes available opportunities, gives demand sources access to inventory, and helps manage its sale. The publisher is the primary customer and beneficiary, although the SSP often takes its payment within the media settlement[^g-settlement] — the actual movement of money between participants, as distinct from the invoice as the issued claim.
 
 **Ad exchange**[^g-ad-exchange] — a transaction layer or function that connects buyers and sellers and performs matching or an auction. An exchange is not necessarily a separate company between DSP and SSP: exchange and SSP functions are often combined in one product. A useful distinction is this: the SSP represents the publisher's sell-side workflow, while the exchange performs the automated transaction function between the parties themselves.
 
@@ -102,27 +96,25 @@ no single line is a mandatory universal pipeline.
 - An advertiser ad server helps the buyer side manage creatives, their delivery, and event recording independently of the specific place of purchase.
 - A publisher ad server matches available demand sources and manages delivery on the publisher's inventory.
 
-Detailed `order`, `line item`, priorities, and serving mechanics will appear in chapter 11. What matters here is that the two kinds of ad server look at the same impression from different operational boundaries.
+Detailed `order`, `line item`, priorities, and serving mechanics will appear in chapter 11.
 
-| Role | Primary customer | Data in | Decision or output | Money relationship |
+| Role | Primary customer | Data in | Decision or result | Money relationship |
 |---|---|---|---|---|
-| Ad network | Advertiser/agency; also needs supply partners | Campaign constraints, creatives, aggregated supply | Managed distribution and reporting | Often accepts media money; other contracts are possible |
-| DSP | Advertiser, agency, media buyer | Campaign settings, creatives, opportunity signals | Buying decision, access to supply, reports | Media spend and/or platform fee depending on the contract |
-| SSP | Publisher | Inventory rules, opportunity and context signals | Access to demand, sale decision metadata, reports | Participates in the settlement or receives a fee under contract |
-| Ad exchange | Buyers and sellers or their platforms | Opportunity descriptions and buying responses | Matching/transaction result | May participate in the media settlement or receive a fee |
-| Ad server | Advertiser or publisher | Campaign/inventory rules, creatives, delivery signals | Selection, delivery, and event registration | Usually a separate service, license, or usage fee; the model depends on the provider |
-
-`DSP ≠ ad network`: a DSP is primarily the buyer's tool and decision layer, while a network is an aggregated managed media offering. `SSP ≠ exchange`: the first role organizes the sale on the publisher's side, the second is a transaction function. But none of these boundaries guarantees separate vendors or non-overlapping features.
+| Ad network | Advertiser/agency; also needs supply partners | Campaign constraints, creatives, aggregated supply | Managed distribution and reporting | Usually a principal[^g-principal-agent]: sets its own price for the buyer, accepts media money, and settles with publishers itself at a price opaque to the buyer |
+| DSP | Advertiser, agency, media buyer | Campaign settings, creatives, opportunity signals | Buying decision, access to supply, reports | Paid by the buyer: media cost plus a platform fee, usually a percentage of spend |
+| SSP | Publisher | Inventory rules, opportunity and context signals | Access to demand, sale decision metadata, reports | Paid by the seller side: usually retains a share (revenue share[^g-revenue-share]) of the clearing price (the final auction price) before paying the publisher |
+| Ad exchange | Buyers and sellers or their platforms | Opportunity descriptions and buying responses | Matching/transaction result | Usually a share of the clearing price on the sell side; if the exchange is combined with the SSP, this is one deduction, not two |
+| Ad server | Advertiser or publisher | Campaign/inventory rules, creatives, delivery signals | Selection, delivery, and event registration | Usually a separate license or usage fee from its own customer; media money usually does not pass through the ad server |
 
 ## Who measures and verifies
 
-A platform that sold or bought media sees only its own measurement[^g-measurement] points and is at the same time interested in the outcome of the deal. Therefore advertisers and publishers may connect cross-cutting providers. They do not stand as mandatory hops in the creative path: their integrations receive events and return separate conclusions.
+A platform that sold or bought media sees only its own measurement[^g-measurement] points and is at the same time interested in the outcome of the deal. Therefore advertisers and publishers may connect cross-cutting providers. They are not a mandatory link in the commercial chain, although their code may execute inside creative delivery: integrations receive events and return separate conclusions.
 
-**Attribution provider**[^g-attribution] matches available advertising touchpoints — for example, an impression[^g-impression] or a click — with outcomes such as a registration or a purchase, and applies rules for assigning credit. The result answers the question "to which source, under the chosen rules, is this conversion attributed?", not "was the advertising the true cause of the action?" Attribution does not prove causality.
+**Attribution provider**[^g-attribution] matches available advertising touchpoints — for example, an impression[^g-impression] or a click[^g-click] — with outcomes such as a registration or a purchase, and applies rules for assigning credit. The result answers the question "to which source, under the chosen rules, is this conversion[^g-conversion] attributed?", not "was the advertising the true cause of the action?" Attribution does not prove causality.
 
-**MMP (Mobile Measurement Partner)**[^g-mmp] — a mobile-specialized category of measurement and attribution providers for app acquisition, installs, and in-app outcomes. A specific MMP may have features for other environments and for analytics, but its primary role here is to match available acquisition signals with app events and to give the advertiser a consistent view across media sources. An MMP is not a synonym for product analytics: product analytics primarily studies behavior inside the product, whereas an MMP links acquisition to advertising sources. Technical details of SDKs, install matching, postbacks, and platform privacy restrictions belong to chapters 27–29.
+**MMP (Mobile Measurement Partner)**[^g-mmp] — a mobile-specialized category of measurement and attribution providers for app acquisition, installs, and in-app outcomes. Its primary role is to match available acquisition signals with app events and to give the advertiser a consistent picture across all media sources. The motive is clear: without an independent party, each network attributes the install to itself under its own rules, and the sum of self-reported installs usually exceeds the real number; an MMP applies uniform rules to all sources. An MMP is not a synonym for product analytics: product analytics primarily studies behavior inside the product, whereas an MMP links acquisition to advertising sources. Technical details of SDKs, install matching, postbacks, and platform privacy restrictions belong to chapters 27–29.
 
-**Verification provider**[^g-verification] creates a separate point for evaluating the conditions and quality of ad delivery. Depending on the integration, it may analyze available delivery, render, placement, context, and quality signals and return verification results to the advertiser, the publisher, or a platform. Verification is broader than fraud detection alone: the questions may also concern the environment and the conditions of serving. But a separate provider is not absolute truth — the completeness of its conclusions depends on the environment, the available signals, and the methodology.
+**Verification provider**[^g-verification] creates a separate point for evaluating the conditions and quality of ad delivery. Depending on the integration, it may analyze available delivery, render, placement, context, and quality signals and return verification results to the advertiser, the publisher, or a platform. Verification is broader than fraud detection alone — the questions may also concern the serving environment — but it is not absolute truth: the completeness of its conclusions depends on the environment, the available signals, and the methodology.
 
 For a single app ad, the systems may receive partially overlapping events:
 
@@ -134,29 +126,29 @@ delivery / context signals ─┴→ verification provider
 install / subscription events → MMP and the advertiser's systems, if integrations allow it
 ```
 
-Reports may differ not only because of error. Platform reporting answers what the platform itself observed; the MMP applies its own attribution rules to acquisition and app events; the verification provider evaluates the delivery conditions available to it. These are different questions and different measurement boundaries.
+Discrepancies between reports are not necessarily an error. Platform reporting answers what the platform itself observed; the MMP applies its own attribution rules to acquisition and app events; the verification provider evaluates the delivery conditions available to it. These are different questions and different measurement boundaries.
 
 ## Who supplies, organizes, and connects data
 
-The word `data` hides several different tasks. Supplying an external dataset, managing an audience segment, storing a customer record, and matching identifiers are not one role.
+The word `data` hides several different tasks. Supplying an external dataset, managing an audience segment[^g-audience-segment], storing a customer record, and matching identifiers are not one role. A separate operation is **activation**[^g-activation]: handing data or a segment to a system that will apply it to real impressions, for example a buying platform for targeting[^g-targeting]; before activation, a segment remains a record in storage.
 
-| Role | Customer and inputs | Persistent state | Output / activation | What the role itself does not do |
+| Role | Customer and data in | Persistent state | Result and activation | What the role itself does not do |
 |---|---|---|---|---|
-| **Data provider**[^g-data-provider] | Advertiser, publisher, or platform; its own or collected datasets | Datasets, attributes, or segments | Data for permitted activation, decisioning, or analysis | Not required to store the end customer's record or make media decisions |
+| **Data provider**[^g-data-provider] | Advertiser, publisher, or platform; its own or collected datasets | Datasets, attributes, or segments | Data for permitted activation, decisioning, or analysis | Not required to store its client's customer record or make media decisions |
 | **DMP**[^g-dmp] | Advertising/marketing team; audience data and campaign signals | Audience profiles and segments in the chosen product model | Segmentation and activation through advertising integrations | Not required to be the system of record for the full customer lifecycle |
 | **CDP**[^g-cdp] | Advertiser; first-party events and customer data from the product, CRM, and other systems | Persistent unified customer record | Customer profiles, events, and segments made available to downstream systems | Not required to buy media or assign attribution credit |
 | **Identity provider**[^g-identity-provider] | Advertiser, publisher, or platform; identifiers from permitted sources | A mapping or identity graph within the specific solution | Linked or translated identifiers for activation and measurement | Does not create consent, does not register all events, and does not prove the identity of a real person |
 
-**Data provider** sells or provides datasets, attributes, or audience segments. The customer pays for an additional signal: for example, a context classification or an audience attribute that can be used legally and technically. The quality, provenance, and permitted use cases of such data matter, but a deep examination of them is beyond the scope of this chapter.
+**Data provider** sells or provides datasets, attributes, or audience segments. The customer pays for an additional signal: for example, a context classification or an audience attribute that can be used legally and technically.
 
 **DMP (Data Management Platform)** — an advertising-oriented system for managing, segmenting, and activating audience data. **CDP (Customer Data Platform)** maintains a persistent unified customer record and makes customer data available to downstream systems. The historical rule "DMP — cookies and anonymous data only; CDP — PII only" is unreliable: modern products and deployment models overlap. The working boundary lies in the primary task and the record model — advertising audience activation versus a durable customer record.
 
-**Identity provider** links or translates identifiers for permitted activation, measurement, and adjacent use cases. For example, one integration may know the advertiser's customer ID while another knows a platform-specific ID; the identity function helps establish a permissible correspondence. This does not mean the provider has always identified the physical person.
+**Identity provider** links or translates identifiers for permitted activation, measurement, and adjacent use cases. For example, one integration may know the advertiser's customer ID while another knows a platform-specific ID; the identity function helps establish a permissible correspondence.
 
 Distinguish four operations:
 
 ```text
-identity    → links entities or identifiers
+identity    → links users, devices, or their identifiers
 tracking    → records events
 attribution → assigns conversion credit according to rules
 consent     → expresses permission or a choice in a separate governance/legal context
@@ -164,13 +156,13 @@ consent     → expresses permission or a choice in a separate governance/legal 
 
 An identity provider does not create legal permission merely by matching. Specific identifiers, resolution algorithms, and privacy rules will be covered in chapters 24 and 40–42.
 
-In the running example, the subscription app sends first-party trial and subscription events to the CDP to maintain the customer record. A DMP or platform integration can form and activate a permitted audience segment. An identity provider helps link the necessary identifiers between permitted environments, and an external data provider can enrich the segment with an additional attribute. These functions are optional and may be performed by different products or by a single suite.
+In the running example, the subscription app sends first-party trial and subscription events to the CDP to maintain the customer record. A DMP or platform integration can form and activate a permitted audience segment. An identity provider helps link the necessary identifiers between permitted environments, and an external data provider can enrich the segment with an additional attribute.
 
 ## One campaign: data and money kept separate
 
-Let's assemble the roles in one scenario. A subscription app is advertised inside a mobile game. The advertiser has hired an agency; a media buyer at the agency runs acquisition through a DSP. The game's publisher provides the opportunity through an SSP whose product also includes an exchange function. An MMP measures mobile acquisition, a verification provider optionally evaluates delivery, and the data/identity functions are connected only where they are needed and permitted.
+Let's assemble the roles in one scenario. A subscription app is advertised inside a mobile game. The advertiser has hired an agency; a media buyer at the agency runs acquisition through a DSP. The game's publisher provides the opportunity through an SSP whose product also includes an exchange function (in mobile in-app, this sell-side role is often performed by a mediation platform or an SDK network — chapter 12). An MMP measures mobile acquisition, a verification provider optionally evaluates delivery, and the data/identity functions are connected only where they are needed and permitted.
 
-This is one possible composition, not a mandatory chain. The advertiser could have bought media directly or through an ad network; the publisher could have used a different monetization path; the agency, DSP, SSP, exchange, MMP, and verification could have belonged to fewer companies or been absent altogether.
+This is one possible composition, not a mandatory chain: the advertiser could have bought media directly or through an ad network, and several roles could have belonged to one company or been absent altogether.
 
 ### Data flow
 
@@ -191,33 +183,32 @@ subscription app / advertiser backend
   ── install, trial, subscription events ──→ MMP, CDP, and advertiser reporting
 ```
 
-Not every participant receives every event. The set of data depends on integrations, the environment, contracts, and privacy/platform restrictions. The event flow is often bidirectional and asynchronous; it need not repeat either the creative path or the financial relationships.
+Not every participant receives every event: the set depends on integrations, the environment, contracts, and privacy/platform restrictions. The event flow is often bidirectional and asynchronous; it need not repeat either the creative path or the financial relationships.
 
 ### Money flow
 
-```text
-advertiser funding
-  → agency / buying contract
-  → media sellers and intermediaries
-  → publisher revenue
+The direction is the same as on the map in chapter 1: the advertiser's media spend goes through the buying channel to media sellers and becomes publisher revenue, while technology providers receive separate fees. What is new here is who exactly pays whom in a typical programmatic setup:
 
-separately, depending on the contracts:
-advertiser / agency / publisher
-  → license, usage, or service fees
-  → ad server, MMP, verification, data/identity providers
-```
+| Who pays | Whom | For what | Kind of money |
+|---|---|---|---|
+| Advertiser | Agency | Planning and running campaigns | Usually a fee or a percentage of spend; sometimes inside the media invoice |
+| Advertiser or agency | DSP | Purchased media and use of the platform | Media cost plus a platform fee, usually a percentage of spend |
+| DSP | Exchange / SSP | Won opportunities at the clearing price | Media money |
+| Exchange / SSP | Publisher | Sold opportunities | Publisher payout[^g-publisher-payout]: clearing price minus the sell-side revenue share |
+| Advertiser | MMP | Attribution and acquisition measurement | SaaS[^g-saas-pricing] or usage fee |
+| Advertiser | Verification provider | Evaluation of delivery conditions | Usage fee, usually by volume of measured impressions |
+| Publisher or advertiser | Its own ad server | Selecting, delivering, and recording ads | Usage or SaaS fee |
+| Advertiser or agency | Data provider | Audience segments or attributes | Often a data CPM[^g-cpm] — a surcharge on media cost, billed through the DSP |
 
-The advertiser is the economic source of media spend, but the agency may be the contractual payer on the DSP's invoice. A DSP or ad network may collect payment for media; sell-side participants may participate in the settlement with the publisher. Part of the sum becomes publisher revenue, and providers receive the agreed fees. The exact model, the deductions, and the path of a hypothetical `$100` are the subject of chapter 4.
+The advertiser is the economic source of media spend, but the contractual payer on the DSP's invoice is often the agency: the advertiser sees one consolidated invoice, while the money is then distributed across several contracts. Invoice and settlement also differ: the former is the issued claim, the latter the actual payment, and the amounts may not match because of adjustments. The deductions of intermediaries[^g-intermediary] at each step and the path of a hypothetical `$100` are the subject of chapter 4.
 
-Not every box takes a percentage of every advertising dollar. An MMP may receive a subscription or usage fee, a verification provider a service fee, a data provider a charge for data, and an identity provider a license or usage fee. They may not handle media money at all.
-
-Finally, the **invoice path**, the actual **settlement path**, the creative delivery path, and the HTTP/event path may have different endpoints. The advertiser may see one consolidated invoice from the agency even though the money is then distributed across several contracts; the creative may come from an ad server or a CDN; a conversion event may go asynchronously to the MMP and never return through the SSP. The financial scheme above is typical in direction, but not universal in the composition of participants or contracts.
+Finally, the **invoice path**, the actual **settlement path**, the creative delivery path, and the HTTP/event path may have different endpoints: the creative may come from an ad server or a CDN, and a conversion event may go asynchronously to the MMP and never return through the SSP.
 
 ## Why one company occupies several places on the map
 
-Companies combine roles because of acquisitions, shared infrastructure and data, and the desire to offer a managed service, a single workflow, reporting, and contract. Such combining is called **role bundling**; when a company controls several consecutive levels of the value chain, one often speaks of **vertical integration**.
+Companies combine roles because of acquisitions, shared infrastructure and data, and the desire to offer a managed service, a single workflow, reporting, and contract. When one company controls several consecutive levels of the value chain, this is called **vertical integration**[^g-vertical-integration]; in this course we also speak of combining roles.
 
-For the customer, bundling may mean fewer integrations, lower operational overhead, faster data exchange, and one UI for setup and reports. But the same properties create risks:
+For the customer, combining roles means fewer integrations, lower operational overhead, faster data exchange, and one UI for setup and reports. But the same properties create risks:
 
 - a conflict of incentives when one side simultaneously represents buyer and seller;
 - opacity of fee boundaries and internal money transfers;
@@ -225,7 +216,7 @@ For the customer, bundling may mean fewer integrations, lower operational overhe
 - self-measurement, when the executor of the deal evaluates its quality itself;
 - difficulty exporting data and comparing external alternatives.
 
-Imagine a hypothetical Platform X: it sells a managed media package, gives the media buyer DSP-like controls, delivers creatives, and shows an attribution report in one UI. Calling it merely a "DSP" is not enough. Let's break the suite into functions:
+Imagine a hypothetical Platform X: it sells a packaged media offering, gives the media buyer DSP-style controls, delivers creatives, and shows an attribution report in one UI. Calling it merely a "DSP" is not enough. Let's break the suite into functions:
 
 | Platform X function | Separate role card |
 |---|---|
@@ -234,38 +225,33 @@ Imagine a hypothetical Platform X: it sells a managed media package, gives the m
 | Delivers the creative and records delivery | Ad serving |
 | Links touchpoints with outcomes | Attribution/measurement |
 
-One login and one invoice do not turn these functions into a single role. For each of them you need to ask separately: who is the customer and the payer, what data comes in and goes out, what decision is made, where the fee arises, and whose interests it may conflict with.
+A shared login and a shared invoice do not make these functions one role. This is the way to analyze an unfamiliar AdTech company: first list the roles it performs, then fill in for each one `problem → customer → payer → data in/out → decision → money` and ask where the fee arises and whose interests it may conflict with. Only then does it make sense to compare vendors by their labels.
 
-This is the way to analyze an unfamiliar AdTech company: first list the roles it performs, then fill in for each one `problem → customer → payer → data in/out → decision → money`. Only then does it make sense to compare vendors by their labels.
-
-## What this is often confused with
+## Common Confusions
 
 - **"A brand advertiser and a performance advertiser are different kinds of companies."** No: these are orientations of activity. One company can run both.
-- **"Agency, media buyer, and DSP are one link."** The agency is an organization, the media buyer is a function, the DSP is a technology platform. They can work together but are not interchangeable.
-- **"Ad network is the old name for a DSP."** A network usually offers more managed media aggregation; a DSP is a buyer tool and decision layer. Real suites may combine both functions.
-- **"An SSP and an exchange must be different companies" or "they are complete synonyms."** Both extremes are wrong: the sell-side workflow and the transaction function are distinguishable, but often bundled.
+- **"Ad network is the old name for a DSP."** A network sells managed media aggregation at its own price; a DSP leaves the decision on each opportunity to the buyer's rules. Real suites may combine both functions.
+- **"An SSP and an exchange must be different companies" or "they are complete synonyms."** Both extremes are wrong: the sell-side workflow and the transaction function are distinguishable, but often combined in one product.
 - **"An MMP knows the true reason for an install, and a verification provider sees the absolute truth of an impression."** Both work with available measurement points and methodologies. Attribution credit is not causality; a verification result is limited by the integration.
 - **"Data provider, DMP, CDP, and identity provider are four names for the user base."** They respectively supply data, organize audience activation, maintain the customer record, and link identifiers.
-- **"All roles form a single chain and take a share of the spend."** Paths may be direct or bundled, and many technology providers receive a separate fee and do not participate in the media settlement.
 
-## What to remember
+## What to Remember
 
 1. The AdTech map describes logical roles, not a mandatory list of companies.
 2. The advertiser funds advertising for the sake of an outcome; the publisher creates the media environment and opportunities.
 3. Brand and performance are orientations of goals and measurement that one advertiser may combine.
-4. The agency is a contractor organization, the media buyer is a function, and the DSP is a tool and decision layer for the buyer.
-5. An ad network offers managed media aggregation; a DSP helps the buyer manage purchasing; an SSP serves the sell-side workflow; an exchange performs the transaction function.
-6. Advertiser-side and publisher-side ad servers apply different sets of rules, although both roles select, deliver, and record ads.
-7. MMP/attribution, verification, data, and identity are cross-cutting functions, not mandatory hops of the creative path.
-8. The data flow, the delivery path, the invoice path, and the settlement path need not coincide.
-9. One company may perform several roles; bundling reduces integration friction but raises questions about incentives, fees, data boundaries, and measurement independence.
+4. An ad network sells media at its own price; a DSP decides on each opportunity with a bid under the buyer's rules and charges the buyer a platform fee; an SSP serves the sell-side workflow and usually retains a share of the clearing price; an exchange performs the transaction function.
+5. Advertiser-side and publisher-side ad servers apply different sets of rules, although both roles select, deliver, and record ads.
+6. MMP/attribution, verification, data, and identity are cross-cutting functions, not mandatory links in the commercial chain; they usually receive a fee for their function rather than a share of media money.
+7. The data flow, the delivery path, the invoice path, and the settlement path need not coincide.
+8. One company may perform several roles; vertical integration reduces integration friction but raises questions about incentives, fees, data boundaries, and measurement independence.
 
-## Check yourself
+## Check Yourself
 
 1. Why can a subscription app simultaneously be a brand and a performance advertiser?
 2. How does a media buyer differ from an agency and from a DSP?
 3. Why might a publisher use an SSP and a publisher ad server in one flow without considering them one role?
-4. Platform X has one UI for buying, ad serving, and attribution. Which separate role cards need to be filled in before evaluating the product?
+4. A hypothetical suite offers publishers an SSP, a publisher ad server, and verification in one UI under one invoice. Which separate role cards need to be filled in, and where does such a combination create a conflict of interest?
 
 ## Sources and Further Reading
 
